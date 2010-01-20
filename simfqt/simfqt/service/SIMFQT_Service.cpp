@@ -6,9 +6,10 @@
 // Boost
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/posix_time/ptime.hpp>
+// StdAir
+#include <stdair/basic/BasChronometer.hpp>
 // Simfqt
 #include <simfqt/basic/BasConst_SIMFQT_Service.hpp>
-#include <simfqt/basic/BasChronometer.hpp>
 #include <simfqt/command/FareQuoter.hpp>
 #include <simfqt/factory/FacSimfqtServiceContext.hpp>
 #include <simfqt/service/SIMFQT_ServiceContext.hpp>
@@ -82,10 +83,9 @@ namespace SIMFQT {
         lSIMFQT_ServiceContext.getFareQuoteID();
       
       // Delegate the price quotation to the dedicated command
-      BasChronometer lPriceQuotingChronometer;
+      stdair::BasChronometer lPriceQuotingChronometer;
       lPriceQuotingChronometer.start();
-      oPrice =
-        FareQuoter::priceQuote (lFareQuoteID, iAirlineCode, iPartySize);
+      oPrice = FareQuoter::priceQuote (lFareQuoteID, iAirlineCode, iPartySize);
       const double lPriceQuotingMeasure = lPriceQuotingChronometer.elapsed();
       
       // DEBUG
