@@ -29,7 +29,8 @@ int main (int argc, char* argv[]) {
     logOutputFile.clear();
     
     // Initialise the list of classes/buckets
-    SIMFQT::SIMFQT_Service simfqtService (logOutputFile, lAirlineCode);
+    const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
+    SIMFQT::SIMFQT_Service simfqtService (lLogParams, lAirlineCode);
 
     // Perform a price quotation
     simfqtService.priceQuote (lAirlineCode, lPartySize);
