@@ -2,10 +2,11 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
-#include <exception>
+#include <cassert>
+// StdAir
+#include <stdair/service/Logger.hpp>
 // Simfqt
 #include <simfqt/command/FareQuoter.hpp>
-#include <simfqt/service/Logger.hpp>
 
 namespace SIMFQT {
 
@@ -18,13 +19,13 @@ namespace SIMFQT {
     try {
 
       // DEBUG
-      SIMFQT_LOG_DEBUG ("The price is " << oPrice
+      STDAIR_LOG_DEBUG ("The price is " << oPrice
                         << " EUR for the travel request for the airline "
                         << iAirlineCode << " for " << iPartySize
                         << " passengers.");
     
     } catch (const std::exception& lStdError) {
-      SIMFQT_LOG_ERROR ("Error: " << lStdError.what());
+      STDAIR_LOG_ERROR ("Error: " << lStdError.what());
       throw QuotingException();
     }
 
