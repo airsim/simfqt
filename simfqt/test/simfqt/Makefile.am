@@ -19,10 +19,12 @@ XFAIL_TESTS = #
 #InventoryTestSuite_LDADD = $(top_builddir)/test/com/libcppunitcore.la
 #InventoryTestSuite_LDFLAGS = \
 #		$(BOOST_LIBS) $(CPPUNIT_LIBS) \
+#		$(top_builddir)/stdair/core/libstdair.la \
 #		$(top_builddir)/simfqt/libsimfqt.la
 
 priceQuote_SOURCES = priceQuote.cpp
 priceQuote_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
 priceQuote_LDADD =
 priceQuote_LDFLAGS = $(BOOST_LIBS) \
+		$(top_builddir)/stdair/core/libstdair.la \
 		$(top_builddir)/simfqt/core/libsimfqt.la
