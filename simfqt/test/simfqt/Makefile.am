@@ -9,22 +9,15 @@ SUBDIRS =
 EXTRA_DIST =
 
 ##
-check_PROGRAMS = priceQuote
+check_PROGRAMS = FQTTestSuite
 TESTS = $(check_PROGRAMS)
 XFAIL_TESTS = #
 
-#InventoryTestSuite_SOURCES = InventoryTestSuite.hpp \
-				InventoryTestSuite.cpp
-#InventoryTestSuite_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
-#InventoryTestSuite_LDADD = $(top_builddir)/test/com/libcppunitcore.la
-#InventoryTestSuite_LDFLAGS = \
-#		$(BOOST_LIBS) $(CPPUNIT_LIBS) \
-#		$(top_builddir)/stdair/core/libstdair.la \
-#		$(top_builddir)/simfqt/libsimfqt.la
-
-priceQuote_SOURCES = priceQuote.cpp
-priceQuote_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
-priceQuote_LDADD =
-priceQuote_LDFLAGS = $(BOOST_LIBS) \
+FQTTestSuite_SOURCES = FQTTestSuite.hpp FQTTestSuite.cpp
+FQTTestSuite_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
+FQTTestSuite_LDADD =
+FQTTestSuite_LDFLAGS = \
+		$(BOOST_LIBS) $(CPPUNIT_LIBS) \
+		$(top_builddir)/extracppunit/libextracc-extracppunit.la \
 		$(top_builddir)/stdair/core/libstdair.la \
 		$(top_builddir)/simfqt/core/libsimfqt.la
