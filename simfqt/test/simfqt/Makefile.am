@@ -18,6 +18,7 @@ FQTTestSuite_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
 FQTTestSuite_LDADD =
 FQTTestSuite_LDFLAGS = \
 		$(BOOST_LIBS) $(CPPUNIT_LIBS) \
-		$(top_builddir)/extracppunit/libextracc-extracppunit.la \
+		$(top_builddir)/extracppunit/libextracppunit.la \
 		$(top_builddir)/stdair/core/libstdair.la \
 		$(top_builddir)/simfqt/core/libsimfqt.la
+
