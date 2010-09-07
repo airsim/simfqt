@@ -10,6 +10,6 @@ MAINTAINERCLEANFILES = Makefile.in
 bin_PROGRAMS =
 
 #simfqt_SOURCES = $(batches_h_sources) $(batches_cc_sources)
-#simfqt_CXXFLAGS = $(BOOST_CFLAGS)
+#simfqt_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
 #simfqt_LDADD =
-#simfqt_LDFLAGS = $(BOOST_PROGRAM_OPTIONS_LIB) $(top_builddir)/simfqt/core/libsimfqt.la
+#simfqt_LDFLAGS = $(BOOST_PROGRAM_OPTIONS_LIB) $(STDAIR_LIBS) $(top_builddir)/simfqt/core/libsimfqt.la

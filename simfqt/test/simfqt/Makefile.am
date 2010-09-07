@@ -14,11 +14,8 @@ TESTS = $(check_PROGRAMS)
 XFAIL_TESTS = #
 
 FQTTestSuite_SOURCES = FQTTestSuite.hpp FQTTestSuite.cpp
-FQTTestSuite_CXXFLAGS= $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS)
+FQTTestSuite_CXXFLAGS = $(CPPUNIT_CFLAGS) $(BOOST_CFLAGS) \
+	$(EXTRACC_CFLAGS) $(STDAIR_CFLAGS)
 FQTTestSuite_LDADD =
-FQTTestSuite_LDFLAGS = \
-		$(BOOST_LIBS) $(CPPUNIT_LIBS) \
-		$(top_builddir)/extracppunit/libextracppunit.la \
-		$(top_builddir)/stdair/core/libstdair.la \
-		$(top_builddir)/simfqt/core/libsimfqt.la
-
+FQTTestSuite_LDFLAGS = $(CPPUNIT_LIBS) $(EXTRACC_LIBS) $(STDAIR_LIBS) \
+	$(top_builddir)/simfqt/core/libsimfqt.la

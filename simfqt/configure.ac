@@ -10,10 +10,6 @@ AM_INIT_AUTOMAKE
 AM_PATH_CPPUNIT(1.10)
 AM_CONDITIONAL([HAVE_CPPUNIT], [test "x$CPPUNIT_LIBS" != x])
 
-# RPM release number
-RPM_RELEASE="1"
-AC_SUBST(RPM_RELEASE)
-
 # Shared library versioning
 GENERIC_LIBRARY_VERSION="99:99:99"
 #                        | | |
@@ -105,14 +101,10 @@ fi
 # -----------------------------------------------------------------------------
 # Support for ExtraCC (Extra-CruiseControl): http://sf.net/projects/extracc
 # -----------------------------------------------------------------------------
-# Note: the ExtraCC is now imported as a Subversion external reference,
-#       thus directly accessible within the extracppunit directory.
-#       When that library will be widely avaible on Linux distributions,
-#       the external reference can be removed and the following line uncommented.
-#AM_PATH_EXTRACC
-#AC_SUBST(EXTRACC_VERSION)
-#AC_SUBST(EXTRACC_CFLAGS)
-#AC_SUBST(EXTRACC_LIBS)
+AM_PATH_EXTRACC
+AC_SUBST(EXTRACC_VERSION)
+AC_SUBST(EXTRACC_CFLAGS)
+AC_SUBST(EXTRACC_LIBS)
 
 # -----------------------------------------------------------
 # Python: http://www.python.org
@@ -171,6 +163,14 @@ AX_SOCI([3.0])
 AC_SUBST(SOCI_VERSION)
 AC_SUBST(SOCI_CFLAGS)
 AC_SUBST(SOCI_LIBS)
+
+# -----------------------------------------------------------------------------
+# Support for StdAir (): http://sf.net/projects/stdair
+# -----------------------------------------------------------------------------
+AM_PATH_STDAIR
+AC_SUBST(STDAIR_VERSION)
+AC_SUBST(STDAIR_CFLAGS)
+AC_SUBST(STDAIR_LIBS)
 
 
 # -------------------------------------------------------------------
@@ -244,18 +244,7 @@ AC_CONFIG_FILES(
 	Makefile
 	simfqt-config
 	simfqt.pc
-	simfqt.spec
 	simfqt.m4
-	stdair/Makefile
-	stdair/basic/Makefile
-	stdair/bom/Makefile
-	stdair/dbadaptor/Makefile
-	stdair/factory/Makefile
-	stdair/command/Makefile
-	stdair/config/Makefile
-	stdair/service/Makefile
-	stdair/core/Makefile
-	stdair/batches/Makefile
 	simfqt/Makefile
 	simfqt/basic/Makefile
 	simfqt/bom/Makefile
@@ -265,10 +254,8 @@ AC_CONFIG_FILES(
 	simfqt/config/Makefile
 	simfqt/core/Makefile
 	simfqt/batches/Makefile
-	extracppunit/Makefile
 	test/Makefile
 	test/samples/Makefile
-	test/stdair/Makefile
 	test/simfqt/Makefile
 )
 AC_OUTPUT
@@ -342,6 +329,11 @@ External libraries:
     o SOCI_VERSION .... : ${SOCI_VERSION}
     o SOCI_CFLAGS ..... : ${SOCI_CFLAGS}
     o SOCI_LIBS ....... : ${SOCI_LIBS}
+
+  - StdAir ............ :
+    o STDAIR_VERSION .. : ${STDAIR_VERSION}
+    o STDAIR_CFLAGS ... : ${STDAIR_CFLAGS}
+    o STDAIR_LIBS ..... : ${STDAIR_LIBS}
 
   - ExtraCC ........... :
     o EXTRACC_VERSION . : ${EXTRACC_VERSION}

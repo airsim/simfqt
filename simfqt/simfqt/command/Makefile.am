@@ -1,13 +1,15 @@
-## command sub-directory
+## simfqt/command sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
-noinst_LTLIBRARIES= libcmd.la
+#
+noinst_LTLIBRARIES = libsimfqtcmd.la
 
-libcmd_la_SOURCES= $(cmd_h_sources) $(cmd_cc_sources) 
-libcmd_la_CXXFLAGS = $(BOOST_CFLAGS)
-libcmd_la_LIBADD =
-libcmd_la_LDFLAGS = $(BOOST_LIBS)
+libsimfqtcmd_la_SOURCES= $(simfqt_cmd_h_sources) $(simfqt_cmd_cc_sources) 
+libsimfqtcmd_la_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
+libsimfqtcmd_la_LIBADD =
+libsimfqtcmd_la_LDFLAGS =
 
+#
 #pkgincludedir = $(includedir)/@PACKAGE@/command
-#pkginclude_HEADERS = $(cmd_h_sources)
+#pkginclude_HEADERS = $(simfqt_cmd_h_sources)

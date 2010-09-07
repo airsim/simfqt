@@ -1,10 +1,10 @@
-## test sub-directory
+## test sub-directory of the SimFQT project
 include $(top_srcdir)/Makefile.common
 
 MAINTAINERCLEANFILES = Makefile.in
 
 ##
-SUBDIRS = samples stdair simfqt
+SUBDIRS = samples simfqt
 
 EXTRA_DIST =
 
@@ -12,4 +12,3 @@ EXTRA_DIST =
 check_PROGRAMS =
 TESTS = $(check_PROGRAMS)
 XFAIL_TESTS = #
-

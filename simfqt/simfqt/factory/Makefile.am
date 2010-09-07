@@ -1,11 +1,14 @@
-## factory sub-directory
+## simfqt/factory sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
-noinst_LTLIBRARIES= libfac.la
+#
+noinst_LTLIBRARIES = libsimfqtfac.la
 
-libfac_la_SOURCES= $(fac_h_sources) $(fac_cc_sources) 
-libfac_la_CXXFLAGS =
+libsimfqtfac_la_SOURCES= $(simfqt_fac_h_sources) $(simfqt_fac_cc_sources) 
+libsimfqtfac_la_CXXFLAGS = $(STDAIR_CFLAGS)
+libsimfqtfac_la_LDFLAGS =
 
+#
 #pkgincludedir = $(includedir)/@PACKAGE@/factory
-#pkginclude_HEADERS = $(fac_h_sources)
+#pkginclude_HEADERS = $(simfqt_fac_h_sources)

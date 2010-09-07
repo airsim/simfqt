@@ -1,11 +1,14 @@
-## basic sub-directory
+## simfqt/basic sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
-noinst_LTLIBRARIES= libbas.la
+#
+noinst_LTLIBRARIES = libsimfqtbas.la
 
-libbas_la_SOURCES= $(bas_h_sources) $(bas_cc_sources) 
-libbas_la_CXXFLAGS =
+libsimfqtbas_la_SOURCES = $(simfqt_bas_h_sources) $(simfqt_bas_cc_sources) 
+libsimfqtbas_la_CXXFLAGS = $(STDAIR_CFLAGS)
+libsimfqtbas_la_LDFLAGS =
 
+#
 #pkgincludedir = $(includedir)/@PACKAGE@/basic
-#pkginclude_HEADERS = $(bas_h_sources)
+#pkginclude_HEADERS = $(simfqt_bas_h_sources)

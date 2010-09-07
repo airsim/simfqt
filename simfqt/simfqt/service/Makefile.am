@@ -1,11 +1,14 @@
-## command sub-directory
+## simfqt/service sub-directory
 include $(top_srcdir)/Makefile.common
 include $(srcdir)/sources.mk
 
-noinst_LTLIBRARIES= libsvc.la
+#
+noinst_LTLIBRARIES = libsimfqtsvc.la
 
-libsvc_la_SOURCES= $(svc_h_sources) $(svc_cc_sources) 
-libsvc_la_CXXFLAGS = $(BOOST_CFLAGS)
+libsimfqtsvc_la_SOURCES= $(simfqt_svc_h_sources) $(simfqt_svc_cc_sources) 
+libsimfqtsvc_la_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
+libsimfqtsvc_la_LDFLAGS =
 
+#
 #pkgincludedir = $(includedir)/@PACKAGE@/service
-#pkginclude_HEADERS = $(svc_h_sources)
+#pkginclude_HEADERS = $(simfqt_svc_h_sources)
