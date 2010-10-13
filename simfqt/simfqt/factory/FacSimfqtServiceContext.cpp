@@ -30,12 +30,11 @@ namespace SIMFQT {
   }
 
   // //////////////////////////////////////////////////////////////////////
-  SIMFQT_ServiceContext& FacSimfqtServiceContext::
-  create (const std::string& iTravelDatabaseName) {
+  SIMFQT_ServiceContext& FacSimfqtServiceContext::create () {
     SIMFQT_ServiceContext* aSIMFQT_ServiceContext_ptr = NULL;
 
     aSIMFQT_ServiceContext_ptr =
-      new SIMFQT_ServiceContext (iTravelDatabaseName);
+      new SIMFQT_ServiceContext ();
     assert (aSIMFQT_ServiceContext_ptr != NULL);
 
     // The new object is added to the Bom pool

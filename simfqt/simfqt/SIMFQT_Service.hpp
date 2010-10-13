@@ -6,9 +6,16 @@
 // //////////////////////////////////////////////////////////////////////
 // StdAir
 #include <stdair/STDAIR_Types.hpp>
-#include <stdair/basic/BasLogParams.hpp>
 // SimFQT
 #include <simfqt/SIMFQT_Types.hpp>
+
+// Forward declarations.
+namespace stdair {
+  class STDAIR_Service;
+  struct BasLogParams;
+  struct BasDBParams;
+}
+
 
 namespace SIMFQT {
 
@@ -24,15 +31,30 @@ namespace SIMFQT {
     Price_T priceQuote (const AirlineCode_T&, const PartySize_T&);
 
     
-    // ////////// Constructors and destructors //////////
+    // ////////////////// Constructors and Destructors //////////////////    
+    /** Constructor.
+        <br>The init() method is called; see the corresponding documentation
+        for more details.
+        <br>A reference on an output stream is given, so that log
+        outputs can be directed onto that stream.
+        <br>Moreover, database connection parameters are given, so that a
+        session can be created on the corresponding database.
+        @param const stdair::BasLogParams& Parameters for the output log stream.
+        @param const stdair::BasDBParams& Parameters for the database access.
+        @param const stdair::Filename_T& Filename of the input fare file. */
+    SIMFQT_Service (const stdair::BasLogParams&, const stdair::BasDBParams&,
+                      const stdair::Filename_T& iFareInputFilename);
+
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation
         for more details.
         <br>Moreover, a reference on an output stream is given, so
         that log outputs can be directed onto that stream.       
         @param const stdair::BasLogParams& Parameters for the output log stream.
-        @param FareQuoteID_T& ID of the Fare Quote system. */
-    SIMFQT_Service (const stdair::BasLogParams&, const FareQuoteID_T&);
+        @param const stdair::Date_T& Date for the beginning of analysis.
+        @param const stdair::Filename_T& Filename of the input fare file. */
+    SIMFQT_Service (const stdair::BasLogParams&,
+                      const stdair::Filename_T& iFareInputFilename);
 
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation
@@ -40,11 +62,13 @@ namespace SIMFQT {
         <br>Moreover, as no reference on any output stream is given,
         it is assumed that the StdAir log service has already been
         initialised with the proper log output stream by some other
-        methods in the calling chain (for instance, when the AIRINV_Service
+        methods in the calling chain (for instance, when the SIMFQT_Service
         is itself being initialised by another library service such as
         SIMCRS_Service).
-        @param FareQuoteID_T& ID of the Fare Quote system. */
-    SIMFQT_Service (const FareQuoteID_T&);
+        @param const stdair::Date_T& Date for the beginning of analysis.
+        @param const stdair::Filename_T& Filename of the input fare file. */
+    SIMFQT_Service (stdair::STDAIR_ServicePtr_T ioSTDAIR_ServicePtr,
+                    const stdair::Filename_T& iFareInputFilename);
 
     /** Destructor. */
     ~SIMFQT_Service();
@@ -57,12 +81,31 @@ namespace SIMFQT {
     /** Default copy constructor. */
     SIMFQT_Service (const SIMFQT_Service&);
 
-    /** Initialise the log. */
-    void logInit (const stdair::BasLogParams&);
 
+    /** Initialise the (SIMFQT) service context (i.e., the
+        SIMFQT_ServiceContext object). */
+    void initServiceContext ();
+
+    /** Initialise the STDAIR service (including the log service).
+        <br>A reference on the root of the BOM tree, namely the BomRoot object,
+        is stored within the service context for later use.
+        @param const stdair::BasLogParams& Parameters for the output log stream.
+        @param const stdair::BasDBParams& Parameters for the database access. */
+    void initStdAirService (const stdair::BasLogParams&,
+                            const stdair::BasDBParams&);
+    
+    /** Initialise the STDAIR service (including the log service).
+        <br>A reference on the root of the BOM tree, namely the BomRoot object,
+        is stored within the service context for later use.
+        @param const stdair::BasLogParams& Parameters for the output log
+               stream. */
+    void initStdAirService (const stdair::BasLogParams&);
+    
     /** Initialise.
-        @param const FareQuoteID_T& ID of the owner of the FareQuote system. */
-    void init (const FareQuoteID_T&);
+        <br>The CSV file, describing the airline fares for the
+        simulator, is parsed and the inventories are generated accordingly.
+        @param const stdair::Filename_T& Filename of the input fare file. */
+    void init (const stdair::Filename_T& iFareInputFilename);
 
     /** Finalise. */
     void finalise ();

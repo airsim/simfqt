@@ -32,7 +32,7 @@ namespace SIMFQT {
     /** Create a new SIMFQT_ServiceContext object.
         <br>This new object is added to the list of instantiated objects.
         @return SIMFQT_ServiceContext& The newly created object. */
-    SIMFQT_ServiceContext& create (const std::string& iTravelDatabaseName);
+    SIMFQT_ServiceContext& create ();
 
     
   protected:

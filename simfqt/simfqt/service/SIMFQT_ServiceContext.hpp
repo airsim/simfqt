@@ -6,6 +6,8 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
+// STDAIR
+#include <stdair/STDAIR_Types.hpp>
 // Simfqt
 #include <simfqt/SIMFQT_Types.hpp>
 #include <simfqt/service/ServiceAbstract.hpp>
@@ -17,18 +19,16 @@ namespace SIMFQT {
     friend class FacSimfqtServiceContext;
   public:
     // ///////// Getters //////////
-    /** Get the Fare Quote system ID. */
-    const FareQuoteID_T& getFareQuoteID () const {
-      return _fareQuoteID;
+    /** Get the pointer on the STDAIR service handler. */
+    stdair::STDAIR_ServicePtr_T getSTDAIR_Service () const {
+      return _stdairService;
     }
-
-    
-    // ///////// Setters //////////
-    /** Set the Fare Quote system ID. */
-    void setAirlineCode (const FareQuoteID_T& iFareQuoteID) {
-      _fareQuoteID = iFareQuoteID;
-    }
-
+        
+    // ///////////////// Setters ///////////////////
+    /** Set the pointer on the STDAIR service handler. */
+    void setSTDAIR_Service (stdair::STDAIR_ServicePtr_T ioSTDAIR_ServicePtr) {
+      _stdairService = ioSTDAIR_ServicePtr;
+    } 
 
     // ///////// Display Methods //////////
     /** Display the short SIMFQT_ServiceContext content. */
@@ -36,7 +36,6 @@ namespace SIMFQT {
     
     /** Display the full SIMFQT_ServiceContext content. */
     const std::string display() const;
-
     
   private:
     // /////// Construction / initialisation ////////
@@ -50,8 +49,8 @@ namespace SIMFQT {
 
   private:
     // //////////// Attributes //////////////////
-    /** Fare Quote system ID. */
-    FareQuoteID_T _fareQuoteID;
+    /** Standard Airline (StdAir) Service Handler. */
+    stdair::STDAIR_ServicePtr_T _stdairService;
   };
 
 }
