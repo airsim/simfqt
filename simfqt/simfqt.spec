@@ -1,9 +1,9 @@
 #
 %define mydocs __tmp_docdir
 #
-Name:           @PACKAGE@
-Version:        @VERSION@
-Release:        @RPM_RELEASE@%{?dist}
+Name:           simfqt
+Version:        99.99.99
+Release:        1%{?dist}
 
 Summary:        C++ library providing a clean API for parsing travel-focused requests
 
@@ -13,12 +13,9 @@ URL:            http://%{name}.sourceforge.net
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  gsl-devel >= 1.8
 BuildRequires:  boost-devel >= 1.34
 BuildRequires:  mysql-devel >= 5.0
-BuildRequires:  mysql++-devel >= 3.0
 BuildRequires:  cppunit-devel >= 1.10
-BuildRequires:  xapian-core-devel >= 1.0
 BuildRequires:  soci-devel >= 3.0
 #Requires:       
 
@@ -64,14 +61,14 @@ development documentation for %{name}. If you would like to develop
 programs using %{name}, you will need to install %{name}-devel.
 
 %package doc
-Summary:        HTML documentation for the @PACKAGE_NAME@ library
+Summary:        HTML documentation for the SIMFQT library
 Group:          Documentation
 BuildArch:      noarch
 BuildRequires:  doxygen, texlive-latex, texlive-dvips, ghostscript
 
 %description doc
-This package contains the documentation in the HTML format of the @PACKAGE_NAME@
-library. The documentation is the same as at the @PACKAGE_NAME@ web page.
+This package contains the documentation in the HTML format of the SIMFQT
+library. The documentation is the same as at the SIMFQT web page.
 
 
 %prep
