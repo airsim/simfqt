@@ -1,5 +1,5 @@
-#ifndef __SIMFQT_CMD_INDEXBUILDER_HPP
-#define __SIMFQT_CMD_INDEXBUILDER_HPP
+#ifndef __SIMFQT_CMD_FAREQUOTER_HPP
+#define __SIMFQT_CMD_FAREQUOTER_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -27,4 +27,4 @@ namespace SIMFQT {
   };
 
 }
-#endif // __SIMFQT_CMD_INDEXBUILDER_HPP
+#endif // __SIMFQT_CMD_FAREQUOTER_HPP
