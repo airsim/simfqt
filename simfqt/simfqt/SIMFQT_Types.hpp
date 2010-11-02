@@ -5,13 +5,25 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // STL
-#include <exception>
+#include <vector>
 #include <string>
+// StdAir
 
 namespace SIMFQT {
 
   // ///////// Exceptions ///////////
   class RootException : public std::exception {
+  public:
+     /** Constructors. */
+    RootException (const std::string& iWhat) : _what (iWhat) {}
+    RootException () : _what ("No more details") {}
+    /** Destructor. */
+    virtual ~RootException() throw() {}
+    /** Give the details of the exception. */
+    const char* what() const throw() { return _what.c_str(); } 
+  protected:
+    /** Details for the exception. */
+    std::string _what;
   };
 
   class NonInitialisedServiceException : public RootException {
@@ -32,6 +44,19 @@ namespace SIMFQT {
   class QuotingException : public RootException {
   };
 
+  class FileException : public RootException {
+  public:
+    /** Constructor. */
+    FileException (const std::string& iWhat) : RootException (iWhat) {}
+  };
+
+  class FareInputFileNotFoundException : public FileException {
+  public:
+    /** Constructor. */
+    FareInputFileNotFoundException (const std::string& iWhat)
+      : FileException (iWhat) {}
+  };
+
 
   // /////////////// Log /////////////
   /** Level of logs. */
@@ -50,13 +75,10 @@ namespace SIMFQT {
 
   // //////// Type definitions /////////
   /** ID for the Fare Quote system. */
-  typedef std::string FareQuoteID_T;
+  typedef unsigned int FareQuoteID_T;
 
-  /** Price, in Euros. */
+  /** Price in euros. */
   typedef double Price_T;
-
-  /** IATA code of an airline. */
-  typedef std::string AirlineCode_T;
 
   /** Number of passengers (in a group) for a booking. */
   typedef unsigned short PartySize_T;

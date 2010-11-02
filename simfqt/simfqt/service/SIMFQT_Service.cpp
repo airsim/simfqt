@@ -13,8 +13,9 @@
 #include <stdair/STDAIR_Service.hpp>
 // Simfqt
 #include <simfqt/basic/BasConst_SIMFQT_Service.hpp>
-#include <simfqt/command/FareQuoter.hpp>
 #include <simfqt/factory/FacSimfqtServiceContext.hpp>
+#include <simfqt/command/FareParser.hpp>
+#include <simfqt/command/FareQuoter.hpp>
 #include <simfqt/service/SIMFQT_ServiceContext.hpp>
 #include <simfqt/SIMFQT_Service.hpp>
 
@@ -120,7 +121,8 @@ namespace SIMFQT {
     // Smart Pointers component.
     stdair::STDAIR_ServicePtr_T lSTDAIR_Service_ptr = 
       boost::make_shared<stdair::STDAIR_Service> (iLogParams, iDBParams);
-
+    assert (lSTDAIR_Service_ptr != NULL);
+    
     // Store the STDAIR service object within the (SIMFQT) service context
     lSIMFQT_ServiceContext.setSTDAIR_Service (lSTDAIR_Service_ptr);
   }
@@ -139,6 +141,7 @@ namespace SIMFQT {
     // Smart Pointers component.
     stdair::STDAIR_ServicePtr_T lSTDAIR_Service_ptr = 
       boost::make_shared<stdair::STDAIR_Service> (iLogParams);
+    assert (lSTDAIR_Service_ptr != NULL);
 
     // Store the STDAIR service object within the (SIMFQT) service context
     lSIMFQT_ServiceContext.setSTDAIR_Service (lSTDAIR_Service_ptr);
@@ -154,7 +157,9 @@ namespace SIMFQT {
     if (doesExistAndIsReadable == false) {
       STDAIR_LOG_ERROR ("The fare input file, '" << iFareInputFilename
                         << "', can not be retrieved on the file-system");
-      throw stdair::FileNotFoundException();
+      throw FareInputFileNotFoundException ("The demand file '"
+                                              + iFareInputFilename
+                                              + "' does not exist or can not be read");
     }
 
     // Retrieve the Simfqt service context
@@ -170,37 +175,9 @@ namespace SIMFQT {
     // Get the root of the BOM tree, on which all of the other BOM objects
     // will be attached
     stdair::BomRoot& lBomRoot = lSTDAIR_Service_ptr->getBomRoot();
-  }
 
-  // //////////////////////////////////////////////////////////////////////
-  Price_T SIMFQT_Service::priceQuote (const AirlineCode_T& iAirlineCode,
-                                      const PartySize_T& iPartySize) {
-    Price_T oPrice = 0.0;
-    
-    if (_simfqtServiceContext == NULL) {
-      throw NonInitialisedServiceException();
-    }
-    assert (_simfqtServiceContext != NULL);
-    SIMFQT_ServiceContext& lSIMFQT_ServiceContext= *_simfqtServiceContext;
-
-    try {
-      
-      // Delegate the price quotation to the dedicated command
-      stdair::BasChronometer lPriceQuotingChronometer;
-      lPriceQuotingChronometer.start();
-      // oPrice = FareQuoter::priceQuote (iAirlineCode, iPartySize);
-      // const double lPriceQuotingMeasure = lPriceQuotingChronometer.elapsed();
-      
-      // // DEBUG
-      // STDAIR_LOG_DEBUG ("Price quoting: " << lPriceQuotingMeasure << " - "
-      //                   << lSIMFQT_ServiceContext.display());
-
-    } catch (const std::exception& error) {
-      STDAIR_LOG_ERROR ("Exception: "  << error.what());
-      throw QuotingException();
-    }
-
-    return oPrice;
+    // Initialise the fare parser
+    FareParser::fareRuleGeneration (iFareInputFilename, lBomRoot);
   }
   
 }

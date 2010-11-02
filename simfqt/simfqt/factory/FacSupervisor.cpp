@@ -4,7 +4,6 @@
 // STL
 #include <cassert>
 // SIMFQT
-#include <simfqt/factory/FacBomAbstract.hpp>
 #include <simfqt/factory/FacServiceAbstract.hpp>
 #include <simfqt/factory/FacSupervisor.hpp>
 
@@ -27,34 +26,13 @@ namespace SIMFQT {
 
   // //////////////////////////////////////////////////////////////////////
   void FacSupervisor::
-  registerBomFactory (FacBomAbstract* ioFacBomAbstract_ptr) {
-    _bomPool.push_back (ioFacBomAbstract_ptr);
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void FacSupervisor::
   registerServiceFactory (FacServiceAbstract* ioFacServiceAbstract_ptr) {
     _svcPool.push_back (ioFacServiceAbstract_ptr);
   }
 
   // //////////////////////////////////////////////////////////////////////
   FacSupervisor::~FacSupervisor() {
-    cleanBomLayer();
     cleanServiceLayer();
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void FacSupervisor::cleanBomLayer() {
-    for (BomFactoryPool_T::const_iterator itFactory = _bomPool.begin();
-         itFactory != _bomPool.end(); itFactory++) {
-      const FacBomAbstract* currentFactory_ptr = *itFactory;
-      assert (currentFactory_ptr != NULL);
-
-      delete (currentFactory_ptr); currentFactory_ptr = NULL;
-    }
-
-    // Empty the pool of Bom Factories
-    _bomPool.clear();
   }
 
   // //////////////////////////////////////////////////////////////////////
@@ -74,7 +52,6 @@ namespace SIMFQT {
   // //////////////////////////////////////////////////////////////////////
   void FacSupervisor::cleanFactory () {
 	if (_instance != NULL) {
-		_instance->cleanBomLayer();
 		_instance->cleanServiceLayer();
 	}
     delete (_instance); _instance = NULL;

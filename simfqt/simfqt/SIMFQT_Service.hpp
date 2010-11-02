@@ -26,11 +26,7 @@ namespace SIMFQT {
   /** Interface for the SIMFQT Services. */
   class SIMFQT_Service {
   public:
-    // /////////// Business Methods /////////////
-    /** Perform a price quotation for the travel request. */
-    Price_T priceQuote (const AirlineCode_T&, const PartySize_T&);
-
-    
+    // /////////// Business Methods /////////////    
     // ////////////////// Constructors and Destructors //////////////////    
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation

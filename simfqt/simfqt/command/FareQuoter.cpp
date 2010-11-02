@@ -13,7 +13,7 @@ namespace SIMFQT {
   // //////////////////////////////////////////////////////////////////////
   Price_T FareQuoter::
   priceQuote (const FareQuoteID_T& iFareQuoteID,
-              const AirlineCode_T& iAirlineCode, const PartySize_T& iPartySize) {
+              const stdair::AirlineCode_T& iAirlineCode, const PartySize_T& iPartySize) {
     Price_T oPrice = 0.0;
 
     try {

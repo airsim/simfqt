@@ -16,7 +16,7 @@ namespace SIMFQT {
 
     /** Quote (with a price) a travel request. */
     static Price_T priceQuote (const FareQuoteID_T&,
-                               const AirlineCode_T&, const PartySize_T&);
+                               const stdair::AirlineCode_T&, const PartySize_T&);
 
   private:
     /** Constructors. */

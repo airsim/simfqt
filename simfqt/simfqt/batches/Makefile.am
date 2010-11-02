@@ -7,9 +7,10 @@ include $(srcdir)/sources.mk
 MAINTAINERCLEANFILES = Makefile.in
 
 # Binaries (batches)
-bin_PROGRAMS =
+bin_PROGRAMS = simfqt
 
-#simfqt_SOURCES = $(batches_h_sources) $(batches_cc_sources)
-#simfqt_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
-#simfqt_LDADD =
-#simfqt_LDFLAGS = $(BOOST_PROGRAM_OPTIONS_LIB) $(STDAIR_LIBS) $(top_builddir)/simfqt/core/libsimfqt.la
+simfqt_SOURCES = $(simfqt_batches_h_sources) $(simfqt_batches_cc_sources)
+simfqt_CXXFLAGS = $(BOOST_CFLAGS) $(STDAIR_CFLAGS)
+simfqt_LDADD =
+simfqt_LDFLAGS = $(BOOST_PROGRAM_OPTIONS_LIB) $(STDAIR_LIBS) \
+	$(top_builddir)/simfqt/core/libsimfqt.la

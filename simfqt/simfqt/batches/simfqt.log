@@ -1,0 +1,2 @@
+[D]../../simfqt/command/FareParserHelper.cpp:530: Parsing fare input file: ../../test/samples/fare01.csv
+[D]../../simfqt/command/FareParserHelper.cpp:550: Parsing of fare input file: ../../test/samples/fare01.csv succeeded: read 417 characters. The input file has not been fully read. Stop point: 1
