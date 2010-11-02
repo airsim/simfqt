@@ -27,7 +27,7 @@ typedef std::vector<std::string> WordList_T;
 const std::string K_SIMFQT_DEFAULT_LOG_FILENAME ("simfqt.log");
 
 /** Default name and location for the (CSV) input file. */
-const std::string K_SIMFQT_DEFAULT_INPUT_FILENAME ("../../test/samples/fare01.csv");
+const std::string K_SIMFQT_DEFAULT_FARE_INPUT_FILENAME ("../../test/samples/fare01.csv");
 
 /** Default query string. */
 const std::string K_SIMFQT_DEFAULT_QUERY_STRING ("my good old query");
@@ -87,7 +87,7 @@ const int K_SIMFQT_EARLY_RETURN_STATUS = 99;
 /** Read and parse the command line options. */
 int readConfiguration (int argc, char* argv[], 
                        std::string& ioQueryString,
-                       stdair::Filename_T& ioInputFilename,
+                       stdair::Filename_T& ioFareInputFilename,
                        std::string& ioLogFilename) {
 
   // Initialise the travel query string, if that one is empty
@@ -111,8 +111,8 @@ int readConfiguration (int argc, char* argv[],
   boost::program_options::options_description config ("Configuration");
   config.add_options()
     ("input,i",
-     boost::program_options::value< std::string >(&ioInputFilename)->default_value(K_SIMFQT_DEFAULT_INPUT_FILENAME),
-     "(CVS) input file for the demand distributions")
+     boost::program_options::value< std::string >(&ioFareInputFilename)->default_value(K_SIMFQT_DEFAULT_FARE_INPUT_FILENAME),
+     "(CVS) input file for the fares")
     ("log,l",
      boost::program_options::value< std::string >(&ioLogFilename)->default_value(K_SIMFQT_DEFAULT_LOG_FILENAME),
      "Filepath for the logs")
@@ -157,8 +157,8 @@ int readConfiguration (int argc, char* argv[],
   }
 
   if (vm.count ("input")) {
-    ioInputFilename = vm["input"].as< std::string >();
-    std::cout << "Input filename is: " << ioInputFilename << std::endl;
+    ioFareInputFilename = vm["input"].as< std::string >();
+    std::cout << "Input filename is: " << ioFareInputFilename << std::endl;
   }
 
   if (vm.count ("log")) {
@@ -174,39 +174,36 @@ int readConfiguration (int argc, char* argv[],
 
 // /////////////// M A I N /////////////////
 int main (int argc, char* argv[]) {
-  try {
 
-    // Query
-    std::string lQuery;
+  // Query
+  std::string lQuery;
 
-    // Input file name
-    stdair::Filename_T lInputFilename;
+  // Fare input file name
+  stdair::Filename_T lFareInputFilename;
 
-    // Output log File
-    std::string lLogFilename;
+  // Output log File
+  std::string lLogFilename;
 
-    // Call the command-line option parser
-    const int lOptionParserStatus = 
-      readConfiguration (argc, argv, lQuery, lInputFilename, lLogFilename);
+  // Call the command-line option parser
+  const int lOptionParserStatus = 
+    readConfiguration (argc, argv, lQuery, lFareInputFilename, lLogFilename);
 
-    if (lOptionParserStatus == K_SIMFQT_EARLY_RETURN_STATUS) {
-      return 0;
-    }
+  if (lOptionParserStatus == K_SIMFQT_EARLY_RETURN_STATUS) {
+    return 0;
+  }
 
-    // Set the log parameters
-    std::ofstream logOutputFile;
-    // Open and clean the log outputfile
-    logOutputFile.open (lLogFilename.c_str());
-    logOutputFile.clear();
+  // Set the log parameters
+  std::ofstream logOutputFile;
+  // Open and clean the log outputfile
+  logOutputFile.open (lLogFilename.c_str());
+  logOutputFile.clear();
 
-    // Initialise the Simfqt service object
-    const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
-    SIMFQT::SIMFQT_Service simfqtService (lLogParams, lInputFilename);
+  // Initialise the Simfqt service object
+  const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
+  SIMFQT::SIMFQT_Service simfqtService (lLogParams, lFareInputFilename);
   
-    // Close the Log outputFile
-    logOutputFile.close();
-
-  } CATCH_ALL_EXCEPTIONS
+  // Close the Log outputFile
+  logOutputFile.close();
 
   return 0;
 }
