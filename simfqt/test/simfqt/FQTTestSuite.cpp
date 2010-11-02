@@ -41,7 +41,7 @@ void FQTTestSuite::simpleFQTHelper() {
     SIMFQT::SIMFQT_Service simfqtService (lLogParams, lAirlineCode);
 
     // Perform a price quotation
-    simfqtService.priceQuote (lAirlineCode, lPartySize);
+    //simfqtService.priceQuote (lAirlineCode, lPartySize);
     
   } catch (const SIMFQT::RootException& otexp) {
     std::cerr << "Standard exception: " << otexp.what() << std::endl;
