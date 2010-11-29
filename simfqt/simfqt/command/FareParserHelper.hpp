@@ -291,20 +291,20 @@ namespace SIMFQT {
     */ 
 
     /** Grammar for the Fare-Rule parser. */
-    /*template <typename ITERATOR>
     struct FareRuleParser : 
-      public boost::spirit::qi::grammar<ITERATOR, boost::spirit::ascii::space_type> {
+      public boost::spirit::qi::grammar<iterator_t, boost::spirit::ascii::space_type> {
 
       FareRuleParser (stdair::BomRoot&, FareRuleStruct&);
 
-      boost::spirit::qi::rule<ITERATOR, boost::spirit::ascii::space_type> start,
-        comments, fare_rule, fare_id, fare_key, segment, fare_rule_end, date,
-        time;
-
+      // Instantiation of rules
+      boost::spirit::qi::rule<iterator_t, boost::spirit::ascii::space_type>
+      start, comments, fare_rule, fare_id, fare_key, segment, fare_rule_end,
+      date, time;
+      
       // Parser Context
       stdair::BomRoot& _bomRoot;
       FareRuleStruct& _fareRule;
-    };*/
+    };
 
   }
   /** Short Description
@@ -339,12 +339,6 @@ namespace SIMFQT {
     // Attributes
     /** File-name of the CSV-formatted schedule input file. */
     stdair::Filename_T _filename;
-
-    /** Start iterator for the parser. */
-    iterator_t _startIterator;
-      
-    /** End iterator for the parser. */
-    iterator_t _endIterator;
 
     /** stdair::BomRoot. */
     stdair::BomRoot& _bomRoot;

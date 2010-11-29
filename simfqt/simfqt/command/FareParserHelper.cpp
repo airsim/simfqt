@@ -36,7 +36,7 @@ namespace SIMFQT {
     void storeFareId::operator() (unsigned int iFareId,
                                   boost::spirit::qi::unused_type,
                                   boost::spirit::qi::unused_type) const {
-      //_fareRule._fareId = iFareId;
+      _fareRule._fareId = iFareId;
 
        STDAIR_LOG_DEBUG ( "Fare Id: " << _fareRule._fareId);
 
@@ -358,7 +358,6 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-
     void doEndFare::operator() (boost::spirit::qi::unused_type,
                                 boost::spirit::qi::unused_type,
                                 boost::spirit::qi::unused_type) const {
@@ -390,38 +389,22 @@ namespace SIMFQT {
     // //////////////////////////////////////////////////////////////////
 
     // //////////////////////////////////////////////////////////////////
-    template <typename ITERATOR>
-    struct FareRuleParser : 
-      public boost::spirit::qi::grammar<ITERATOR, boost::spirit::ascii::space_type> {
+    FareRuleParser::FareRuleParser (stdair::BomRoot& ioBomRoot,
+                                    FareRuleStruct& iofareRule) :
+      FareRuleParser::base_type(start),
+      _bomRoot(ioBomRoot),
+      _fareRule(iofareRule) {
+      
+      start = *(comments | fare_rule)
+        ;
+      
+        comments = (boost::spirit::qi::lexeme[ (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("/")]) >> +(boost::spirit::ascii::char_ - boost::spirit::qi::eol) >> boost::spirit::qi::eol ]
+               | boost::spirit::qi::lexeme[ (boost::spirit::ascii::char_("/") >> boost::spirit::ascii::char_("*") >> +(boost::spirit::ascii::char_ - boost::spirit::ascii::char_("*")) >> boost::spirit::ascii::char_("*") >> boost::spirit::ascii::char_("/")) ])
+               ;
 
-      FareRuleParser (stdair::BomRoot& ioBomRoot,
-                      FareRuleStruct& iofareRule) :
-        FareRuleParser::base_type(start),
-        _bomRoot(ioBomRoot),
-        _fareRule(iofareRule) {
-
-        STDAIR_LOG_DEBUG ("Begin parsing");
-        
-        start = * (fare_rule) // *(comments | fare_rule)
-         ;
-
-        comments = (boost::spirit::qi::lexeme[
-                 (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("/")])
-                 >> +(boost::spirit::ascii::char_ - boost::spirit::qi::eol)
-                 >> +(boost::spirit::ascii::char_)
-                 >> boost::spirit::qi::eol ]
-                  | boost::spirit::qi::lexeme[
-                 (boost::spirit::ascii::char_("/")
-                  >> boost::spirit::ascii::char_("*")
-                  >> +(boost::spirit::ascii::char_ - boost::spirit::ascii::char_("*"))
-                  >> boost::spirit::ascii::char_("*")
-                  >> boost::spirit::ascii::char_("/")) ])
-          ;
-
-        fare_rule =// fare_key
-          //>> +( ';' >> segment )
-          //>>
-          fare_rule_end[doEndFare(_bomRoot, _fareRule)]
+        fare_rule = fare_key
+          >> +( ';' >> segment )
+          >> fare_rule_end[doEndFare(_bomRoot, _fareRule)]
           ;
 
         fare_rule_end = boost::spirit::ascii::char_(";")
@@ -448,9 +431,7 @@ namespace SIMFQT {
           >> ';' >> boost::spirit::qi::double_[storeFare(_fareRule)]
           ;
 
-        fare_id = boost::spirit::qi::lexeme[
-                   uint1_4_p[storeFareId(_fareRule)] ]
-           ;
+        fare_id = uint1_4_p[storeFareId(_fareRule)];
         
         date =  boost::spirit::qi::lexeme[
           uint4_p[boost::phoenix::ref(_fareRule._itYear) = boost::spirit::qi::labels::_1]
@@ -483,16 +464,7 @@ namespace SIMFQT {
         BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
         BOOST_SPIRIT_DEBUG_NODE (date);
         BOOST_SPIRIT_DEBUG_NODE (time);
-      }
-      
-      boost::spirit::qi::rule<ITERATOR, boost::spirit::ascii::space_type>
-      start, comments, fare_rule, fare_id, fare_key, segment, fare_rule_end,
-      date, time;
-      
-      // Parser Context
-      stdair::BomRoot& _bomRoot;
-      FareRuleStruct& _fareRule;
-    };
+    }
 
   }
   /////////////////////////////////////////////////////////////////////////
@@ -521,7 +493,15 @@ namespace SIMFQT {
       
       throw FareInputFileNotFoundException ("The fare file " + _filename + " does not exist or can not be read");
     }
+  }
     
+  // //////////////////////////////////////////////////////////////////////
+  bool FareRuleFileParser::generateFareRules () {
+      
+    STDAIR_LOG_DEBUG ("Parsing fare input file: " << _filename);
+
+
+
     // File to be parsed
     const std::string* lFileName = &_filename;
     const char *lChar = (*lFileName).c_str();
@@ -536,45 +516,37 @@ namespace SIMFQT {
     }
     
     // Create an input iterator
-    base_iterator_t inputBegin(fileToBeParsed);
-    typedef boost::spirit::multi_pass<base_iterator_t> iterator_t;   
-
-    // Convert input iterator to an iterator usable by spirit parser  
-    iterator_t _startIterator =  boost::spirit::make_default_multi_pass(inputBegin);
-  }
+    base_iterator_t inputBegin (fileToBeParsed);
     
-  // //////////////////////////////////////////////////////////////////////
-  bool FareRuleFileParser::generateFareRules () {
-      
-    STDAIR_LOG_DEBUG ("Parsing fare input file: " << _filename);
+    // Convert input iterator to an iterator usable by spirit parser  
+    iterator_t start = boost::spirit::make_default_multi_pass (inputBegin);
+    iterator_t end;
 
     // Initialise the parser (grammar) with the helper/staging structure.
-    typedef FareParserHelper::FareRuleParser<iterator_t> FareRule_T;
-    FareRule_T lFPParser(_bomRoot, _fareRule);
+    FareParserHelper::FareRuleParser lFPParser(_bomRoot, _fareRule);
       
     // Launch the parsing of the file and, thanks to the doEndFare
     // call-back structure, the building of the whole BomRoot BOM
-    STDAIR_LOG_DEBUG ("Begin parsing");
-    
+    STDAIR_LOG_DEBUG ("Begin parsing") ;
     const bool hasParsingBeenSuccesful = 
-      boost::spirit::qi::phrase_parse(_startIterator, _endIterator, lFPParser, boost::spirit::ascii::space);
+       boost::spirit::qi::phrase_parse(start, end, lFPParser, boost::spirit::ascii::space);
+    STDAIR_LOG_DEBUG ("End parsing") ;
       
-    STDAIR_LOG_DEBUG ("Finish parsing");
     if (hasParsingBeenSuccesful == false) {
       // TODO: decide whether to throw an exceqption
       STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
                         << " failed");
         
     }
-    // if  (_startIterator != _endIterator) {
-    //   // TODO: decide whether to throw an exception
-    //   STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
-    //                     << " failed");
-    // }
-    // if (hasParsingBeenSuccesful == true && _startIterator == _endIterator) {
-    //   STDAIR_LOG_DEBUG ("Parsing of fare input file: " << _filename
-    //   << " succeeded ;)");
-    // }
+    if  (start != end) {
+      // TODO: decide whether to throw an exception
+      STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
+                        << " failed");
+    }
+    if (hasParsingBeenSuccesful == true && start == end) {
+      STDAIR_LOG_DEBUG ("Parsing of fare input file: " << _filename
+      << " succeeded ;)");
+    }
     return hasParsingBeenSuccesful;
   }
     
