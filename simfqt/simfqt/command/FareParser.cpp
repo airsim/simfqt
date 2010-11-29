@@ -6,6 +6,7 @@
 #include <string>
 // StdAir
 //#include <stdair/bom/Inventory.hpp>
+#include <stdair/service/Logger.hpp>
 // AirSched
 #include <simfqt/command/FareParserHelper.hpp>
 #include <simfqt/command/FareParser.hpp>
@@ -22,6 +23,7 @@ namespace SIMFQT {
     // Parse the CSV-formatted fare input file generate the
     // corresponding fare rules and fulfill the WorldSchedule.
     lFareRuleFileParser.generateFareRules ();
+    STDAIR_LOG_DEBUG ("Finish!");
   }
 
 }

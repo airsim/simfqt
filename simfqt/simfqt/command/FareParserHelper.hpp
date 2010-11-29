@@ -6,10 +6,10 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// #define BOOST_SPIRIT_DEBUG
+//#define BOOST_SPIRIT_DEBUG
 // StdAir
 #include <stdair/command/CmdAbstract.hpp>
-// AirSched
+// Simfqt
 #include <simfqt/SIMFQT_Types.hpp>
 #include <simfqt/basic/BasParserTypes.hpp>
 #include <simfqt/bom/FareRuleStruct.hpp>
@@ -40,7 +40,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeFareId (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (unsigned int) const;
+      void operator() (unsigned int,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed origin. */
@@ -48,7 +50,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeOrigin (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (std::vector<char>,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed destination. */
@@ -56,7 +60,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeDestination (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (std::vector<char>,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
      /** Store the parsed start of the date range. */
@@ -64,7 +70,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeDateRangeStart (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed end of the date range. */
@@ -72,7 +80,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeDateRangeEnd (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed start range time. */
@@ -80,7 +90,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeStartRangeTime (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t iStr, iterator_t iStrEnd) const;
+      void operator() (boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed end start range time. */
@@ -88,7 +100,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeEndRangeTime (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed customer position. */
@@ -96,7 +110,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storePOS (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (std::vector<char>,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the channel distribution. */
@@ -104,7 +120,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeChannel (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (std::vector<char>,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed advance purchase days. */
@@ -112,7 +130,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeAdvancePurchase (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (unsigned int) const;
+      void operator() (unsigned int,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed saturday night. */
@@ -120,7 +140,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeSaturdayStay (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (char) const;
+      void operator() (char,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
     
     /** Store the parsed change fees. */
@@ -128,7 +150,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeChangeFees (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (char) const;
+      void operator() (char,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed refundable option */
@@ -136,7 +160,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeNonRefundable (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (char) const;
+      void operator() (char,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
     
     /** Store the parsed minimum stay. */
@@ -144,7 +170,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeMinimumStay (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (unsigned int) const;
+      void operator() (unsigned int,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
      /** Store the parsed fare value. */
@@ -152,7 +180,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeFare (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (double) const;
+      void operator() (double,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const; 
     };
     
     /** Store the parsed airline code. */
@@ -160,7 +190,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeAirlineCode (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (std::vector<char>,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
     };
 
     /** Store the parsed class. */
@@ -168,7 +200,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       storeClass (FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (char) const;
+      void operator() (char,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const; 
     };
     
     /** Mark the end of the fare-rule parsing. */
@@ -176,7 +210,9 @@ namespace SIMFQT {
       /** Actor Constructor. */
       doEndFare (stdair::BomRoot&, FareRuleStruct&);
       /** Actor Function (functor). */
-      void operator() (iterator_t, iterator_t) const;
+      void operator() (boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type,
+                       boost::spirit::qi::unused_type) const;
       /** Actor Specific Context. */
       stdair::BomRoot& _bomRoot;
     };
@@ -255,27 +291,20 @@ namespace SIMFQT {
     */ 
 
     /** Grammar for the Fare-Rule parser. */
+    /*template <typename ITERATOR>
     struct FareRuleParser : 
-      public boost::spirit::classic::grammar<FareRuleParser> {
+      public boost::spirit::qi::grammar<ITERATOR, boost::spirit::ascii::space_type> {
 
       FareRuleParser (stdair::BomRoot&, FareRuleStruct&);
 
-      template <typename ScannerT>
-      struct definition {
-        definition (FareRuleParser const& self);
-
-          // Instantiation of rules
-        boost::spirit::classic::rule<ScannerT> fare_rule_list, comments,
-          fare_rule, fare_id, fare_key, segment, fare_rule_end, date, time;
-
-        /** Entry point of the parser. */
-        boost::spirit::classic::rule<ScannerT> const& start() const;
-      };
+      boost::spirit::qi::rule<ITERATOR, boost::spirit::ascii::space_type> start,
+        comments, fare_rule, fare_id, fare_key, segment, fare_rule_end, date,
+        time;
 
       // Parser Context
       stdair::BomRoot& _bomRoot;
       FareRuleStruct& _fareRule;
-    };
+    };*/
 
   }
   /** Short Description
@@ -316,7 +345,7 @@ namespace SIMFQT {
       
     /** End iterator for the parser. */
     iterator_t _endIterator;
-      
+
     /** stdair::BomRoot. */
     stdair::BomRoot& _bomRoot;
 

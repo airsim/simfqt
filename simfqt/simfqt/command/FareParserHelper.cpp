@@ -4,6 +4,7 @@
 // STL
 #include <cassert>
 #include <vector>
+#include <fstream>
 // StdAir
 #include <stdair/basic/BasFileMgr.hpp>
 #include <stdair/bom/BomRoot.hpp>
@@ -32,16 +33,18 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeFareId::operator() (unsigned int iFareId) const {
-       _fareRule._fareId = iFareId;
+    void storeFareId::operator() (unsigned int iFareId,
+                                  boost::spirit::qi::unused_type,
+                                  boost::spirit::qi::unused_type) const {
+      //_fareRule._fareId = iFareId;
 
-       //STDAIR_LOG_DEBUG ( "Fare Id: " << _fareRule._fareId);
+       STDAIR_LOG_DEBUG ( "Fare Id: " << _fareRule._fareId);
 
        _fareRule._nbOfAirlines = 0;
-        _fareRule._airlineCode = "";
-        _fareRule._classCode = "";
-        _fareRule._airlineCodeList.clear();
-        _fareRule._classCodeList.clear(); 
+       _fareRule._airlineCode = "";
+       _fareRule._classCode = "";
+       _fareRule._airlineCodeList.clear();
+       _fareRule._classCodeList.clear(); 
     }
     
     // //////////////////////////////////////////////////////////////////
@@ -51,10 +54,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeOrigin::operator() (iterator_t iStr,
-                                  iterator_t iStrEnd) const {
-       stdair::AirportCode_T lOrigin (iStr, iStrEnd);
-       //STDAIR_LOG_DEBUG ( "Origin: " << lOrigin);
+    void storeOrigin::operator() (std::vector<char> iChar,
+                                  boost::spirit::qi::unused_type,
+                                  boost::spirit::qi::unused_type) const {
+       stdair::AirportCode_T lOrigin (iChar.begin(), iChar.end());
+       STDAIR_LOG_DEBUG ( "Origin: " << lOrigin);
        _fareRule._origin = lOrigin;
     }
 
@@ -65,10 +69,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeDestination::operator() (iterator_t iStr,
-                                       iterator_t iStrEnd) const {
-       stdair::AirportCode_T lDestination (iStr, iStrEnd);
-       //STDAIR_LOG_DEBUG ( "Destination: " << lDestination);
+    void storeDestination::operator() (std::vector<char> iChar,
+                                       boost::spirit::qi::unused_type,
+                                       boost::spirit::qi::unused_type) const {
+       stdair::AirportCode_T lDestination (iChar.begin(), iChar.end());
+       STDAIR_LOG_DEBUG ( "Destination: " << lDestination);
        _fareRule._destination = lDestination;
     }
     
@@ -79,10 +84,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeDateRangeStart::operator() (iterator_t iStr,
-                                          iterator_t iStrEnd) const {
+    void storeDateRangeStart::operator() (boost::spirit::qi::unused_type,
+                                          boost::spirit::qi::unused_type,
+                                          boost::spirit::qi::unused_type) const {
       _fareRule._dateRangeStart = _fareRule.getDate();
-      //STDAIR_LOG_DEBUG ("Date Range Start: "<< _fareRule._dateRangeStart);
+      STDAIR_LOG_DEBUG ("Date Range Start: "<< _fareRule._dateRangeStart);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -92,10 +98,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeDateRangeEnd::operator() (iterator_t iStr,
-                                        iterator_t iStrEnd) const {
+    void storeDateRangeEnd::operator() (boost::spirit::qi::unused_type,
+                                        boost::spirit::qi::unused_type,
+                                        boost::spirit::qi::unused_type) const {
        _fareRule._dateRangeEnd = _fareRule.getDate();
-       //STDAIR_LOG_DEBUG ("Date Range End: " << _fareRule._dateRangeEnd);
+       STDAIR_LOG_DEBUG ("Date Range End: " << _fareRule._dateRangeEnd);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -105,10 +112,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeStartRangeTime::operator() (iterator_t iStr,
-                                          iterator_t iStrEnd) const {
+    void storeStartRangeTime::operator() (boost::spirit::qi::unused_type,
+                                          boost::spirit::qi::unused_type,
+                                          boost::spirit::qi::unused_type) const {
       _fareRule._timeRangeStart = _fareRule.getTime();
-      //STDAIR_LOG_DEBUG ("Time Range Start: " << _fareRule._timeRangeStart);
+      STDAIR_LOG_DEBUG ("Time Range Start: " << _fareRule._timeRangeStart);
       // Reset the number of seconds
       _fareRule._itSeconds = 0;
     }
@@ -120,10 +128,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeEndRangeTime::operator() (iterator_t iStr,
-                                        iterator_t iStrEnd) const {
+    void storeEndRangeTime::operator() (boost::spirit::qi::unused_type,
+                                        boost::spirit::qi::unused_type,
+                                        boost::spirit::qi::unused_type) const {
       _fareRule._timeRangeEnd = _fareRule.getTime();
-      // STDAIR_LOG_DEBUG ("Time Range End: " << _fareRule._timeRangeEnd);
+      STDAIR_LOG_DEBUG ("Time Range End: " << _fareRule._timeRangeEnd);
       // Reset the number of seconds
       _fareRule._itSeconds = 0;
     }
@@ -135,11 +144,12 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storePOS::operator() (iterator_t iStr,
-                                    iterator_t iStrEnd) const {
-      stdair::AirlineCode_T lPOS (iStr, iStrEnd);
+    void storePOS::operator() (std::vector<char> iChar,
+                               boost::spirit::qi::unused_type,
+                               boost::spirit::qi::unused_type) const {
+      stdair::AirlineCode_T lPOS (iChar.begin(), iChar.end());
       _fareRule._pos = lPOS;
-      //STDAIR_LOG_DEBUG ("POS: " << _fareRule._pos);
+     STDAIR_LOG_DEBUG ("POS: " << _fareRule._pos);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -149,15 +159,16 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeChannel::operator() (iterator_t iStr,
-                                   iterator_t iStrEnd) const {
-      stdair::ChannelLabel_T lChannel (iStr, iStrEnd);
+    void storeChannel::operator() (std::vector<char> iChar,
+                                   boost::spirit::qi::unused_type,
+                                   boost::spirit::qi::unused_type) const {
+      stdair::ChannelLabel_T lChannel (iChar.begin(), iChar.end());
       _fareRule._channel = lChannel;
       if (lChannel != "IN" && lChannel != "IF"
           && lChannel != "DN" && lChannel != "DF") {
         STDAIR_LOG_DEBUG ("Invalid channel " << lChannel);
       }
-      // STDAIR_LOG_DEBUG ("Channel: " << _fareRule._channel);
+      STDAIR_LOG_DEBUG ("Channel: " << _fareRule._channel);
     }
     
     // //////////////////////////////////////////////////////////////////
@@ -167,9 +178,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeAdvancePurchase::operator() (unsigned int iAdancePurchase) const {
+    void storeAdvancePurchase::operator() (unsigned int iAdancePurchase,
+                                           boost::spirit::qi::unused_type,
+                                           boost::spirit::qi::unused_type) const {
       _fareRule._advancePurchase = iAdancePurchase;
-      //STDAIR_LOG_DEBUG ( "Advance Purchase: " << _fareRule._advancePurchase);
+      STDAIR_LOG_DEBUG ( "Advance Purchase: " << _fareRule._advancePurchase);
     }
     
     // //////////////////////////////////////////////////////////////////
@@ -179,7 +192,9 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeSaturdayStay::operator() (char iSaturdayStay) const {
+    void storeSaturdayStay::operator() (char iSaturdayStay,
+                                        boost::spirit::qi::unused_type,
+                                        boost::spirit::qi::unused_type) const {
       bool lBool = false;
       if (iSaturdayStay == 'T') {
         lBool = true;
@@ -190,7 +205,7 @@ namespace SIMFQT {
       }
       stdair::SaturdayStay_T lSaturdayStay (lBool);
       _fareRule._saturdayStay = lSaturdayStay;
-      //STDAIR_LOG_DEBUG ("Saturday Stay: " << _fareRule._saturdayStay);
+      STDAIR_LOG_DEBUG ("Saturday Stay: " << _fareRule._saturdayStay);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -200,7 +215,9 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeChangeFees::operator() (char iChangefees) const {
+    void storeChangeFees::operator() (char iChangefees,
+                                      boost::spirit::qi::unused_type,
+                                      boost::spirit::qi::unused_type) const {
       
       bool lBool = false;
       if (iChangefees == 'T') {
@@ -212,7 +229,7 @@ namespace SIMFQT {
       }
       stdair::ChangeFees_T lChangefees (lBool);
       _fareRule._changeFees = lChangefees;
-      //STDAIR_LOG_DEBUG ("Change fees: " << _fareRule._changeFees);
+      STDAIR_LOG_DEBUG ("Change fees: " << _fareRule._changeFees);
     }
     
     // //////////////////////////////////////////////////////////////////
@@ -222,7 +239,9 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeNonRefundable::operator() (char iNonRefundable) const {
+    void storeNonRefundable::operator() (char iNonRefundable,
+                                         boost::spirit::qi::unused_type,
+                                         boost::spirit::qi::unused_type) const {
        bool lBool = false;
        if (iNonRefundable == 'T') {
          lBool = true;
@@ -233,7 +252,7 @@ namespace SIMFQT {
        }
        stdair::NonRefundable_T lNonRefundable (lBool);
        _fareRule._nonRefundable = lNonRefundable;
-       // STDAIR_LOG_DEBUG ("Non refundable: " << _fareRule._nonRefundable);
+       STDAIR_LOG_DEBUG ("Non refundable: " << _fareRule._nonRefundable);
     }
     
     // //////////////////////////////////////////////////////////////////
@@ -243,9 +262,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeMinimumStay::operator() (unsigned int iMinStay) const {
+    void storeMinimumStay::operator() (unsigned int iMinStay,
+                                       boost::spirit::qi::unused_type,
+                                       boost::spirit::qi::unused_type) const {
       _fareRule._minimumStay = iMinStay;
-      //STDAIR_LOG_DEBUG ("Minimum Stay: " << _fareRule._minimumStay );
+      STDAIR_LOG_DEBUG ("Minimum Stay: " << _fareRule._minimumStay );
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -255,9 +276,11 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeFare::operator() (double iFare) const {
+    void storeFare::operator() (double iFare,
+                                boost::spirit::qi::unused_type,
+                                boost::spirit::qi::unused_type) const {
       _fareRule._fare = iFare;
-      // STDAIR_LOG_DEBUG ("Fare: " << _fareRule._fare);
+      STDAIR_LOG_DEBUG ("Fare: " << _fareRule._fare);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -267,11 +290,12 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeAirlineCode::operator() (iterator_t iStr,
-                                       iterator_t iStrEnd) const {
+    void storeAirlineCode::operator() (std::vector<char> iChar,
+                                       boost::spirit::qi::unused_type,
+                                       boost::spirit::qi::unused_type) const {
 
       bool lAlreadyInTheList = false;
-      stdair::AirlineCode_T lAirlineCode (iStr, iStrEnd);
+      stdair::AirlineCode_T lAirlineCode (iChar.begin(), iChar.end());
       // Update the airline code
       _fareRule._airlineCode = lAirlineCode;
       // Test if the FareRule Struct stands for interline products
@@ -299,7 +323,7 @@ namespace SIMFQT {
           << lAirlineCode);*/
         _fareRule._airlineCodeList.push_back (lAirlineCode);
       }
-      // STDAIR_LOG_DEBUG ( "Airline code: " << lAirlineCode);
+      STDAIR_LOG_DEBUG ( "Airline code: " << lAirlineCode);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -309,7 +333,9 @@ namespace SIMFQT {
     }
     
     // //////////////////////////////////////////////////////////////////
-    void storeClass::operator() (char iChar) const {
+    void storeClass::operator() (char iChar,
+                                 boost::spirit::qi::unused_type,
+                                 boost::spirit::qi::unused_type) const {
       std::ostringstream ostr;
       ostr << iChar;
       std::string classCodeStr = ostr.str();
@@ -319,7 +345,7 @@ namespace SIMFQT {
       std::ostringstream ostrr;
       ostrr << _fareRule._classCode << classCodeStr;
       _fareRule._classCode = ostrr.str();
-      //STDAIR_LOG_DEBUG ("Class Code: " << lClassCode << std::endl);
+      STDAIR_LOG_DEBUG ("Class Code: " << lClassCode << std::endl);
         
     }
     
@@ -333,164 +359,152 @@ namespace SIMFQT {
     
     // //////////////////////////////////////////////////////////////////
 
-    void doEndFare::operator() (iterator_t iStr,
-                                iterator_t iStrEnd) const {
+    void doEndFare::operator() (boost::spirit::qi::unused_type,
+                                boost::spirit::qi::unused_type,
+                                boost::spirit::qi::unused_type) const {
 
       // Generation of the fare rule object.
+      STDAIR_LOG_DEBUG ("Do End");
       FareRuleGenerator::createFareRule (_bomRoot, _fareRule);
-    }
-      
+    }  
+
     // ///////////////////////////////////////////////////////////////////
     //
     //  Utility Parsers
     //
     // ///////////////////////////////////////////////////////////////////
-  
+    /** 1-digit-integer parser */
+    int1_p_t int1_p;
+    
     /** 2-digit-integer parser */
     uint2_p_t uint2_p;
-    
+
     /** 4-digit-integer parser */
     uint4_p_t uint4_p;
-
+    
     /** Up-to-4-digit-integer parser */
     uint1_4_p_t uint1_4_p;
-
-    /** Sequence of (capital) alphabetic characters: chset_p("A-Z") */
-    chset_t alpha_cap_set_p ("A-Z");
-    
-    /** Airport Parser: repeat_p(3)[chset_p("0-9A-Z")] */
-    repeat_p_t airport_p (chset_t("0-9A-Z").derived(), 3, 3);
-
-    /** Year Parser: limit_d(2000u, 2099u)[uint4_p] */
-    bounded4_p_t year_p (uint4_p.derived(), 2000u, 2099u);
-      
-    /** Month Parser: limit_d(1u, 12u)[uint2_p] */
-    bounded2_p_t month_p (uint2_p.derived(), 1u, 12u);
-
-    /** Day Parser: limit_d(1u, 31u)[uint2_p] */
-    bounded2_p_t day_p (uint2_p.derived(), 1u, 31u);
-      
-    /** Hour Parser: limit_d(0u, 23u)[uint2_p] */
-    bounded2_p_t hours_p (uint2_p.derived(), 0u, 23u);
-
-    /** Minute Parser: limit_d(0u, 59u)[uint2_p] */
-    bounded2_p_t minutes_p (uint2_p.derived(), 0u, 59u);
-
-    /** Second Parser: limit_d(0u, 59u)[uint2_p] */
-    bounded2_p_t seconds_p (uint2_p.derived(), 0u, 59u);
-
-    /** Airline Code Parser: repeat_p(2,3)[chset_p("0-9A-Z")] */
-    repeat_p_t airline_code_p (chset_t("0-9A-Z").derived(), 2, 3);
-
-    /** Channel type Parser: repeat_p(2,3)[chset_p("A-ZA-Z")] */
-    repeat_p_t channel_type_p (chset_t("A-Z").derived(), 2, 3);
 
     // //////////////////////////////////////////////////////////////////
     //  (Boost Spirit) Grammar Definition
     // //////////////////////////////////////////////////////////////////
 
     // //////////////////////////////////////////////////////////////////
-    FareRuleParser::
-    FareRuleParser (stdair::BomRoot& ioBomRoot,
-                        FareRuleStruct& ioFareRule) 
-      : _bomRoot (ioBomRoot),
-        _fareRule (ioFareRule) {
-    }
+    template <typename ITERATOR>
+    struct FareRuleParser : 
+      public boost::spirit::qi::grammar<ITERATOR, boost::spirit::ascii::space_type> {
 
-    // //////////////////////////////////////////////////////////////////
-    template<typename ScannerT>
-    FareRuleParser::definition<ScannerT>::
-    definition (FareRuleParser const& self) {
+      FareRuleParser (stdair::BomRoot& ioBomRoot,
+                      FareRuleStruct& iofareRule) :
+        FareRuleParser::base_type(start),
+        _bomRoot(ioBomRoot),
+        _fareRule(iofareRule) {
 
-        fare_rule_list = *( comments | fare_rule )
+        STDAIR_LOG_DEBUG ("Begin parsing");
+        
+        start = * (fare_rule) // *(comments | fare_rule)
+         ;
+
+        comments = (boost::spirit::qi::lexeme[
+                 (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("/")])
+                 >> +(boost::spirit::ascii::char_ - boost::spirit::qi::eol)
+                 >> +(boost::spirit::ascii::char_)
+                 >> boost::spirit::qi::eol ]
+                  | boost::spirit::qi::lexeme[
+                 (boost::spirit::ascii::char_("/")
+                  >> boost::spirit::ascii::char_("*")
+                  >> +(boost::spirit::ascii::char_ - boost::spirit::ascii::char_("*"))
+                  >> boost::spirit::ascii::char_("*")
+                  >> boost::spirit::ascii::char_("/")) ])
           ;
 
-        comments = boost::spirit::classic::comment_p("//")
-          | boost::spirit::classic::comment_p("/*", "*/")
+        fare_rule =// fare_key
+          //>> +( ';' >> segment )
+          //>>
+          fare_rule_end[doEndFare(_bomRoot, _fareRule)]
           ;
 
-        fare_rule = fare_key
-          >> +( ';' >> segment )
-          >> fare_rule_end[doEndFare(self._bomRoot, self._fareRule)]
-          ;
-
-        fare_rule_end = boost::spirit::classic::ch_p(';')
+        fare_rule_end = boost::spirit::ascii::char_(";")
           ;
 
         fare_key = fare_id
-          >> ';' >> (airport_p)[storeOrigin(self._fareRule)]
-          >> ';' >> (airport_p)[storeDestination(self._fareRule)]
-          >> ';' >> date[storeDateRangeStart(self._fareRule)]
-          >> ';' >> date[storeDateRangeEnd(self._fareRule)]
-          >> ';' >> time[storeStartRangeTime(self._fareRule)]
-          >> ';' >> time[storeEndRangeTime(self._fareRule)]
-          >> ';' >> (airport_p)[storePOS(self._fareRule)]
-          >> ';' >> (channel_type_p)[storeChannel(self._fareRule)]
-          >> ';' >> (uint1_4_p)[storeAdvancePurchase(self._fareRule)]
-          >> ';' >> (alpha_cap_set_p)[storeSaturdayStay(self._fareRule)]
-          >> ';' >> (alpha_cap_set_p)[storeChangeFees(self._fareRule)]
-          >> ';' >> (alpha_cap_set_p)[storeNonRefundable(self._fareRule)]
-          >> ';' >> (uint1_4_p)[storeMinimumStay(self._fareRule)]
-          >> ';' >> (boost::spirit::classic::ureal_p)[storeFare(self._fareRule)]
+          >> ';' >> boost::spirit::qi::lexeme[
+          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storeOrigin(_fareRule)] ]
+          >> ';' >> boost::spirit::qi::lexeme[
+          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storeDestination(_fareRule)] ]
+          >> ';' >> date[storeDateRangeStart(_fareRule)]
+          >> ';' >> date[storeDateRangeEnd(_fareRule)]
+          >> ';' >> time[storeStartRangeTime(_fareRule)]
+          >> ';' >> time[storeEndRangeTime(_fareRule)]
+          >> ';' >> boost::spirit::qi::lexeme[
+          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storePOS(_fareRule)] ]
+          >> ';' >> boost::spirit::qi::lexeme[
+          (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")])[storeChannel(_fareRule)] ]
+          >> ';' >> (uint1_4_p)[storeAdvancePurchase(_fareRule)]
+          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeSaturdayStay(_fareRule)]
+          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeChangeFees(_fareRule)] 
+          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeNonRefundable(_fareRule)] 
+          >> ';' >> uint1_4_p[storeMinimumStay(_fareRule)]
+          >> ';' >> boost::spirit::qi::double_[storeFare(_fareRule)]
           ;
 
-        fare_id = boost::spirit::classic::lexeme_d[
-                   (uint1_4_p)[storeFareId(self._fareRule)]]
+        fare_id = boost::spirit::qi::lexeme[
+                   uint1_4_p[storeFareId(_fareRule)] ]
            ;
         
-        date = boost::spirit::classic::lexeme_d[
-           (year_p)[boost::spirit::classic::assign_a(self._fareRule._itYear)]
-           >> '-'
-           >> (month_p)[boost::spirit::classic::assign_a(self._fareRule._itMonth)]
-           >> '-'
-           >> (day_p)[boost::spirit::classic::assign_a(self._fareRule._itDay)]]
+        date =  boost::spirit::qi::lexeme[
+          uint4_p[boost::phoenix::ref(_fareRule._itYear) = boost::spirit::qi::labels::_1]
+          >> '-'
+          >> uint2_p[boost::phoenix::ref(_fareRule._itMonth) =boost::spirit::qi::labels::_1]
+          >> '-'
+          >> uint2_p[boost::phoenix::ref(_fareRule._itDay) = boost::spirit::qi::labels::_1] ]
           ;
-           
-        time = boost::spirit::classic::lexeme_d[
-           (hours_p)[boost::spirit::classic::assign_a(self._fareRule._itHours)]
-           >> ':'
-           >> (minutes_p)[boost::spirit::classic::assign_a(self._fareRule._itMinutes)]
-           >> !(':' >> (seconds_p)[boost::spirit::classic::assign_a(self._fareRule._itSeconds)])]
-           ;
-
-        segment = boost::spirit::classic::lexeme_d[
-           (airline_code_p)[storeAirlineCode(self._fareRule)]]
-          >> ';' >> (alpha_cap_set_p)[storeClass(self._fareRule)]
+        
+        time = boost::spirit::qi::lexeme[
+          uint2_p[boost::phoenix::ref(_fareRule._itHours) = boost::spirit::qi::labels::_1]
+          >> ':'
+          >> uint2_p[boost::phoenix::ref(_fareRule._itMinutes) = boost::spirit::qi::labels::_1]
+          >> !(':' >> (uint2_p)[boost::phoenix::ref(_fareRule._itSeconds) = boost::spirit::qi::labels::_1]) ]
           ;
 
-      //BOOST_SPIRIT_DEBUG_NODE (FareRuleParser);
-      BOOST_SPIRIT_DEBUG_NODE (fare_rule_list);
-      BOOST_SPIRIT_DEBUG_NODE (comments);
-      BOOST_SPIRIT_DEBUG_NODE (fare_rule);
-      BOOST_SPIRIT_DEBUG_NODE (fare_id);
-      BOOST_SPIRIT_DEBUG_NODE (fare_key);
-      BOOST_SPIRIT_DEBUG_NODE (segment);
-      BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
-      BOOST_SPIRIT_DEBUG_NODE (date);
-      BOOST_SPIRIT_DEBUG_NODE (time);
+        segment = boost::spirit::qi::lexeme[
+          (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")])[storeAirlineCode(_fareRule)] ]
+          >> ';'
+          >> boost::spirit::ascii::char_("A-Z")[storeClass(_fareRule)]
+          ;
+
+        //BOOST_SPIRIT_DEBUG_NODE (FareRuleParser);
+        BOOST_SPIRIT_DEBUG_NODE (start);
+        BOOST_SPIRIT_DEBUG_NODE (comments);
+        BOOST_SPIRIT_DEBUG_NODE (fare_rule);
+        BOOST_SPIRIT_DEBUG_NODE (fare_id);
+        BOOST_SPIRIT_DEBUG_NODE (fare_key);
+        BOOST_SPIRIT_DEBUG_NODE (segment);
+        BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
+        BOOST_SPIRIT_DEBUG_NODE (date);
+        BOOST_SPIRIT_DEBUG_NODE (time);
+      }
       
-    }
+      boost::spirit::qi::rule<ITERATOR, boost::spirit::ascii::space_type>
+      start, comments, fare_rule, fare_id, fare_key, segment, fare_rule_end,
+      date, time;
+      
+      // Parser Context
+      stdair::BomRoot& _bomRoot;
+      FareRuleStruct& _fareRule;
+    };
 
-    // //////////////////////////////////////////////////////////////////
-    template<typename ScannerT>
-    boost::spirit::classic::rule<ScannerT> const&
-    FareRuleParser::definition<ScannerT>::start() const {
-      return fare_rule_list;
-    }
-    
   }
-
-
   /////////////////////////////////////////////////////////////////////////
   //
   //  Entry class for the file parser
   //
   /////////////////////////////////////////////////////////////////////////
-
+    
   // //////////////////////////////////////////////////////////////////////
   FareRuleFileParser::
-   FareRuleFileParser (stdair::BomRoot& ioBomRoot,
-                          const stdair::Filename_T& iFilename)
+  FareRuleFileParser (stdair::BomRoot& ioBomRoot,
+                      const stdair::Filename_T& iFilename)
     : _filename (iFilename), _bomRoot (ioBomRoot) {
     init();
   }
@@ -503,61 +517,65 @@ namespace SIMFQT {
 
     if (doesExistAndIsReadable == false) {
       STDAIR_LOG_ERROR ("The fare schedule file " << _filename
-                        << " does not exist or can not be read.");
+                        << " does not exist or can not be  read.");
       
       throw FareInputFileNotFoundException ("The fare file " + _filename + " does not exist or can not be read");
     }
     
-    // Open the file
-    _startIterator = iterator_t (_filename);
+    // File to be parsed
+    const std::string* lFileName = &_filename;
+    const char *lChar = (*lFileName).c_str();
+    std::ifstream fileToBeParsed(lChar, std::ios_base::in);
 
     // Check the filename exists and can be open
-    if (!_startIterator) {
+    if (fileToBeParsed == false) {
       STDAIR_LOG_ERROR ("The fare file " << _filename << " can not be open."
                           << std::endl);
 
       throw FareInputFileNotFoundException ("The file " + _filename + " does not exist or can not be read");
     }
+    
+    // Create an input iterator
+    base_iterator_t inputBegin(fileToBeParsed);
+    typedef boost::spirit::multi_pass<base_iterator_t> iterator_t;   
 
-    // Create an EOF iterator
-    _endIterator = _startIterator.make_end();
+    // Convert input iterator to an iterator usable by spirit parser  
+    iterator_t _startIterator =  boost::spirit::make_default_multi_pass(inputBegin);
   }
     
   // //////////////////////////////////////////////////////////////////////
   bool FareRuleFileParser::generateFareRules () {
-    bool oResult = false;
       
     STDAIR_LOG_DEBUG ("Parsing fare input file: " << _filename);
 
     // Initialise the parser (grammar) with the helper/staging structure.
-    FareParserHelper::FareRuleParser lFPParser (_bomRoot, _fareRule);
+    typedef FareParserHelper::FareRuleParser<iterator_t> FareRule_T;
+    FareRule_T lFPParser(_bomRoot, _fareRule);
       
     // Launch the parsing of the file and, thanks to the doEndFare
     // call-back structure, the building of the whole BomRoot BOM
-    boost::spirit::classic::parse_info<iterator_t> info =
-      boost::spirit::classic::parse (_startIterator, _endIterator, lFPParser, 
-                                     boost::spirit::classic::space_p);
-
-    // Retrieves whether or not the parsing was successful
-    oResult = info.hit;
+    STDAIR_LOG_DEBUG ("Begin parsing");
+    
+    const bool hasParsingBeenSuccesful = 
+      boost::spirit::qi::phrase_parse(_startIterator, _endIterator, lFPParser, boost::spirit::ascii::space);
       
-    const std::string hasBeenFullyReadStr = (info.full == true)?"":"not ";
-    if (oResult == true) {
-      STDAIR_LOG_DEBUG ("Parsing of fare input file: " << _filename
-                        << " succeeded: read " << info.length
-                        << " characters. The input file has "
-                        << hasBeenFullyReadStr
-                        << "been fully read. Stop point: " << info.stop);
-        
-    } else {
-      // TODO: decide whether to throw an exception
+    STDAIR_LOG_DEBUG ("Finish parsing");
+    if (hasParsingBeenSuccesful == false) {
+      // TODO: decide whether to throw an exceqption
       STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
-                        << " failed: read " << info.length
-                        << " characters. The input file has "
-                        << hasBeenFullyReadStr
-                        << "been fully read. Stop point: " << info.stop);
+                        << " failed");
+        
     }
-    return oResult;
+    // if  (_startIterator != _endIterator) {
+    //   // TODO: decide whether to throw an exception
+    //   STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
+    //                     << " failed");
+    // }
+    // if (hasParsingBeenSuccesful == true && _startIterator == _endIterator) {
+    //   STDAIR_LOG_DEBUG ("Parsing of fare input file: " << _filename
+    //   << " succeeded ;)");
+    // }
+    return hasParsingBeenSuccesful;
   }
     
 }
