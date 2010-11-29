@@ -519,7 +519,7 @@ namespace SIMFQT {
     base_iterator_t inputBegin (fileToBeParsed);
     
     // Convert input iterator to an iterator usable by spirit parser  
-    iterator_t start = boost::spirit::make_default_multi_pass (inputBegin);
+    iterator_t start (boost::spirit::make_default_multi_pass (inputBegin));
     iterator_t end;
 
     // Initialise the parser (grammar) with the helper/staging structure.
