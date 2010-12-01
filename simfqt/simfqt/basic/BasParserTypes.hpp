@@ -4,6 +4,8 @@
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
+// STL
+#include <string>
 // Boost Spirit (Parsing)
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
@@ -40,6 +42,7 @@ namespace SIMFQT {
 
   /** Up-to-4-digit-integer parser */
   typedef boost::spirit::qi::uint_parser<int, 10, 1, 4> uint1_4_p_t;
+;
    
 }
 #endif // __SIMFQT_BAS_BASCOMPARSERTYPES_HPP

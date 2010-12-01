@@ -23,7 +23,7 @@ namespace SIMFQT {
     // Parse the CSV-formatted fare input file generate the
     // corresponding fare rules and fulfill the WorldSchedule.
     lFareRuleFileParser.generateFareRules ();
-    STDAIR_LOG_DEBUG ("Finish!");
+
   }
 
 }

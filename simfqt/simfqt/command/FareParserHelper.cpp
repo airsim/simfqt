@@ -163,11 +163,11 @@ namespace SIMFQT {
                                    boost::spirit::qi::unused_type,
                                    boost::spirit::qi::unused_type) const {
       stdair::ChannelLabel_T lChannel (iChar.begin(), iChar.end());
-      _fareRule._channel = lChannel;
       if (lChannel != "IN" && lChannel != "IF"
           && lChannel != "DN" && lChannel != "DF") {
         STDAIR_LOG_DEBUG ("Invalid channel " << lChannel);
       }
+      _fareRule._channel = lChannel;
       STDAIR_LOG_DEBUG ("Channel: " << _fareRule._channel);
     }
     
@@ -345,7 +345,7 @@ namespace SIMFQT {
       std::ostringstream ostrr;
       ostrr << _fareRule._classCode << classCodeStr;
       _fareRule._classCode = ostrr.str();
-      STDAIR_LOG_DEBUG ("Class Code: " << lClassCode << std::endl);
+      STDAIR_LOG_DEBUG ("Class Code: " << lClassCode);
         
     }
     
@@ -394,79 +394,141 @@ namespace SIMFQT {
       FareRuleParser::base_type(start),
       _bomRoot(ioBomRoot),
       _fareRule(iofareRule) {
-      
+
       start = *(comments | fare_rule)
         ;
+
+      comments = (boost::spirit::qi::lexeme[
+                                            boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_('/')]
+                                            >> +(boost::spirit::ascii::char_ - boost::spirit::qi::eol)
+                                            >> boost::spirit::qi::eol
+                                            ]
+                  | boost::spirit::qi::lexeme[
+                                              boost::spirit::ascii::char_('/') >>
+                                              boost::spirit::ascii::char_('*') >>
+                                              +(boost::spirit::ascii::char_ - boost::spirit::ascii::char_('*')) >>
+                                              boost::spirit::ascii::char_('*') >> boost::spirit::ascii::char_('/')
+                                              ])
+        ;
+
+      fare_rule = fare_key
+        >> +( ';' >> segment )
+        >> fare_rule_end[doEndFare(_bomRoot, _fareRule)]
+        ;
+
+      fare_rule_end = boost::spirit::ascii::char_(';')
+        ;
+
+      fare_key = fare_id
+        >> ';' >>  origin >> ';' >> destination
+        >> ';' >> dateRangeStart >> ';' >> dateRangeEnd
+        >> ';' >> timeRangeStart >> ';' >> timeRangeEnd
+        >> ';' >> position
+        >> ';' >> channel
+        >> ';' >> advancePurchase
+        >> ';' >> saturdayStay
+        >> ';' >> changeFees
+        >> ';' >> nonRefundable
+        >> ';' >> minimumStay
+        >> ';' >> fare
+            ;
+
+      fare_id = uint1_4_p[storeFareId(_fareRule)]
+        ;
+
+      origin = boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")][storeOrigin(_fareRule)]
+        ;
       
-        comments = (boost::spirit::qi::lexeme[ (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("/")]) >> +(boost::spirit::ascii::char_ - boost::spirit::qi::eol) >> boost::spirit::qi::eol ]
-               | boost::spirit::qi::lexeme[ (boost::spirit::ascii::char_("/") >> boost::spirit::ascii::char_("*") >> +(boost::spirit::ascii::char_ - boost::spirit::ascii::char_("*")) >> boost::spirit::ascii::char_("*") >> boost::spirit::ascii::char_("/")) ])
-               ;
+      destination =  boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")][storeDestination(_fareRule)]
+        ;
+      
+      dateRangeStart = date[storeDateRangeStart(_fareRule)]
+        ;
 
-        fare_rule = fare_key
-          >> +( ';' >> segment )
-          >> fare_rule_end[doEndFare(_bomRoot, _fareRule)]
-          ;
+      dateRangeEnd = date[storeDateRangeEnd(_fareRule)]
+        ;
+      
+      date =  boost::spirit::qi::lexeme[
+                                        uint4_p[boost::phoenix::ref(_fareRule._itYear) = boost::spirit::qi::labels::_1]
+                                        >> '-'
+                                        >> uint2_p[boost::phoenix::ref(_fareRule._itMonth) = boost::spirit::qi::labels::_1]
+                                        >> '-'
+                                        >> uint2_p[boost::phoenix::ref(_fareRule._itDay) = boost::spirit::qi::labels::_1]
+                                        ]
+        ;
 
-        fare_rule_end = boost::spirit::ascii::char_(";")
-          ;
+      timeRangeStart = time[storeStartRangeTime(_fareRule)]
+        ;
+      
+      timeRangeEnd = time[storeEndRangeTime(_fareRule)]
+        ;
 
-        fare_key = fare_id
-          >> ';' >> boost::spirit::qi::lexeme[
-          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storeOrigin(_fareRule)] ]
-          >> ';' >> boost::spirit::qi::lexeme[
-          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storeDestination(_fareRule)] ]
-          >> ';' >> date[storeDateRangeStart(_fareRule)]
-          >> ';' >> date[storeDateRangeEnd(_fareRule)]
-          >> ';' >> time[storeStartRangeTime(_fareRule)]
-          >> ';' >> time[storeEndRangeTime(_fareRule)]
-          >> ';' >> boost::spirit::qi::lexeme[
-          (boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")])[storePOS(_fareRule)] ]
-          >> ';' >> boost::spirit::qi::lexeme[
-          (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")])[storeChannel(_fareRule)] ]
-          >> ';' >> (uint1_4_p)[storeAdvancePurchase(_fareRule)]
-          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeSaturdayStay(_fareRule)]
-          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeChangeFees(_fareRule)] 
-          >> ';' >> boost::spirit::ascii::char_("A-Z")[storeNonRefundable(_fareRule)] 
-          >> ';' >> uint1_4_p[storeMinimumStay(_fareRule)]
-          >> ';' >> boost::spirit::qi::double_[storeFare(_fareRule)]
-          ;
+      time = boost::spirit::qi::lexeme[
+                                       uint2_p[boost::phoenix::ref(_fareRule._itHours) = boost::spirit::qi::labels::_1]
+                                       >> ':'
+                                       >> uint2_p[boost::phoenix::ref(_fareRule._itMinutes) = boost::spirit::qi::labels::_1]
+                                       >> !(':' >> (uint2_p)[boost::phoenix::ref(_fareRule._itSeconds) = boost::spirit::qi::labels::_1])
+                                       ]
+        ;
 
-        fare_id = uint1_4_p[storeFareId(_fareRule)];
-        
-        date =  boost::spirit::qi::lexeme[
-          uint4_p[boost::phoenix::ref(_fareRule._itYear) = boost::spirit::qi::labels::_1]
-          >> '-'
-          >> uint2_p[boost::phoenix::ref(_fareRule._itMonth) =boost::spirit::qi::labels::_1]
-          >> '-'
-          >> uint2_p[boost::phoenix::ref(_fareRule._itDay) = boost::spirit::qi::labels::_1] ]
-          ;
-        
-        time = boost::spirit::qi::lexeme[
-          uint2_p[boost::phoenix::ref(_fareRule._itHours) = boost::spirit::qi::labels::_1]
-          >> ':'
-          >> uint2_p[boost::phoenix::ref(_fareRule._itMinutes) = boost::spirit::qi::labels::_1]
-          >> !(':' >> (uint2_p)[boost::phoenix::ref(_fareRule._itSeconds) = boost::spirit::qi::labels::_1]) ]
-          ;
+      position = boost::spirit::qi::repeat(3)[boost::spirit::ascii::char_("A-Z")][storePOS(_fareRule)]
+        ;
+      
 
-        segment = boost::spirit::qi::lexeme[
-          (boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")])[storeAirlineCode(_fareRule)] ]
-          >> ';'
-          >> boost::spirit::ascii::char_("A-Z")[storeClass(_fareRule)]
-          ;
+      channel = boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")][storeChannel(_fareRule)]
+        ;
+    
+      advancePurchase = uint1_4_p[storeAdvancePurchase(_fareRule)]
+        ;
 
-        //BOOST_SPIRIT_DEBUG_NODE (FareRuleParser);
-        BOOST_SPIRIT_DEBUG_NODE (start);
-        BOOST_SPIRIT_DEBUG_NODE (comments);
-        BOOST_SPIRIT_DEBUG_NODE (fare_rule);
-        BOOST_SPIRIT_DEBUG_NODE (fare_id);
-        BOOST_SPIRIT_DEBUG_NODE (fare_key);
-        BOOST_SPIRIT_DEBUG_NODE (segment);
-        BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
-        BOOST_SPIRIT_DEBUG_NODE (date);
-        BOOST_SPIRIT_DEBUG_NODE (time);
+      saturdayStay = boost::spirit::ascii::char_("A-Z")[storeSaturdayStay(_fareRule)]
+        ;
+
+      changeFees = boost::spirit::ascii::char_("A-Z")[storeChangeFees(_fareRule)] 
+        ;
+
+      nonRefundable = boost::spirit::ascii::char_("A-Z")[storeNonRefundable(_fareRule)]
+        ;
+      
+      minimumStay = uint1_4_p[storeMinimumStay(_fareRule)]
+        ;
+
+      fare = boost::spirit::qi::double_[storeFare(_fareRule)]
+        ;
+      
+      segment = boost::spirit::qi::repeat(2)[boost::spirit::ascii::char_("A-Z")][storeAirlineCode(_fareRule)]
+        >> ';'
+        >> boost::spirit::ascii::char_("A-Z")[storeClass(_fareRule)]
+        ;
+
+      //BOOST_SPIRIT_DEBUG_NODE (FareRuleParser);
+      BOOST_SPIRIT_DEBUG_NODE (start);
+      BOOST_SPIRIT_DEBUG_NODE (comments);
+      BOOST_SPIRIT_DEBUG_NODE (fare_rule);
+      BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
+      BOOST_SPIRIT_DEBUG_NODE (fare_key);
+      BOOST_SPIRIT_DEBUG_NODE (fare_id);
+      BOOST_SPIRIT_DEBUG_NODE (origin);
+      BOOST_SPIRIT_DEBUG_NODE (destination);
+      BOOST_SPIRIT_DEBUG_NODE (dateRangeStart);
+      BOOST_SPIRIT_DEBUG_NODE (dateRangeEnd);
+      BOOST_SPIRIT_DEBUG_NODE (date);
+      BOOST_SPIRIT_DEBUG_NODE (timeRangeStart);
+      BOOST_SPIRIT_DEBUG_NODE (timeRangeEnd);
+      BOOST_SPIRIT_DEBUG_NODE (time);
+      BOOST_SPIRIT_DEBUG_NODE (position);
+      BOOST_SPIRIT_DEBUG_NODE (channel);
+      BOOST_SPIRIT_DEBUG_NODE (advancePurchase);
+      BOOST_SPIRIT_DEBUG_NODE (saturdayStay);
+      BOOST_SPIRIT_DEBUG_NODE (changeFees);
+      BOOST_SPIRIT_DEBUG_NODE (nonRefundable);
+      BOOST_SPIRIT_DEBUG_NODE (minimumStay);
+      BOOST_SPIRIT_DEBUG_NODE (fare);
+      BOOST_SPIRIT_DEBUG_NODE (segment);
     }
 
   }
+
   /////////////////////////////////////////////////////////////////////////
   //
   //  Entry class for the file parser
@@ -500,8 +562,6 @@ namespace SIMFQT {
       
     STDAIR_LOG_DEBUG ("Parsing fare input file: " << _filename);
 
-
-
     // File to be parsed
     const std::string* lFileName = &_filename;
     const char *lChar = (*lFileName).c_str();
@@ -527,10 +587,9 @@ namespace SIMFQT {
       
     // Launch the parsing of the file and, thanks to the doEndFare
     // call-back structure, the building of the whole BomRoot BOM
-    STDAIR_LOG_DEBUG ("Begin parsing") ;
+
     const bool hasParsingBeenSuccesful = 
        boost::spirit::qi::phrase_parse(start, end, lFPParser, boost::spirit::ascii::space);
-    STDAIR_LOG_DEBUG ("End parsing") ;
       
     if (hasParsingBeenSuccesful == false) {
       // TODO: decide whether to throw an exceqption
@@ -545,7 +604,7 @@ namespace SIMFQT {
     }
     if (hasParsingBeenSuccesful == true && start == end) {
       STDAIR_LOG_DEBUG ("Parsing of fare input file: " << _filename
-      << " succeeded ;)");
+      << " succeeded");
     }
     return hasParsingBeenSuccesful;
   }

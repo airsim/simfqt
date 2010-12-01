@@ -24,7 +24,7 @@ namespace SIMFQT {
      _changeFees("T"), _nonRefundable("T"),
      _minimumStay(0), _fare(0),
      _airlineCode(""), _classCode("") {
-    STDAIR_LOG_DEBUG ("fare rule struct.");
+
   }
 
   // ////////////////////////////////////////////////////////////////////

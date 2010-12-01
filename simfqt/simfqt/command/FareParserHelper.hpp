@@ -298,8 +298,10 @@ namespace SIMFQT {
 
       // Instantiation of rules
       boost::spirit::qi::rule<iterator_t, boost::spirit::ascii::space_type>
-      start, comments, fare_rule, fare_id, fare_key, segment, fare_rule_end,
-      date, time;
+      start, comments, fare_rule, fare_rule_end, fare_key, fare_id, origin,
+        destination, dateRangeStart, dateRangeEnd, date, timeRangeStart,
+        timeRangeEnd, time, position, channel, advancePurchase, saturdayStay,
+        changeFees, nonRefundable, minimumStay, fare, segment;
       
       // Parser Context
       stdair::BomRoot& _bomRoot;
@@ -307,10 +309,7 @@ namespace SIMFQT {
     };
 
   }
-  /** Short Description
-      <br> Detailed Description.*/
   
-
   /////////////////////////////////////////////////////////////////////////
   //
   //  Entry class for the file parser
