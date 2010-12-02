@@ -172,38 +172,41 @@ int readConfiguration (int argc, char* argv[],
   return 0;
 }
 
+
 // /////////////// M A I N /////////////////
 int main (int argc, char* argv[]) {
-
-  // Query
-  std::string lQuery;
-
-  // Fare input file name
-  stdair::Filename_T lFareInputFilename;
-
-  // Output log File
-  std::string lLogFilename;
-
-  // Call the command-line option parser
-  const int lOptionParserStatus = 
-    readConfiguration (argc, argv, lQuery, lFareInputFilename, lLogFilename);
-
-  if (lOptionParserStatus == K_SIMFQT_EARLY_RETURN_STATUS) {
+  try {
+    // Query
+    std::string lQuery;
+    
+    // Fare input file name
+    stdair::Filename_T lFareInputFilename;
+    
+    // Output log File
+    std::string lLogFilename;
+    
+    // Call the command-line option parser
+    const int lOptionParserStatus = 
+      readConfiguration (argc, argv, lQuery, lFareInputFilename, lLogFilename);
+    
+    if (lOptionParserStatus == K_SIMFQT_EARLY_RETURN_STATUS) {
+      return 0;
+    }
+    
+    // Set the log parameters
+    std::ofstream logOutputFile;
+    // Open and clean the log outputfile
+    logOutputFile.open (lLogFilename.c_str());
+    logOutputFile.clear();
+    
+    // Initialise the Simfqt service object
+    const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
+    SIMFQT::SIMFQT_Service simfqtService (lLogParams, lFareInputFilename);
+    
+    // Close the Log outputFile
+    logOutputFile.close();
+    
     return 0;
-  }
-
-  // Set the log parameters
-  std::ofstream logOutputFile;
-  // Open and clean the log outputfile
-  logOutputFile.open (lLogFilename.c_str());
-  logOutputFile.clear();
-
-  // Initialise the Simfqt service object
-  const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
-  SIMFQT::SIMFQT_Service simfqtService (lLogParams, lFareInputFilename);
-  
-  // Close the Log outputFile
-  logOutputFile.close();
-
-  return 0;
+    
+  } CATCH_ALL_EXCEPTIONS
 }

@@ -12,6 +12,7 @@
 #include <stdair/basic/StructAbstract.hpp>
 // SIMFQT
 #include <simfqt/SIMFQT_Types.hpp>
+#include <simfqt/basic/BasParserTypes.hpp>
 
 namespace SIMFQT {
 
@@ -33,14 +34,15 @@ namespace SIMFQT {
     
     // ////////////////// Attributes /////////////////
     /** Staging Date. */
-    unsigned int _itYear;
-    unsigned int _itMonth;
-    unsigned int _itDay;
+    year_t _itYear;
+    month_t _itMonth;
+    day_t _itDay;
       
     /** Staging Time. */
-    long _itHours;
-    long _itMinutes;
-    long _itSeconds;
+    //long _itHours;
+    hour_t _itHours;
+    minute_t _itMinutes;
+    second_t _itSeconds;
 
     
     unsigned long int _nbOfAirlines;

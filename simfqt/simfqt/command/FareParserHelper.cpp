@@ -387,6 +387,16 @@ namespace SIMFQT {
     
     /** Up-to-4-digit-integer parser */
     uint1_4_p_t uint1_4_p;
+
+    /** Time element parsers. */
+    hour_p_t hour_p;
+    minute_p_t minute_p;
+    second_p_t second_p;
+
+    /** Date element parsers. */
+    year_p_t year_p;
+    month_p_t month_p;
+    day_p_t day_p;
         
     // //////////////////////////////////////////////////////////////////
     //  (Boost Spirit) Grammar Definition
@@ -434,21 +444,21 @@ namespace SIMFQT {
       dateRangeEnd = date[storeDateRangeEnd(_fareRule)];
       
       date = bsq::lexeme
-        [uint4_p[boost::phoenix::ref(_fareRule._itYear) = bsq::labels::_1]
+        [year_p[boost::phoenix::ref(_fareRule._itYear) = bsq::labels::_1]
         >> '-'
-        >> uint2_p[boost::phoenix::ref(_fareRule._itMonth) = bsq::labels::_1]
+        >> month_p[boost::phoenix::ref(_fareRule._itMonth) = bsq::labels::_1]
         >> '-'
-        >> uint2_p[boost::phoenix::ref(_fareRule._itDay) = bsq::labels::_1] ];
+        >> day_p[boost::phoenix::ref(_fareRule._itDay) = bsq::labels::_1] ];
 
       timeRangeStart = time[storeStartRangeTime(_fareRule)];
       
       timeRangeEnd = time[storeEndRangeTime(_fareRule)];
 
       time = bsq::lexeme
-        [uint2_p[boost::phoenix::ref(_fareRule._itHours) = bsq::labels::_1]
+        [hour_p[boost::phoenix::ref(_fareRule._itHours) = bsq::labels::_1]
          >> ':'
-         >> uint2_p[boost::phoenix::ref(_fareRule._itMinutes) = bsq::labels::_1]
-         >> !(':' >> (uint2_p)[boost::phoenix::ref(_fareRule._itSeconds) = bsq::labels::_1]) ];
+         >> minute_p[boost::phoenix::ref(_fareRule._itMinutes) = bsq::labels::_1]
+         >> !(':' >> (second_p)[boost::phoenix::ref(_fareRule._itSeconds) = bsq::labels::_1]) ];
       
       position = bsq::repeat(3)[bsa::char_("A-Z")][storePOS(_fareRule)];
             
@@ -494,6 +504,10 @@ namespace SIMFQT {
       BOOST_SPIRIT_DEBUG_NODE (minimumStay);
       BOOST_SPIRIT_DEBUG_NODE (fare);
       BOOST_SPIRIT_DEBUG_NODE (segment);
+
+      hour_t h1 (2);
+      hour_t h2 (3);
+      h1 = h1 * h2;
     }
 
   }

@@ -29,14 +29,16 @@ namespace SIMFQT {
 
   // ////////////////////////////////////////////////////////////////////
   stdair::Date_T FareRuleStruct::getDate() const {
-    return stdair::Date_T (_itYear, _itMonth, _itDay);
+    _itYear.check(); _itMonth.check(); _itDay.check();
+    return stdair::Date_T (_itYear._value, _itMonth._value, _itDay._value);
   }
 
   // ////////////////////////////////////////////////////////////////////
   stdair::Duration_T FareRuleStruct::getTime() const {
-    return boost::posix_time::hours (_itHours)
-      + boost::posix_time::minutes (_itMinutes)
-      + boost::posix_time::seconds (_itSeconds);
+    _itHours.check(); _itMinutes.check(); _itSeconds.check();
+    return boost::posix_time::hours (_itHours._value)
+      + boost::posix_time::minutes (_itMinutes._value)
+      + boost::posix_time::seconds (_itSeconds._value);
   }
   
  
