@@ -377,26 +377,26 @@ namespace SIMFQT {
     namespace bsa = boost::spirit::ascii;
     
     /** 1-digit-integer parser */
-    int1_p_t int1_p;
+    stdair::int1_p_t int1_p;
     
     /** 2-digit-integer parser */
-    uint2_p_t uint2_p;
+    stdair::uint2_p_t uint2_p;
 
     /** 4-digit-integer parser */
-    uint4_p_t uint4_p;
+    stdair::uint4_p_t uint4_p;
     
     /** Up-to-4-digit-integer parser */
-    uint1_4_p_t uint1_4_p;
+    stdair::uint1_4_p_t uint1_4_p;
 
     /** Time element parsers. */
-    hour_p_t hour_p;
-    minute_p_t minute_p;
-    second_p_t second_p;
+    stdair::hour_p_t hour_p;
+    stdair::minute_p_t minute_p;
+    stdair::second_p_t second_p;
 
     /** Date element parsers. */
-    year_p_t year_p;
-    month_p_t month_p;
-    day_p_t day_p;
+    stdair::year_p_t year_p;
+    stdair::month_p_t month_p;
+    stdair::day_p_t day_p;
         
     // //////////////////////////////////////////////////////////////////
     //  (Boost Spirit) Grammar Definition
@@ -504,12 +504,7 @@ namespace SIMFQT {
       BOOST_SPIRIT_DEBUG_NODE (minimumStay);
       BOOST_SPIRIT_DEBUG_NODE (fare);
       BOOST_SPIRIT_DEBUG_NODE (segment);
-
-      hour_t h1 (2);
-      hour_t h2 (3);
-      h1 = h1 * h2;
     }
-
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -559,11 +554,12 @@ namespace SIMFQT {
     }
     
     // Create an input iterator
-    base_iterator_t inputBegin (fileToBeParsed);
-    
+    stdair::base_iterator_t inputBegin (fileToBeParsed);
+
     // Convert input iterator to an iterator usable by spirit parser  
-    iterator_t start (boost::spirit::make_default_multi_pass (inputBegin));
-    iterator_t end;
+    stdair::iterator_t 
+      start (boost::spirit::make_default_multi_pass (inputBegin));
+    stdair::iterator_t end;
 
     // Initialise the parser (grammar) with the helper/staging structure.
     FareParserHelper::FareRuleParser lFPParser(_bomRoot, _fareRule);
@@ -579,7 +575,6 @@ namespace SIMFQT {
       // TODO: decide whether to throw an exceqption
       STDAIR_LOG_ERROR ("Parsing of fare input file: " << _filename
                         << " failed");
-        
     }
     if  (start != end) {
       // TODO: decide whether to throw an exception
