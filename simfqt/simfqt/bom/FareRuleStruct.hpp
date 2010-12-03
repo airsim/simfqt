@@ -7,8 +7,9 @@
 // STL
 #include <string>
 #include <vector>
-// STDAIR
-#include <stdair/STDAIR_Types.hpp>
+// StdAir
+#include <stdair/stdair_demand_types.hpp>
+#include <stdair/stdair_inventory_types.hpp>
 #include <stdair/basic/StructAbstract.hpp>
 #include <stdair/basic/BasParserTypes.hpp>
 // SIMFQT

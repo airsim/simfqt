@@ -5,7 +5,7 @@
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // StdAir
-#include <stdair/STDAIR_Types.hpp>
+#include <stdair/stdair_basic_types.hpp>
 // SimFQT
 #include <simfqt/SIMFQT_Types.hpp>
 
@@ -15,7 +15,6 @@ namespace stdair {
   struct BasLogParams;
   struct BasDBParams;
 }
-
 
 namespace SIMFQT {
 
@@ -39,7 +38,7 @@ namespace SIMFQT {
         @param const stdair::BasDBParams& Parameters for the database access.
         @param const stdair::Filename_T& Filename of the input fare file. */
     SIMFQT_Service (const stdair::BasLogParams&, const stdair::BasDBParams&,
-                      const stdair::Filename_T& iFareInputFilename);
+                    const stdair::Filename_T& iFareInputFilename);
 
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation
@@ -50,7 +49,7 @@ namespace SIMFQT {
         @param const stdair::Date_T& Date for the beginning of analysis.
         @param const stdair::Filename_T& Filename of the input fare file. */
     SIMFQT_Service (const stdair::BasLogParams&,
-                      const stdair::Filename_T& iFareInputFilename);
+                    const stdair::Filename_T& iFareInputFilename);
 
     /** Constructor.
         <br>The init() method is called; see the corresponding documentation

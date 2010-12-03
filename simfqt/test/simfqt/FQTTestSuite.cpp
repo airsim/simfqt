@@ -5,8 +5,7 @@
 // CPPUNIT
 #include <extracppunit/CppUnitCore.hpp>
 // StdAir
-#include <stdair/basic/BasLogParams.hpp>
-#include <stdair/basic/BasDBParams.hpp>
+#include <stdair/STDAIR_Service.hpp>
 // SimFQT
 #include <simfqt/SIMFQT_Service.hpp>
 // SimFQT Test Suite

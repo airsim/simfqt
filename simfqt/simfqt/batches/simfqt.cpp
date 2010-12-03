@@ -12,7 +12,6 @@
 #include <boost/tokenizer.hpp>
 #include <boost/program_options.hpp>
 // StdAir
-#include <stdair/STDAIR_Types.hpp>
 #include <stdair/STDAIR_Service.hpp>
 #include <stdair/service/Logger.hpp>
 // Simfqt
@@ -175,7 +174,7 @@ int readConfiguration (int argc, char* argv[],
 
 // /////////////// M A I N /////////////////
 int main (int argc, char* argv[]) {
-  try {
+
     // Query
     std::string lQuery;
     
@@ -207,6 +206,4 @@ int main (int argc, char* argv[]) {
     logOutputFile.close();
     
     return 0;
-    
-  } CATCH_ALL_EXCEPTIONS
 }

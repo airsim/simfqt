@@ -3,8 +3,7 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <cassert>
-// STDAIR
-#include <stdair/STDAIR_Types.hpp>
+// StdAir
 #include <stdair/basic/BasConst_BookingClass.hpp>
 #include <stdair/basic/BasConst_Yield.hpp>
 #include <stdair/basic/BasConst_General.hpp>

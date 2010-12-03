@@ -6,9 +6,9 @@
 // //////////////////////////////////////////////////////////////////////
 // STL
 #include <string>
-// STDAIR
-#include <stdair/STDAIR_Types.hpp>
-// Simfqt
+// StdAir
+#include <stdair/stdair_service_types.hpp>
+// SimFQT
 #include <simfqt/SIMFQT_Types.hpp>
 #include <simfqt/service/ServiceAbstract.hpp>
 
