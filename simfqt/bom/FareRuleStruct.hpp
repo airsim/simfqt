@@ -44,9 +44,6 @@ namespace SIMFQT {
     stdair::hour_t _itHours;
     stdair::minute_t _itMinutes;
     stdair::second_t _itSeconds;
-
-    
-    unsigned long int _nbOfAirlines;
     
     /** Fare ID. */
     SIMFQT::FareQuoteID_T _fareId;
@@ -70,7 +67,7 @@ namespace SIMFQT {
     stdair::Duration_T _timeRangeEnd;
     
      /** Point-of-sale. */
-    stdair::AirlineCode_T _pos;
+    stdair::AirportCode_T _pos;
     
     /** Channel distribution. */
     stdair::ChannelLabel_T _channel;
@@ -101,6 +98,9 @@ namespace SIMFQT {
 
     /** Airline Code List*/
     stdair::AirlineCodeList_T _airlineCodeList;
+
+    /** Numbers of different Airline Codes*/
+    unsigned long int _nbOfAirlines;
     
     /** Class Code List*/
     stdair::ClassCodeList_T _classCodeList;

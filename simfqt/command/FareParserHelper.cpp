@@ -362,8 +362,8 @@ namespace SIMFQT {
                                 boost::spirit::qi::unused_type,
                                 boost::spirit::qi::unused_type) const {
 
-      // Generation of the fare rule object.
       STDAIR_LOG_DEBUG ("Do End");
+      // Generation of the fare rule object.
       FareRuleGenerator::createFareRule (_bomRoot, _fareRule);
     }  
 
