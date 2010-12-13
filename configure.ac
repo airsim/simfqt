@@ -254,8 +254,8 @@ AC_CONFIG_FILES(
 	simfqt/config/Makefile
 	simfqt/core/Makefile
 	simfqt/batches/Makefile
-	samples/Makefile
 	test/Makefile
+	test/samples/Makefile
 	test/simfqt/Makefile
 )
 AC_OUTPUT

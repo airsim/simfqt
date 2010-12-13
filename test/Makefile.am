@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.common
 MAINTAINERCLEANFILES = Makefile.in
 
 ##
-SUBDIRS = simfqt
+SUBDIRS = samples simfqt
 
 EXTRA_DIST =
 

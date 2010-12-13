@@ -33,7 +33,6 @@ rm -f config.cache acconfig.h
 
 echo "- autoreconf."     	&& \
 autoreconf -fvi          	&& \
-
 echo "" && \
 echo "Now, the configuration script has to be run. For instance:" && \
 echo "mkdir -p tmp && cd tmp && ../configure --prefix=/home/user/dev/deliveries/simfqt-99.99.99 \\" && \
