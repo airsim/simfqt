@@ -1,5 +1,5 @@
-#ifndef __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
-#define __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
+#ifndef __SIMFQT_BOM_FAREPOSITIONKEY_HPP
+#define __SIMFQT_BOM_FAREPOSITIONKEY_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -9,29 +9,24 @@
 #include <stdair/stdair_basic_types.hpp>
 
 namespace SIMFQT  {
-  /** Key of airport-pair. */
-  struct AirportPairKey : public stdair::KeyAbstract {
+  /** Key of fare position. */
+  struct FarePositionKey : public stdair::KeyAbstract {
 
   private:
     // /////////// Default constructor //////////
-    AirportPairKey () { };
+    FarePositionKey () { };
   public:
     // /////////// Construction ///////////
     /** Constructors. */
-    AirportPairKey (const stdair::AirportCode_T&, const stdair::AirportCode_T&);
-    AirportPairKey (const AirportPairKey&);
+    FarePositionKey (const stdair::CityCode_T&);
+    FarePositionKey (const FarePositionKey&);
     /** Destructor. */
-    ~AirportPairKey ();
+    ~FarePositionKey ();
     
-    // /////////// Getters //////////
-    /** Get the boarding point. */
-    const stdair::AirportCode_T& getBoardingPoint() const {
-      return _boardingPoint;
-    }
-
-    /** Get the arrival point. */
-    const stdair::AirportCode_T& getOffPoint() const {
-      return _offPoint;
+    // /////////// Getter //////////
+    /** Get the position. */
+    const stdair::CityCode_T& getPosition() const {
+      return _position;
     }
     
     // /////////// Display support methods /////////
@@ -45,17 +40,15 @@ namespace SIMFQT  {
 
    /** Get the serialised version of the Business Object Key.
        <br>That string is unique, at the level of a given Business Object,
-       when among children of a given parent Business Object. */
+       when among children of a given parent Business Object.*/
     const std::string toString() const;
 
   private:
     // Attributes
-    /** Boarding airport. */
-    stdair::AirportCode_T _boardingPoint;
+    /** City code position */
+    stdair::CityCode_T _position;
 
-    /** Arrival airport. */
-    stdair::AirportCode_T _offPoint;
   };
 
 }
-#endif // __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
+#endif // __SIMFQT_BOM_FAREPOSITIONKEY_HPP

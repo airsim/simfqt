@@ -1,5 +1,5 @@
-#ifndef __SIMFQT_BOM_AIRPORTPAIR_HPP
-#define __SIMFQT_BOM_AIRPORTPAIR_HPP
+#ifndef __SIMFQT_BOM_FAREDATEPERIOD_HPP
+#define __SIMFQT_BOM_FAREDATEPERIOD_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -7,8 +7,8 @@
 // STDAIR
 #include <stdair/bom/BomAbstract.hpp>
 // SIMFQT
-#include <simfqt/bom/AirportPairKey.hpp>
-#include <simfqt/bom/AirportPairTypes.hpp>
+#include <simfqt/bom/FareDatePeriodKey.hpp>
+#include <simfqt/bom/FareDatePeriodTypes.hpp>
 
 // Forward declaration
 namespace stdair {
@@ -18,15 +18,15 @@ namespace stdair {
 
 namespace SIMFQT {
 
-  /** Class representing the actual attributes for an airport-pair. */
-  class AirportPair : public stdair::BomAbstract {
+  /** Class representing the actual attributes for a fare date-period. */
+  class FareDatePeriod : public stdair::BomAbstract {
     template <typename BOM> friend class stdair::FacBom;
     friend class stdair::FacBomManager;
 
   public:
     // Type definitions.
     /** Definition allowing to retrieve the associated BOM key type. */
-    typedef AirportPairKey Key_T;
+    typedef FareDatePeriodKey Key_T;
   
   public:
     // /////////// Display support methods /////////
@@ -47,21 +47,18 @@ namespace SIMFQT {
   public:
     // ////////// Getters ////////////
     const Key_T& getKey() const { return _key; }
-    const stdair::AirportCode_T& getBoardingPoint() const {
-      return _key.getBoardingPoint();
-    }
-    const stdair::AirportCode_T& getOffPoint() const {
-      return _key.getOffPoint();
+    const stdair::DatePeriod_T& getDatePeriod() const {
+      return _key.getDatePeriod();
     }
     stdair::BomAbstract* const getParent() const { return _parent; }
     const  stdair::HolderMap_T& getHolderMap() const { return _holderMap; }
     
   protected:
     /** Default constructors. */
-    AirportPair (const Key_T&);
-    AirportPair (const AirportPair&);
+    FareDatePeriod (const Key_T&);
+    FareDatePeriod (const FareDatePeriod&);
     /** Destructor. */
-    ~AirportPair();
+    ~FareDatePeriod();
 
   protected:
     // Attributes
@@ -72,5 +69,5 @@ namespace SIMFQT {
   };
 
 }
-#endif // __SIMFQT_BOM_AIRPORTPAIR_HPP
+#endif // __SIMFQT_BOM_FAREDATEPERIOD_HPP
 

@@ -23,16 +23,27 @@ namespace SIMFQT {
  
     /** Default constructor. */
     FareRuleStruct ();
-
+    
     /** Get the date from the staging details. */
     stdair::Date_T getDate() const;
 
     /** Get the time from the staging details. */
-    stdair::Duration_T getTime() const;
-    
+    stdair::Duration_T getTime() const;    
+
     /** Display of the structure. */
-    const std::string describe() const;
-    
+    const std::string describe() const;  
+
+    /** Get the size of the airline code list. */
+    const unsigned int getAirlineListSize () const {
+      return _airlineCodeList.size();
+    }
+
+    /** Get the size of the class code list. */
+    const unsigned int getClassCodeListSize () const {
+      return _classCodeList.size();
+    }
+
+  public:
     // ////////////////// Attributes /////////////////
     /** Staging Date. */
     stdair::year_t _itYear;
@@ -67,7 +78,7 @@ namespace SIMFQT {
     stdair::Duration_T _timeRangeEnd;
     
      /** Point-of-sale. */
-    stdair::AirportCode_T _pos;
+    stdair::CityCode_T _pos;
     
     /** Channel distribution. */
     stdair::ChannelLabel_T _channel;

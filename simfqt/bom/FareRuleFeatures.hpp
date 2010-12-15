@@ -1,5 +1,5 @@
-#ifndef __SIMFQT_BOM_AIRPORTPAIR_HPP
-#define __SIMFQT_BOM_AIRPORTPAIR_HPP
+#ifndef __SIMFQT_BOM_FARERULEFEATURES_HPP
+#define __SIMFQT_BOM_FARERULEFEATURES_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -7,8 +7,8 @@
 // STDAIR
 #include <stdair/bom/BomAbstract.hpp>
 // SIMFQT
-#include <simfqt/bom/AirportPairKey.hpp>
-#include <simfqt/bom/AirportPairTypes.hpp>
+#include <simfqt/bom/FareRuleFeaturesKey.hpp>
+#include <simfqt/bom/FareRuleFeaturesTypes.hpp>
 
 // Forward declaration
 namespace stdair {
@@ -18,15 +18,15 @@ namespace stdair {
 
 namespace SIMFQT {
 
-  /** Class representing the actual attributes for an airport-pair. */
-  class AirportPair : public stdair::BomAbstract {
+  /** Class representing the actual attributes for a fare-rule. */
+  class FareRuleFeatures : public stdair::BomAbstract {
     template <typename BOM> friend class stdair::FacBom;
     friend class stdair::FacBomManager;
 
   public:
     // Type definitions.
     /** Definition allowing to retrieve the associated BOM key type. */
-    typedef AirportPairKey Key_T;
+    typedef FareRuleFeaturesKey Key_T;
   
   public:
     // /////////// Display support methods /////////
@@ -47,21 +47,15 @@ namespace SIMFQT {
   public:
     // ////////// Getters ////////////
     const Key_T& getKey() const { return _key; }
-    const stdair::AirportCode_T& getBoardingPoint() const {
-      return _key.getBoardingPoint();
-    }
-    const stdair::AirportCode_T& getOffPoint() const {
-      return _key.getOffPoint();
-    }
     stdair::BomAbstract* const getParent() const { return _parent; }
     const  stdair::HolderMap_T& getHolderMap() const { return _holderMap; }
     
   protected:
     /** Default constructors. */
-    AirportPair (const Key_T&);
-    AirportPair (const AirportPair&);
+    FareRuleFeatures (const Key_T&);
+    FareRuleFeatures (const FareRuleFeatures&);
     /** Destructor. */
-    ~AirportPair();
+    ~FareRuleFeatures();
 
   protected:
     // Attributes
@@ -72,5 +66,5 @@ namespace SIMFQT {
   };
 
 }
-#endif // __SIMFQT_BOM_AIRPORTPAIR_HPP
+#endif // __SIMFQT_BOM_FARERULEFEATURES_HPP
 

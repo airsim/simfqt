@@ -1,5 +1,5 @@
-#ifndef __SIMFQT_BOM_AIRPORTPAIR_HPP
-#define __SIMFQT_BOM_AIRPORTPAIR_HPP
+#ifndef __SIMFQT_BOM_FAREPOSITION_HPP
+#define __SIMFQT_BOM_FAREPOSITION_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
@@ -7,8 +7,8 @@
 // STDAIR
 #include <stdair/bom/BomAbstract.hpp>
 // SIMFQT
-#include <simfqt/bom/AirportPairKey.hpp>
-#include <simfqt/bom/AirportPairTypes.hpp>
+#include <simfqt/bom/FarePositionKey.hpp>
+#include <simfqt/bom/FarePositionTypes.hpp>
 
 // Forward declaration
 namespace stdair {
@@ -18,15 +18,15 @@ namespace stdair {
 
 namespace SIMFQT {
 
-  /** Class representing the actual attributes for an airport-pair. */
-  class AirportPair : public stdair::BomAbstract {
+  /** Class representing the actual attributes for a fare position . */
+  class FarePosition : public stdair::BomAbstract {
     template <typename BOM> friend class stdair::FacBom;
     friend class stdair::FacBomManager;
 
   public:
     // Type definitions.
     /** Definition allowing to retrieve the associated BOM key type. */
-    typedef AirportPairKey Key_T;
+    typedef FarePositionKey Key_T;
   
   public:
     // /////////// Display support methods /////////
@@ -47,21 +47,18 @@ namespace SIMFQT {
   public:
     // ////////// Getters ////////////
     const Key_T& getKey() const { return _key; }
-    const stdair::AirportCode_T& getBoardingPoint() const {
-      return _key.getBoardingPoint();
-    }
-    const stdair::AirportCode_T& getOffPoint() const {
-      return _key.getOffPoint();
+    const stdair::CityCode_T& getFarePosition() const {
+      return _key.getPosition();
     }
     stdair::BomAbstract* const getParent() const { return _parent; }
     const  stdair::HolderMap_T& getHolderMap() const { return _holderMap; }
     
   protected:
     /** Default constructors. */
-    AirportPair (const Key_T&);
-    AirportPair (const AirportPair&);
+    FarePosition (const Key_T&);
+    FarePosition (const FarePosition&);
     /** Destructor. */
-    ~AirportPair();
+    ~FarePosition();
 
   protected:
     // Attributes
@@ -72,5 +69,5 @@ namespace SIMFQT {
   };
 
 }
-#endif // __SIMFQT_BOM_AIRPORTPAIR_HPP
+#endif // __SIMFQT_BOM_FAREPOSITION_HPP
 

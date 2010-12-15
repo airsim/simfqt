@@ -5,38 +5,37 @@
 #include <ostream>
 #include <sstream>
 // STDAIR
-#include <simfqt/bom/AirportPairKey.hpp>
+#include <simfqt/bom/FareDatePeriodKey.hpp>
 
 namespace SIMFQT  {
 
   // ////////////////////////////////////////////////////////////////////
-  AirportPairKey::AirportPairKey (const stdair::AirportCode_T& iBoardingPoint,
-                                  const stdair::AirportCode_T& iOffPoint)
-    : _boardingPoint (iBoardingPoint), _offPoint (iOffPoint) {
+  FareDatePeriodKey::FareDatePeriodKey (const stdair::DatePeriod_T& iDatePeriod)
+    : _datePeriod (iDatePeriod) {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  AirportPairKey::AirportPairKey (const AirportPairKey& iKey)
-    : _boardingPoint (iKey._boardingPoint), _offPoint (iKey._offPoint) {
+  FareDatePeriodKey::FareDatePeriodKey (const FareDatePeriodKey& iKey)
+    : _datePeriod (iKey._datePeriod) {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  AirportPairKey::~AirportPairKey () {
+  FareDatePeriodKey::~FareDatePeriodKey () {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  void AirportPairKey::toStream (std::ostream& ioOut) const {
-    ioOut << "AirportPairKey: " << toString() << std::endl;
+  void FareDatePeriodKey::toStream (std::ostream& ioOut) const {
+    ioOut << "FareDatePeriodKey: " << toString() << std::endl;
   }
 
   // ////////////////////////////////////////////////////////////////////
-  void AirportPairKey::fromStream (std::istream& ioIn) {
+  void FareDatePeriodKey::fromStream (std::istream& ioIn) {
   }
 
   // ////////////////////////////////////////////////////////////////////
-  const std::string AirportPairKey::toString() const {
+  const std::string FareDatePeriodKey::toString() const {
     std::ostringstream oStr;
-    oStr << _boardingPoint << "-" << _offPoint << std::endl; 
+    oStr << _datePeriod << std::endl; 
     return oStr.str();
   }
 

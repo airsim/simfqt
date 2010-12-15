@@ -1,37 +1,29 @@
-#ifndef __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
-#define __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
+#ifndef __SIMFQT_BOM_FAREDATEPERIODKEY_HPP
+#define __SIMFQT_BOM_FAREDATEPERIODKEY_HPP
 
 // //////////////////////////////////////////////////////////////////////
 // Import section
 // //////////////////////////////////////////////////////////////////////
 // SIMFQT
 #include <stdair/bom/KeyAbstract.hpp>
-#include <stdair/stdair_basic_types.hpp>
+#include <stdair/stdair_date_time_types.hpp>
 
 namespace SIMFQT  {
-  /** Key of airport-pair. */
-  struct AirportPairKey : public stdair::KeyAbstract {
+  /** Key of date-period. */
+  struct FareDatePeriodKey : public stdair::KeyAbstract {
 
-  private:
-    // /////////// Default constructor //////////
-    AirportPairKey () { };
   public:
     // /////////// Construction ///////////
     /** Constructors. */
-    AirportPairKey (const stdair::AirportCode_T&, const stdair::AirportCode_T&);
-    AirportPairKey (const AirportPairKey&);
+    FareDatePeriodKey (const stdair::DatePeriod_T&);
+    FareDatePeriodKey (const FareDatePeriodKey&);
     /** Destructor. */
-    ~AirportPairKey ();
+    ~FareDatePeriodKey ();
     
-    // /////////// Getters //////////
-    /** Get the boarding point. */
-    const stdair::AirportCode_T& getBoardingPoint() const {
-      return _boardingPoint;
-    }
-
-    /** Get the arrival point. */
-    const stdair::AirportCode_T& getOffPoint() const {
-      return _offPoint;
+    // /////////// Getter //////////
+    /** Get the date period. */
+    const stdair::DatePeriod_T& getDatePeriod() const {
+      return _datePeriod;
     }
     
     // /////////// Display support methods /////////
@@ -50,12 +42,10 @@ namespace SIMFQT  {
 
   private:
     // Attributes
-    /** Boarding airport. */
-    stdair::AirportCode_T _boardingPoint;
+    /** Fare date period */
+    stdair::DatePeriod_T _datePeriod;
 
-    /** Arrival airport. */
-    stdair::AirportCode_T _offPoint;
   };
 
 }
-#endif // __SIMFQT_BOM_AIRPORTPAIRKEY_HPP
+#endif // __SIMFQT_BOM_FAREDATEPERIODKEY_HPP

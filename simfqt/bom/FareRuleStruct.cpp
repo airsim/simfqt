@@ -15,15 +15,22 @@ namespace SIMFQT {
 
   // ////////////////////////////////////////////////////////////////////
   FareRuleStruct::FareRuleStruct ()
-    :_fareId(0), _origin(""), _destination(""),
+    :_fareId(0), 
+     _origin(""), 
+     _destination(""),
      _dateRangeStart(stdair::DEFAULT_DATE),
      _dateRangeEnd(stdair::DEFAULT_DATE),
      _timeRangeStart(stdair::DEFAULT_EPSILON_DURATION),
      _timeRangeEnd(stdair::DEFAULT_EPSILON_DURATION),
-     _pos (""), _advancePurchase(0), _saturdayStay("T"),
-     _changeFees("T"), _nonRefundable("T"),
-     _minimumStay(0), _fare(0),
-     _airlineCode(""), _classCode("") {
+     _pos (""), 
+     _advancePurchase(0), 
+     _saturdayStay("T"),
+     _changeFees("T"), 
+     _nonRefundable("T"),
+     _minimumStay(0), 
+     _fare(0),
+     _airlineCode(""), 
+     _classCode("") {
 
   }
 
@@ -44,7 +51,20 @@ namespace SIMFQT {
  
   // ////////////////////////////////////////////////////////////////////
   const std::string FareRuleStruct::describe () const {
-    std::ostringstream ostr;
+    std::ostringstream ostr; 
+    ostr << _fareId << ": "
+	 << _origin << "-" << _destination << ", between"
+	 << _dateRangeStart << " to " << _dateRangeEnd << ", between  "
+	 << boost::posix_time::to_simple_string(_timeRangeStart)
+	 << " to "
+	 << boost::posix_time::to_simple_string(_timeRangeEnd) << ", "
+	 <<  _advancePurchase << ", " << _saturdayStay << ", "
+	 <<  _changeFees << ", " << _nonRefundable << ", "
+	 << _minimumStay << ", "
+	 << _fare << ", "
+	 << _classCode << ", "
+	 << _airlineCode << ", "
+	 << std::endl; 
     return ostr.str();
   }
 

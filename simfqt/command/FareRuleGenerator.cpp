@@ -11,6 +11,9 @@
 // SIMFQT
 #include <simfqt/bom/FareRuleStruct.hpp>
 #include <simfqt/bom/AirportPair.hpp>
+#include <simfqt/bom/FarePosition.hpp>
+#include <simfqt/bom/FareDatePeriod.hpp>
+#include <simfqt/bom/FareRuleFeatures.hpp>
 #include <simfqt/command/FareRuleGenerator.hpp>
 
 namespace SIMFQT {
@@ -20,9 +23,11 @@ namespace SIMFQT {
   createFareRule (stdair::BomRoot& ioBomRoot,
                   const FareRuleStruct& iFareRuleStruct) {
 
-    // Set the segment-period primary key.
-    const stdair::AirportCode_T& lBoardPoint = iFareRuleStruct._origin;
-    const stdair::AirportCode_T& lOffPoint = iFareRuleStruct._destination;
+    // Set the airport-pair primary key.
+    const stdair::AirportCode_T& lBoardPoint =
+      iFareRuleStruct._origin;
+    const stdair::AirportCode_T& lOffPoint = 
+      iFareRuleStruct._destination;
     const AirportPairKey lAirportPairKey (lBoardPoint, lOffPoint);
   
     // If the AirportPairKey object corresponding to the fare rule set
@@ -38,24 +43,109 @@ namespace SIMFQT {
       stdair::FacBomManager::
       instance().linkWithParent (ioBomRoot, *lAirportPair_ptr);
     }
-    assert (lAirportPair_ptr != NULL);
+    assert (lAirportPair_ptr != NULL);    
 
-    const stdair::Date_T& lDateRangeStart = iFareRuleStruct._dateRangeStart;
-    const stdair::Date_T& lDateRangeEnd = iFareRuleStruct._dateRangeEnd;
-    const stdair::DatePeriod_T lDatePeriod (lDateRangeStart, lDateRangeEnd);
+    // Set the fare-position primary key.
+    const stdair::CityCode_T& lPosition = 
+      iFareRuleStruct._pos; 
+    const FarePositionKey lFarePositionKey (lPosition);  
 
-    // const stdair::AirlineCode_T& lPos = iFareRuleStruct._pos;
-    // const stdair::Duration_T& lTimeRangeStart = iFareRuleStruct._timeRangeStart;
-    const stdair::Duration_T& lTimeRangeEnd = iFareRuleStruct._timeRangeEnd;
-    const stdair::AirlineCode_T& lPos = iFareRuleStruct._pos;
-    const stdair::ChannelLabel_T& lChannel = iFareRuleStruct._channel;
-    const stdair::DayDuration_T& lAdvancePurchase = iFareRuleStruct._advancePurchase;
-    const stdair::SaturdayStay_T& lSaturdayStay =iFareRuleStruct._saturdayStay;
-    const stdair::ChangeFees_T& lChangeFees = iFareRuleStruct._changeFees;
-    const stdair::NonRefundable_T& lNonRefundable = iFareRuleStruct._nonRefundable;
-    const stdair::DayDuration_T& lMinimumStay = iFareRuleStruct._minimumStay;
-    const stdair::Fare_T& lFare = iFareRuleStruct._fare;
+    // If the FarePositionKey object corresponding to the fare rule set
+    // having the same city code does not exist, create it and link it
+    // to the AirportPair object.     
+    FarePosition* lFarePosition_ptr = stdair::BomManager::
+      getObjectPtr<FarePosition> (*lAirportPair_ptr, 
+				  lFarePositionKey.toString());
+    if (lFarePosition_ptr == NULL) {
+      lFarePosition_ptr =
+        &stdair::FacBom<FarePosition>::instance().create (lFarePositionKey);
+      stdair::FacBomManager::
+        instance().addToListAndMap (*lAirportPair_ptr, *lAirportPair_ptr);
+      stdair::FacBomManager::
+      instance().linkWithParent (*lAirportPair_ptr, *lAirportPair_ptr);
+    }
+    assert (lFarePosition_ptr != NULL);   
+
+    // Set the fare date-period primary key.
+    const stdair::Date_T& lDateRangeStart = 
+      iFareRuleStruct._dateRangeStart;
+    const stdair::Date_T& lDateRangeEnd = 
+      iFareRuleStruct._dateRangeEnd;
+    const stdair::DatePeriod_T lDatePeriod (lDateRangeStart, lDateRangeEnd); 
+    const FareDatePeriodKey lFareDatePeriodKey (lDatePeriod);
+
+    // If the FareDatePeriodeKey object corresponding to the fare rule set
+    // having the same city code does not exist, create it and link it
+    // to the FarePosition object.     
+    FareDatePeriod* lFareDatePeriod_ptr = stdair::BomManager::
+      getObjectPtr<FareDatePeriod> (*lFarePosition_ptr, 
+				    lFareDatePeriodKey.toString());
+    if (lFareDatePeriod_ptr == NULL) {
+      lFareDatePeriod_ptr =
+        &stdair::FacBom<FareDatePeriod>::instance().create (lFareDatePeriodKey);
+      stdair::FacBomManager::
+        instance().addToListAndMap (*lFarePosition_ptr, *lFareDatePeriod_ptr);
+      stdair::FacBomManager::
+      instance().linkWithParent (*lFarePosition_ptr, *lFareDatePeriod_ptr);
+    }
+    assert (lFareDatePeriod_ptr != NULL);   
     
+    // Generate all FareRules
+    const stdair::Duration_T& lTimeRangeStart = 
+      iFareRuleStruct._timeRangeStart;
+    const stdair::Duration_T& lTimeRangeEnd = 
+      iFareRuleStruct._timeRangeEnd;
+    const stdair::ChannelLabel_T& lChannel = 
+      iFareRuleStruct._channel;
+    const stdair::DayDuration_T& lAdvancePurchase = 
+      iFareRuleStruct._advancePurchase;
+    const stdair::SaturdayStay_T& lSaturdayStay = 
+      iFareRuleStruct._saturdayStay;
+    const stdair::ChangeFees_T& lChangeFees =
+      iFareRuleStruct._changeFees;
+    const stdair::NonRefundable_T& lNonRefundable = 
+      iFareRuleStruct._nonRefundable;
+    const stdair::DayDuration_T& lMinimumStay = 
+      iFareRuleStruct._minimumStay;
+    const stdair::Fare_T& lFare = 
+      iFareRuleStruct._fare; 
+    const FareRuleFeaturesKey lFareRuleFeaturesKey (lTimeRangeStart, lTimeRangeEnd,
+						    lAdvancePurchase, lSaturdayStay,
+						    lChangeFees, lNonRefundable,
+						    lMinimumStay, lFare);  
+
+    // Create ther fare rule object and link it to the FareDatePeriod object.  
+    FareRuleFeatures* lFareRuleFeatures_ptr =
+        &stdair::FacBom<FareRuleFeatures>::instance().create (lFareRuleFeaturesKey);
+    assert(lFareRuleFeatures_ptr != NULL); 
+    stdair::FacBomManager::
+      instance().addToListAndMap (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr);
+    stdair::FacBomManager::
+      instance().linkWithParent (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr); 
+
+    // Generate Segment Features and link them to their FareRule
+    const unsigned int lAirlineListSize =
+      iFareRuleStruct.getAirlineListSize();
+    const unsigned int lClassCodeListSize =
+      iFareRuleStruct.getClassCodeListSize();
+    assert (lAirlineListSize == lClassCodeListSize);
+    /**iFareRuleStruct.beginClassCode();
+    for (iFareRuleStruct.beginAirline();
+	 iFareRuleStruct.hasNotReachedEndAirline();
+	 iFareRuleStruct.iterateAirline()) {
+      stdair::AirlineCode_T lAirlineCode =
+	iFareRuleStruct.getCurrentAirlineCode();
+      stdair::ClassCode_T lClassCode = 
+	iFareRuleStruct.getCurrentClassCode();
+      ioFareRuleStruct.iterateClassCode();
+        
+      SegmentFeatures* lSegmentFeatures_ptr =
+	&FacSegmentFeatures::instance().create(lAirlineCode, lClassCode);
+      FacFareRule::initLinkWithSegmentFeatures(*lFareRule_ptr,
+      *lSegmentFeatures_ptr);
+    }*/
+    
+    //const stdair::ChannelLabel_T& lChannel = iFareRuleStruct._channel;
   }
         
 }
