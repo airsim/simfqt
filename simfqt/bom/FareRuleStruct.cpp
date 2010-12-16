@@ -68,5 +68,63 @@ namespace SIMFQT {
     return ostr.str();
   }
 
+ // //////////////////////////////////////////////////////////////////////
+  const stdair::AirlineCode_T& FareRuleStruct::getFirstAirlineCode () const {
+    assert (_airlineCodeList.size() > 0);
+    stdair::AirlineCodeList_T::const_iterator itFirstAirlineCode =
+      _airlineCodeList.begin();
+    return *itFirstAirlineCode;
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void FareRuleStruct::beginAirline () {
+    _itCurrentAirlineCode = _airlineCodeList.begin();
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  bool FareRuleStruct::hasNotReachedEndAirline () const {
+    bool result = (_itCurrentAirlineCode != _airlineCodeList.end());
+    return result;
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  stdair::AirlineCode_T FareRuleStruct::getCurrentAirlineCode () const {
+    assert (_itCurrentAirlineCode != _airlineCodeList.end());    
+      return (*_itCurrentAirlineCode);
+  }
+
+
+  // //////////////////////////////////////////////////////////////////////
+  void FareRuleStruct::iterateAirline () {
+    if (_itCurrentAirlineCode != _airlineCodeList.end()) {
+      _itCurrentAirlineCode++;
+    }
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  void FareRuleStruct::beginClassCode () {
+    _itCurrentClassCode = _classCodeList.begin();
+  }
+
+  // //////////////////////////////////////////////////////////////////////
+  bool FareRuleStruct::hasNotReachedEndClassCode () const {
+    bool result = (_itCurrentClassCode != _classCodeList.end());
+    return result;
+  }
+  
+  // //////////////////////////////////////////////////////////////////////
+  stdair::ClassCode_T FareRuleStruct::getCurrentClassCode () const {
+    assert (_itCurrentClassCode != _classCodeList.end());    
+    return (*_itCurrentClassCode);
+  }
+
+
+  // //////////////////////////////////////////////////////////////////////
+  void FareRuleStruct::iterateClassCode () {
+    if (_itCurrentClassCode != _classCodeList.end()) {
+      _itCurrentClassCode++;
+    }
+  }
+
 }
 

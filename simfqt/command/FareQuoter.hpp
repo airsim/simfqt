@@ -6,6 +6,9 @@
 // //////////////////////////////////////////////////////////////////////
 // StdAir
 #include <stdair/stdair_basic_types.hpp>
+#include <stdair/bom/TravelSolutionStruct.hpp>
+#include <stdair/bom/TravelSolutionTypes.hpp>
+
 // Simfqt
 #include <simfqt/SIMFQT_Types.hpp>
 
@@ -17,8 +20,7 @@ namespace SIMFQT {
   private:
 
     /** Quote (with a price) a travel request. */
-    static Price_T priceQuote (const FareQuoteID_T&,
-                               const stdair::AirlineCode_T&, const PartySize_T&);
+    static Price_T priceQuote (stdair::TravelSolutionList_T&);
 
   private:
     /** Constructors. */

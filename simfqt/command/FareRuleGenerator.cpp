@@ -14,6 +14,7 @@
 #include <simfqt/bom/FarePosition.hpp>
 #include <simfqt/bom/FareDatePeriod.hpp>
 #include <simfqt/bom/FareRuleFeatures.hpp>
+#include <simfqt/bom/SegmentFeatures.hpp>
 #include <simfqt/command/FareRuleGenerator.hpp>
 
 namespace SIMFQT {
@@ -21,7 +22,7 @@ namespace SIMFQT {
   // //////////////////////////////////////////////////////////////////////
   void FareRuleGenerator::
   createFareRule (stdair::BomRoot& ioBomRoot,
-                  const FareRuleStruct& iFareRuleStruct) {
+                  FareRuleStruct& iFareRuleStruct) {
 
     // Set the airport-pair primary key.
     const stdair::AirportCode_T& lBoardPoint =
@@ -129,7 +130,7 @@ namespace SIMFQT {
     const unsigned int lClassCodeListSize =
       iFareRuleStruct.getClassCodeListSize();
     assert (lAirlineListSize == lClassCodeListSize);
-    /**iFareRuleStruct.beginClassCode();
+    iFareRuleStruct.beginClassCode();
     for (iFareRuleStruct.beginAirline();
 	 iFareRuleStruct.hasNotReachedEndAirline();
 	 iFareRuleStruct.iterateAirline()) {
@@ -137,14 +138,15 @@ namespace SIMFQT {
 	iFareRuleStruct.getCurrentAirlineCode();
       stdair::ClassCode_T lClassCode = 
 	iFareRuleStruct.getCurrentClassCode();
-      ioFareRuleStruct.iterateClassCode();
+      iFareRuleStruct.iterateClassCode();
+      const SegmentFeaturesKey lSegmentFeaturesKey (lAirlineCode, lClassCode); 
         
       SegmentFeatures* lSegmentFeatures_ptr =
-	&FacSegmentFeatures::instance().create(lAirlineCode, lClassCode);
-      FacFareRule::initLinkWithSegmentFeatures(*lFareRule_ptr,
-      *lSegmentFeatures_ptr);
-    }*/
-    
+         &stdair::FacBom<SegmentFeatures>::instance().create (lSegmentFeaturesKey); 
+      stdair::FacBomManager::
+      instance().linkWithParent(*lFareRuleFeatures_ptr, *lSegmentFeatures_ptr); 
+    }
+ 
     //const stdair::ChannelLabel_T& lChannel = iFareRuleStruct._channel;
   }
         
