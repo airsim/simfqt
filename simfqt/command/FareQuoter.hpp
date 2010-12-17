@@ -12,6 +12,11 @@
 // Simfqt
 #include <simfqt/SIMFQT_Types.hpp>
 
+// Forward declarations
+namespace stdair {
+  class BomRoot;
+}
+
 namespace SIMFQT {
 
   /** Command wrapping the pricing request process. */
@@ -20,7 +25,7 @@ namespace SIMFQT {
   private:
 
     /** Quote (with a price) a travel request. */
-    static Price_T priceQuote (stdair::TravelSolutionList_T&);
+    static void priceQuote (stdair::TravelSolutionStruct&, stdair::BomRoot&);
 
   private:
     /** Constructors. */

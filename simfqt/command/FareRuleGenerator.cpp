@@ -61,9 +61,9 @@ namespace SIMFQT {
       lFarePosition_ptr =
         &stdair::FacBom<FarePosition>::instance().create (lFarePositionKey);
       stdair::FacBomManager::
-        instance().addToListAndMap (*lAirportPair_ptr, *lAirportPair_ptr);
+	instance().addToListAndMap (*lAirportPair_ptr, *lFarePosition_ptr);
       stdair::FacBomManager::
-      instance().linkWithParent (*lAirportPair_ptr, *lAirportPair_ptr);
+	instance().linkWithParent (*lAirportPair_ptr, *lFarePosition_ptr);
     }
     assert (lFarePosition_ptr != NULL);   
 
@@ -116,13 +116,19 @@ namespace SIMFQT {
 						    lMinimumStay, lFare);  
 
     // Create ther fare rule object and link it to the FareDatePeriod object.  
-    FareRuleFeatures* lFareRuleFeatures_ptr =
-        &stdair::FacBom<FareRuleFeatures>::instance().create (lFareRuleFeaturesKey);
+    FareRuleFeatures* lFareRuleFeatures_ptr = stdair::BomManager::
+      getObjectPtr<FareRuleFeatures> (*lFareDatePeriod_ptr, 
+				      lFareRuleFeaturesKey.toString());
+    if (lFareRuleFeatures_ptr == NULL) {
+      lFareRuleFeatures_ptr =
+	&stdair::FacBom<FareRuleFeatures>::instance().create (lFareRuleFeaturesKey);
+      assert(lFareRuleFeatures_ptr != NULL); 
+      stdair::FacBomManager::
+	instance().addToListAndMap (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr);
+      stdair::FacBomManager::
+	instance().linkWithParent (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr);  
+    }
     assert(lFareRuleFeatures_ptr != NULL); 
-    stdair::FacBomManager::
-      instance().addToListAndMap (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr);
-    stdair::FacBomManager::
-      instance().linkWithParent (*lFareDatePeriod_ptr, *lFareRuleFeatures_ptr); 
 
     // Generate Segment Features and link them to their FareRule
     const unsigned int lAirlineListSize =
@@ -144,8 +150,8 @@ namespace SIMFQT {
       SegmentFeatures* lSegmentFeatures_ptr =
          &stdair::FacBom<SegmentFeatures>::instance().create (lSegmentFeaturesKey); 
       stdair::FacBomManager::
-      instance().linkWithParent(*lFareRuleFeatures_ptr, *lSegmentFeatures_ptr); 
-    }
+	instance().linkWithParent(*lFareRuleFeatures_ptr, *lSegmentFeatures_ptr); 
+      }
  
     //const stdair::ChannelLabel_T& lChannel = iFareRuleStruct._channel;
   }

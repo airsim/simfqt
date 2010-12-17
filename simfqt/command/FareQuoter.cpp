@@ -11,8 +11,9 @@
 namespace SIMFQT {
 
   // //////////////////////////////////////////////////////////////////////
-  Price_T FareQuoter::
-  priceQuote (stdair::TravelSolutionList_T& ioTravelSolutionList) {
+  void FareQuoter::
+  priceQuote (stdair::TravelSolutionStruct& ioTravelSolutionList, 
+	      stdair::BomRoot& iBomRoot) {
 
     Price_T oPrice = 1000.0;
     try { 
@@ -26,7 +27,6 @@ namespace SIMFQT {
       throw QuotingException();
     }
 
-    return oPrice;
   }
 
 }
