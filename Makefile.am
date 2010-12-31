@@ -30,7 +30,7 @@ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure \
 EXTRA_DIST =
 
 # Build in these directories:
-SUBDIRS = simfqt $(TEST_DIR)
+SUBDIRS = simfqt samples $(TEST_DIR)
 
 
 # Configuration helpers
