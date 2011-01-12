@@ -47,16 +47,6 @@ namespace SIMFQT {
   priceQuote (stdair::TravelSolutionStruct& ioTravelSolution, 
 	      stdair::BomRoot& iBomRoot) {
 
-<<<<<<< HEAD
-    Price_T lPrice = 1000.0;
-    ioTravelSolution.setFare(lPrice);
-    try { 
-
-      // DEBUG
-      STDAIR_LOG_DEBUG ("The price is " << lPrice
-                        << " EUR for the travel request for the airline ");
-    
-=======
     try {   
 
       // Get the list of segment-date keys of the traval solution. 
@@ -98,14 +88,9 @@ namespace SIMFQT {
 
       }
      
->>>>>>> src
     } catch (const std::exception& lStdError) {
       STDAIR_LOG_ERROR ("Error: " << lStdError.what());
       throw QuotingException();
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> src
   }
 }
