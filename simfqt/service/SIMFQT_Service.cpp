@@ -199,11 +199,21 @@ namespace SIMFQT {
     // will be attached
     stdair::BomRoot& lBomRoot = lSTDAIR_Service_ptr->getBomRoot();
 
+<<<<<<< HEAD
     // Initialise the fare parser  
     for (stdair::TravelSolutionList_T::iterator itTravelSolution =
            ioTravelSolutionList.begin();
          itTravelSolution != ioTravelSolutionList.end(); ++itTravelSolution) {
       FareQuoter::priceQuote (*itTravelSolution, lBomRoot);
+=======
+    // Initialise the fare parser 
+    if (!ioTravelSolutionList.empty()) {
+      for (stdair::TravelSolutionList_T::iterator itTravelSolution =
+	     ioTravelSolutionList.begin();
+	   itTravelSolution != ioTravelSolutionList.end(); ++itTravelSolution) {
+	FareQuoter::priceQuote (*itTravelSolution, lBomRoot);
+      }
+>>>>>>> src
     }
   }
   
