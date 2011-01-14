@@ -1,25 +1,4 @@
 tmp
-<<<<<<< HEAD
-Makefile.in
-INSTALL
-aclocal.m4
-autom4te.cache
-config/config.guess
-config/config.sub
-config/depcomp
-config/install-sh
-config/libtool.m4
-config/ltmain.sh
-config/ltoptions.m4
-config/ltsugar.m4
-config/ltversion.m4
-config/lt~obsolete.m4
-config/missing
-configure
-simfqt/config.h.in*
-test/simfqt/FQTTestSuite_results.xml
-simcrs
-=======
 INSTALL
 Makefile.in
 aclocal.m4
@@ -42,5 +21,4 @@ simfqt/
 simlfs/
 trademgen/
 travelccm/
->>>>>>> src
 
