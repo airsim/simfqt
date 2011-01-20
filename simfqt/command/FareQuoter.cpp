@@ -76,7 +76,7 @@ namespace SIMFQT {
 	  assert (lAirportPair_ptr != NULL); 
 
 	  // Set a random price (for now) to the traval solution.
-          stdair::PriceValue_T lPrice  = 600.0;
+      stdair::PriceValue_T lPrice  = 600.0;
 	  //ioTravelSolution.setFare(lPrice);     
 	
 	  // DEBUG
