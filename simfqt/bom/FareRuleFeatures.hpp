@@ -49,8 +49,6 @@ namespace SIMFQT {
     const Key_T& getKey() const { return _key; }
     stdair::BomAbstract* const getParent() const { return _parent; }
     const  stdair::HolderMap_T& getHolderMap() const { return _holderMap; }
-<<<<<<< HEAD
-=======
 
     /** Get the time range start. */
     const stdair::Duration_T& getTimeRangeStart() const {
@@ -91,7 +89,6 @@ namespace SIMFQT {
     const stdair::Fare_T& getFare() const {
       return _key.getFare();
     }
->>>>>>> src
     
   protected:
     /** Default constructors. */
