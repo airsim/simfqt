@@ -6,6 +6,10 @@
 // //////////////////////////////////////////////////////////////////////
 // STDAIR
 #include <stdair/bom/BomAbstract.hpp>
+<<<<<<< HEAD
+=======
+#include <stdair/stdair_date_time_types.hpp>
+>>>>>>> src
 // SIMFQT
 #include <simfqt/bom/FareRuleFeaturesKey.hpp>
 #include <simfqt/bom/FareRuleFeaturesTypes.hpp>
@@ -50,6 +54,7 @@ namespace SIMFQT {
     stdair::BomAbstract* const getParent() const { return _parent; }
     const  stdair::HolderMap_T& getHolderMap() const { return _holderMap; }
 
+<<<<<<< HEAD
     /** Get the time range start. */
     const stdair::Duration_T& getTimeRangeStart() const {
       return _key.getTimeRangeStart();
@@ -60,6 +65,8 @@ namespace SIMFQT {
       return _key.getTimeRangeEnd();
     }
 
+=======
+>>>>>>> src
     /** Get the fare day duration. */
     const stdair::DayDuration_T& getAdvancePurchase() const {
       return _key.getAdvancePurchase();
@@ -89,6 +96,20 @@ namespace SIMFQT {
     const stdair::Fare_T& getFare() const {
       return _key.getFare();
     }
+<<<<<<< HEAD
+=======
+
+  public:
+    // ////////////// Business methods ///////////////
+    /** Check if a given stay duration is greater or equal to
+        the minimum stay of the fare rule. */
+    bool IsStayDurationValid (const stdair::DayDuration_T&) const;
+
+    /** Check if a booking request date is valid compared the required
+        advance purchase number of days of the fare rule. */
+    bool IsAdvancePurchaseValid (const stdair::DateTime_T&,
+                                 const stdair::DateTime_T&) const;
+>>>>>>> src
     
   protected:
     /** Default constructors. */
