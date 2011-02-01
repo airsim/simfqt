@@ -508,5 +508,5 @@ namespace SIMFQT {
       throw QuotingException();
     }
   }
-}
 
+}
