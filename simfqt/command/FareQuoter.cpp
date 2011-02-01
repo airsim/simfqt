@@ -131,49 +131,6 @@ namespace SIMFQT {
   priceQuote (const stdair::SegmentPath_T& iSegmentPath,
               stdair::TravelSolutionList_T& ioTravelSolutionList,
               const stdair::BookingRequestStruct& iBookingRequest,
-              const stdair::BomRoot& iBomRoot,
-              stdair::TravelSolutionStruct& ioTravelSolution,
-              const std::vector<std::string>& iResultParsing) {
-    
-    try {
-
-      // Get the Airport pair stream of the segment path.
-      std::ostringstream lAirportPairStr; 
-      lAirportPairStr << iResultParsing.back() << std::endl;
-
-      // Search for the fare rules having the same origin and
-      // destination airport as the travel solution
-      const AirportPair* lAirportPair_ptr = stdair::BomManager::
-        getObjectPtr<AirportPair> (iBomRoot, lAirportPairStr.str());  
-
-      if (lAirportPair_ptr == NULL) { 
-        STDAIR_LOG_ERROR ("No available fare rule for the "
-                          << "Origin-Destination pair: "
-                          << lAirportPairStr.str());
-        throw AirportPairNotFoundException ("No available fare rule for "
-                                            "the Origin-Destination pair: "
-                                            + lAirportPairStr.str());
-      }
-      assert(lAirportPair_ptr != NULL);
-
-      priceQuote (iSegmentPath,
-                  ioTravelSolutionList,
-                  iBookingRequest,
-                  *lAirportPair_ptr,
-                  ioTravelSolution, 
-                  iResultParsing);
-
-    } catch (const std::exception& lStdError) {
-      STDAIR_LOG_ERROR ("Error: " << lStdError.what());
-      throw QuotingException();
-    }
-  }
-
-  // //////////////////////////////////////////////////////////////////////
-  void FareQuoter::
-  priceQuote (const stdair::SegmentPath_T& iSegmentPath,
-              stdair::TravelSolutionList_T& ioTravelSolutionList,
-              const stdair::BookingRequestStruct& iBookingRequest,
               const AirportPair& iAirportPair,
               stdair::TravelSolutionStruct& ioTravelSolution,
               const std::vector<std::string>& iResultParsing) {
