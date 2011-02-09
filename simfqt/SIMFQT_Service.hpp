@@ -6,6 +6,8 @@
 // //////////////////////////////////////////////////////////////////////
 // StdAir
 #include <stdair/stdair_basic_types.hpp>
+#include <stdair/stdair_service_types.hpp>
+#include <stdair/bom/TravelSolutionTypes.hpp>
 // SimFQT
 #include <simfqt/SIMFQT_Types.hpp>
 #include <stdair/bom/TravelSolutionTypes.hpp>
@@ -16,6 +18,7 @@ namespace stdair {
   struct BookingRequestStruct;
   struct BasLogParams;
   struct BasDBParams;
+  struct BookingRequestStruct;
 }
 
 namespace SIMFQT {
