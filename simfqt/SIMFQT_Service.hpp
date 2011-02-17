@@ -35,7 +35,7 @@ namespace SIMFQT {
 	solutions.
 	<br>The stdair::Fare_T attribute of each travel solution of the list 
 	is calculated.
-	@param stdair::BookingRequestStruct& Booking request. 
+        @param stdair::BookingRequestStruct& Booking request. 
 	@param stdair::TravelSolutionList_T& List of travel solution. */
     void getFares (const stdair::BookingRequestStruct&,
                    stdair::TravelSolutionList_T&);
