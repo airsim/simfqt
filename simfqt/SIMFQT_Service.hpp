@@ -14,6 +14,7 @@
 /// Forward declarations.
 namespace stdair {
   class STDAIR_Service;
+  struct BookingRequestStruct;
   struct BasLogParams;
   struct BasDBParams;
   struct BookingRequestStruct;
@@ -152,6 +153,12 @@ namespace SIMFQT {
      */
     void buildSampleBom();
 
+	/**
+	 * Build a BookingRequest structure (for test purposes).
+	 *
+	 * @return stdair::BookingRequestStruct The created BookingRequest
+	 *         structure.
+	 */ 
     stdair::BookingRequestStruct buildBookingRequest();
 
     /**
