@@ -49,12 +49,12 @@ struct UnitTestConfig {
 /**
  * Build and fareQuote a default list of travel solutions
  */
-void testFareQuoterHelper (const unsigned short optimisationMethodFlag,
-                          const stdair::Filename_T iFareInputFilename) {
+void testFareQuoterHelper (const unsigned short iTestFlag,
+                           const stdair::Filename_T iFareInputFilename) {
 
   // Output log File
   std::ostringstream oStr;
-  oStr << "FQTTestSuite_" << optimisationMethodFlag << ".log";
+  oStr << "FQTTestSuite_" << iTestFlag << ".log";
   const stdair::Filename_T lLogFilename (oStr.str());
 
   // Set the log parameters
@@ -96,15 +96,7 @@ BOOST_AUTO_TEST_SUITE (master_test_suite)
  */
 BOOST_AUTO_TEST_CASE (simfqt_simple_pricing_test) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fare01.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
 
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_NO_THROW (testFareQuoterHelper (0, lFareInputFilename));
@@ -117,15 +109,7 @@ BOOST_AUTO_TEST_CASE (simfqt_simple_pricing_test) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_01) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError01.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
 
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (1, lFareInputFilename),
@@ -138,15 +122,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_01) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_02) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError02.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
 
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (2, lFareInputFilename),
@@ -159,15 +135,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_02) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_03) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError03.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
 
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (3, lFareInputFilename),
@@ -180,16 +148,8 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_03) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_04) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError04.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
-
+  
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (4, lFareInputFilename),
                      SIMFQT::FlightTimeNotFoundException);
@@ -201,15 +161,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_04) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_05) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError05.csv");
-    
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
 
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (5, lFareInputFilename),
@@ -222,19 +174,24 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_05) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_06) {
 
-  // Fare input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError06.csv");
     
-  // Check that the file path given as input corresponds to an actual file
-  bool doesExistAndIsReadable =
-    stdair::BasFileMgr::doesExistAndIsReadable (lFareInputFilename);
-  BOOST_CHECK_MESSAGE (doesExistAndIsReadable == true,
-                       "The '" << lFareInputFilename
-                       << "' input file can not be open and read");
-
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (6, lFareInputFilename),
                      SIMFQT::AirlineNotFoundException);
+}
+
+/**
+ * Test an error detection functionality
+ * Expected to throw SIMFQT::FareInputFileNotFoundException
+ */
+BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_07) {
+
+  const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError07.csv");
+    
+  // Try to fareQuote the sample default list of travel solutions
+  BOOST_CHECK_THROW (testFareQuoterHelper (7, lFareInputFilename),
+                     SIMFQT::FareInputFileNotFoundException);
 }
 
 // End the test suite
