@@ -63,7 +63,7 @@ void testFareQuoterHelper (const unsigned short iTestFlag,
   logOutputFile.open (lLogFilename.c_str());
   logOutputFile.clear();
     
-  // Initialise the list of classes/buckets
+  // Initialise the SimFQT service object
   const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG,
                                          logOutputFile);
   
@@ -96,6 +96,7 @@ BOOST_AUTO_TEST_SUITE (master_test_suite)
  */
 BOOST_AUTO_TEST_CASE (simfqt_simple_pricing_test) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fare01.csv");
 
   // Try to fareQuote the sample default list of travel solutions
@@ -109,6 +110,7 @@ BOOST_AUTO_TEST_CASE (simfqt_simple_pricing_test) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_01) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError01.csv");
 
   // Try to fareQuote the sample default list of travel solutions
@@ -122,6 +124,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_01) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_02) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError02.csv");
 
   // Try to fareQuote the sample default list of travel solutions
@@ -135,6 +138,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_02) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_03) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError03.csv");
 
   // Try to fareQuote the sample default list of travel solutions
@@ -148,6 +152,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_03) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_04) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError04.csv");
   
   // Try to fareQuote the sample default list of travel solutions
@@ -161,6 +166,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_04) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_05) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError05.csv");
 
   // Try to fareQuote the sample default list of travel solutions
@@ -174,6 +180,7 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_05) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_06) {
 
+  // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError06.csv");
     
   // Try to fareQuote the sample default list of travel solutions
@@ -187,12 +194,14 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_06) {
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_07) {
 
-  const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError07.csv");
+  // Input file name
+  const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/missingFile.csv");
     
   // Try to fareQuote the sample default list of travel solutions
   BOOST_CHECK_THROW (testFareQuoterHelper (7, lFareInputFilename),
                      SIMFQT::FareInputFileNotFoundException);
 }
+
 
 // End the test suite
 BOOST_AUTO_TEST_SUITE_END()
