@@ -109,6 +109,14 @@ if test -z "${CXXFLAGS}"; then
    CXXFLAGS="-g -Wall"
 fi
 
+# -----------------------------------------------------------------
+# Readline: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
+# -----------------------------------------------------------------
+AM_PATH_READLINE([6.0])
+AC_SUBST(READLINE_VERSION)
+AC_SUBST(READLINE_CFLAGS)
+AC_SUBST(READLINE_LIBS)
+
 # -----------------------------------------------------------
 # Python: http://www.python.org
 # -----------------------------------------------------------
@@ -235,7 +243,9 @@ AC_CONFIG_FILES(
 	simfqt/service/Makefile
 	simfqt/config/Makefile
 	simfqt/core/Makefile
-	simfqt/batches/Makefile
+	simfqt/batches/Makefile	
+	simfqt/ui/Makefile	
+	simfqt/ui/cmdline/Makefile
 	samples/Makefile
 	samples/RDS01/Makefile
 	test/Makefile
@@ -306,6 +316,12 @@ Compiler/linker flags/libs/defs:
   - CPPFLAGS ............... : ${CPPFLAGS}
   - LDFLAGS ................ : ${LDFLAGS}
   - LIBS ................... : ${LIBS}
+
+External libraries:
+  - Readline ............... :
+    o READLINE_VERSION ..... : ${READLINE_VERSION}
+    o READLINE_CFLAGS ...... : ${READLINE_CFLAGS}
+    o READLINE_LIBS ........ : ${READLINE_LIBS} 
 
 External libraries:
 ${OPENMPI_OUTPUT}
