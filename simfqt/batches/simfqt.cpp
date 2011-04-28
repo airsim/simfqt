@@ -70,7 +70,7 @@ int readConfiguration (int argc, char* argv[], bool& ioIsBuiltin,
      "The sample BOM tree can be either built-in or parsed from an input file. That latter must then be given with the -f/--fare option")
     ("fare,f",
      boost::program_options::value< std::string >(&ioFareInputFilename)->default_value(K_SIMFQT_DEFAULT_FARE_INPUT_FILENAME),
-     "(CVS) input file for the schedule")
+     "(CVS) input file for the fare rules")
     ("log,l",
      boost::program_options::value< std::string >(&ioLogFilename)->default_value(K_SIMFQT_DEFAULT_LOG_FILENAME),
      "Filename for the logs")
@@ -178,64 +178,43 @@ int main (int argc, char* argv[]) {
     
   // Initialise the Simfqt service object
   const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile);
-  
+
+  // Build the BOM tree from parsing an fare dump file
+  SIMFQT::SIMFQT_Service simfqtService (lLogParams);
+    
+  // DEBUG
+  STDAIR_LOG_DEBUG ("Welcome to Simfqt");
+
+  // Build a sample list of travel solutions and a booking request.
+  stdair::TravelSolutionList_T lTravelSolutionList;
+  simfqtService.buildSampleTravelSolutions (lTravelSolutionList);
+  stdair::BookingRequestStruct lBookingRequest =
+    simfqtService.buildBookingRequest();
 
   // Check wether or not a (CSV) input file should be read
   if (isBuiltin == true) {
 
-    // Build the BOM tree from parsing an fare dump file
-    SIMFQT::SIMFQT_Service simfqtService (lLogParams);
-    
-    // DEBUG
-    STDAIR_LOG_DEBUG ("Welcome to Simfqt");
-
     // Build the sample BOM tree (filled with fares) for Simfqt
     simfqtService.buildSampleBom();
-    
-    // Build a sample list of travel solutions and a booking request.
-    stdair::TravelSolutionList_T lTravelSolutionList;
-    simfqtService.buildSampleTravelSolutions (lTravelSolutionList);
-    stdair::BookingRequestStruct lBookingRequest =
-      simfqtService.buildBookingRequest();
-
-    // FareQuote the sample list of travel solutions
-    simfqtService.quotePrices (lBookingRequest, lTravelSolutionList);
-
-    // DEBUG: Display the whole BOM tree
-    const std::string& lBOMCSVDump = simfqtService.csvDisplay();
-    STDAIR_LOG_DEBUG ("BOM tree: " << lBOMCSVDump);
-
-    // DEBUG: Display the travel solutions
-    const std::string& lTSCSVDump =
-      simfqtService.csvDisplay (lTravelSolutionList);
-    STDAIR_LOG_DEBUG (lTSCSVDump);
 
   } else {
     
     // Build the BOM tree from parsing a fare file
-    SIMFQT::SIMFQT_Service simfqtService (lLogParams, lFareInputFilename);
+    simfqtService.parseAndLoad (lFareInputFilename);
 
-    // DEBUG
-    STDAIR_LOG_DEBUG ("Welcome to Simfqt");
+  }
+  
+  // FareQuote the sample list of travel solutions
+  simfqtService.quotePrices (lBookingRequest, lTravelSolutionList);
 
-    // Build a sample list of travel solutions and a booking request.
-    stdair::TravelSolutionList_T lTravelSolutionList;
-    simfqtService.buildSampleTravelSolutions (lTravelSolutionList);
-    stdair::BookingRequestStruct lBookingRequest =
-      simfqtService.buildBookingRequest();
-
-    // FareQuote the sample list of travel solutions
-    simfqtService.quotePrices (lBookingRequest, lTravelSolutionList);
-    
-    // DEBUG: Display the whole BOM tree
-    const std::string& lBOMCSVDump = simfqtService.csvDisplay();
-    STDAIR_LOG_DEBUG ("BOM tree: " << lBOMCSVDump);
-
-    // DEBUG: Display the travel solutions
-    const std::string& lTSCSVDump =
-      simfqtService.csvDisplay (lTravelSolutionList);
-    STDAIR_LOG_DEBUG (lTSCSVDump);
-    }
+  // DEBUG: Display the whole BOM tree
+  const std::string& lBOMCSVDump = simfqtService.csvDisplay();
+  STDAIR_LOG_DEBUG ("BOM tree: " << lBOMCSVDump);
+  
+  // DEBUG: Display the travel solutions
+  const std::string& lTSCSVDump =
+    simfqtService.csvDisplay (lTravelSolutionList);
+  STDAIR_LOG_DEBUG (lTSCSVDump);
 
   // Close the Log outputFile
   logOutputFile.close();

@@ -55,7 +55,6 @@ struct Command_T {
     NOP = 0,
     QUIT,
     DISPLAY,
-    SELL,
     LAST_VALUE
   } Type_T;
 };
@@ -91,7 +90,7 @@ int readConfiguration (int argc, char* argv[], bool& ioIsBuiltin,
      "The sample BOM tree can be either built-in or parsed from an input file. That latter must then be given with the -f/--fare option")
     ("fare,f",
      boost::program_options::value< std::string >(&ioFareInputFilename)->default_value(K_SIMFQT_DEFAULT_FARE_INPUT_FILENAME),
-     "(CVS) input file for the schedule")
+     "(CVS) input file for the fare rules")
     ("log,l",
      boost::program_options::value< std::string >(&ioLogFilename)->default_value(K_SIMFQT_DEFAULT_LOG_FILENAME),
      "Filename for the logs")
@@ -204,9 +203,6 @@ Command_T::Type_T extractCommand (const TokenList_T& iTokenList) {
 
     } else if (lCommand == "quit") {
       oCommandType = Command_T::QUIT;
-
-    } else if (lCommand == "sell") {
-      oCommandType = Command_T::SELL;
     }
 
   } else {
@@ -248,16 +244,25 @@ int main (int argc, char* argv[]) {
   logOutputFile.open (lLogFilename.c_str());
   logOutputFile.clear();
 
-  // Initialise the inventory service
+  // Initialise the fareQuote service
   const stdair::BasLogParams lLogParams (stdair::LOG::DEBUG, logOutputFile); 
   SIMFQT::SIMFQT_Service simfqtService (lLogParams);
-
 
   // DEBUG
   STDAIR_LOG_DEBUG ("Welcome to fareQuote display");
 
-  // Build the sample BOM tree for SimFQT
-  simfqtService.buildSampleBom();
+  // Check wether or not a (CSV) input file should be read
+  if (isBuiltin == true) {
+
+    // Build the sample BOM tree (filled with fares) for Simfqt
+    simfqtService.buildSampleBom();
+
+  } else {
+    
+    // Build the BOM tree from parsing a fare file
+    simfqtService.parseAndLoad (lFareInputFilename);
+
+  }
 
   // DEBUG: Display the whole BOM tree
   const std::string& lCSVDump = simfqtService.csvDisplay();
