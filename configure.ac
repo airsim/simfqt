@@ -236,8 +236,6 @@ AC_CONFIG_FILES(
 	simfqt/config/Makefile
 	simfqt/core/Makefile
 	simfqt/batches/Makefile
-	samples/Makefile
-	samples/RDS01/Makefile
 	test/Makefile
 	test/simfqt/Makefile
 )
