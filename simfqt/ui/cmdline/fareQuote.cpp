@@ -15,6 +15,7 @@
 #include <stdair/basic/BasLogParams.hpp>
 #include <stdair/basic/BasDBParams.hpp>
 #include <stdair/service/Logger.hpp>
+#include <stdair/stdair_date_time_types.hpp>
 // Stdair GNU Readline Wrapper
 #include <stdair/ui/cmdline/SReadline.hpp>
 // Simfqt
@@ -212,6 +213,55 @@ Command_T::Type_T extractCommand (const TokenList_T& iTokenList) {
   return oCommandType;
 }
 
+// //////////////////////////////////////////////////////////////////
+void parseFlightDateKey (const TokenList_T& iTokenList,
+                         stdair::AirportCode_T& ioOrigin,
+                         stdair::AirportCode_T& ioDestination,
+                         stdair::Date_T& ioDepartureDate) {
+  // Interpret the user input
+  if (iTokenList.empty() == false) {
+    TokenList_T::const_iterator itTok = iTokenList.begin();
+    const std::string& lCommand (*itTok);
+    assert (lCommand == "display");
+
+    // Read the origin
+    ++itTok;
+    if (itTok != iTokenList.end()) {
+      ioOrigin = *itTok;
+
+    } else {
+      return;
+    }
+
+    // Read the destination
+    ++itTok;
+    if (itTok != iTokenList.end()) {
+      ioDestination = *itTok;
+
+    } else {
+      return;
+    }
+
+    // Read the departure date
+    ++itTok;
+    if (itTok != iTokenList.end()) {
+      try {
+
+      ioDepartureDate = boost::gregorian::from_simple_string (*itTok);
+
+      } catch (boost::bad_lexical_cast& eCast) {
+        std::cerr << "The flight departure date ('" << *itTok
+                  << "') cannot be understood. The default value ("
+                  << ioDepartureDate << ") is kept. " << std::endl;
+        return;
+      }
+
+    } else {
+      return;
+    }
+  }
+}
+
 // ///////// M A I N ////////////
 int main (int argc, char* argv[]) {
 
@@ -301,6 +351,12 @@ int main (int argc, char* argv[]) {
     const Command_T::Type_T lCommandType = extractCommand (lTokenList);
     switch (lCommandType) {
     case Command_T::DISPLAY: {
+      stdair::AirportCode_T lOrigin ("SIN");
+      stdair::AirportCode_T lDestination ("BKK");
+      stdair::Date_T lDate (2010, 01, 15);
+      parseFlightDateKey (lTokenList, lOrigin, lDestination, lDate);
+      std::cout << lOrigin << "-"<< lDestination << " " <<  lDate;
+
       // DEBUG: Display the fare rule
       const std::string& lCSVFlightDateDump =
         simfqtService.csvDisplay ();
