@@ -355,11 +355,10 @@ int main (int argc, char* argv[]) {
       stdair::AirportCode_T lDestination ("BKK");
       stdair::Date_T lDate (2010, 01, 15);
       parseFlightDateKey (lTokenList, lOrigin, lDestination, lDate);
-      std::cout << lOrigin << "-"<< lDestination << " " <<  lDate;
 
       // DEBUG: Display the fare rule
       const std::string& lCSVFlightDateDump =
-        simfqtService.csvDisplay ();
+        simfqtService.csvDisplay (lOrigin, lDestination, lDate);
       std::cout << lCSVFlightDateDump << std::endl;
       STDAIR_LOG_DEBUG (lCSVFlightDateDump);
 
