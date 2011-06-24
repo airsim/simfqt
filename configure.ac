@@ -246,6 +246,12 @@ AC_CONFIG_FILES(
 	simfqt/batches/Makefile	
 	simfqt/ui/Makefile	
 	simfqt/ui/cmdline/Makefile
+	doc/Makefile
+	doc/images/Makefile
+	doc/tutorial/Makefile
+	doc/tutorial/src/Makefile
+	doc/local/Makefile
+	doc/doxygen_html.cfg
 	test/Makefile
 	test/simfqt/Makefile
 )
