@@ -14,6 +14,10 @@ nofail_PRG = FQTTestSuite
 fail_PRG =
 
 #
+MAINTAINERCLEANFILES = Makefile.in
+CLEANFILES = ${nofail_PRG:%=%_utfresults.xml} ${nofail_PRG:%=%_?.log}
+
+#
 check_PROGRAMS = $(nofail_PRG) $(fail_PRG)
 TESTS = $(check_PROGRAMS)
 XFAIL_TESTS = $(fail_PRG)
