@@ -2,24 +2,24 @@
 \page tutorials Tutorials
 
 \section tut_toc Table of Contents
-- \ref tut_introduction
+- \ref tut_intro
  - \ref tut_intro_configuration
-- \ref tut_build_bom_tree
- - \ref tut_build_bom_root
- - \ref tut_build_inventory
- - \ref tut_build_link
- - \ref tut_build_inventory_another
- - \ref tut_dump_bom_tree
- - \ref tut_result_output
-- \ref tut_extend_bom_tree
- - \ref tut_extend_inventory
- - \ref tut_extend_build
- - \ref tut_extend_result_output
+ - \ref tut_intro_inputfile
+- \ref tut_bom_bom
+ - \ref tut_bom_build
+ - \ref tut_bom_display
+ - \ref tut_bom_structure
+- \ref tut_procedure
+ - \ref tut_procedure_bookingrequest
+ - \ref tut_procedure_travelsolution
+ - \ref tut_procedure_fareQuote
+ - \ref tut_procedure_summary
+ - \ref tut_procedure_results
 
-\section tut_introduction Introduction
+\section tut_intro Introduction
 This page contains some tutorial examples that will help you getting
-started using SimFQT. Most examples show how to construct some simple
-business objects, i.e., instances of the so-named Business Object
+started using SimFQT. Some examples show how to construct some simple
+business objects, i.e., instances of the so-named Fare Quoting Business Object
 Model (BOM).
 
 \subsection tut_intro_configuration Preparing the SimFQT Project for Development
@@ -30,162 +30,227 @@ compiled along with the rest of the \c SimFQT project. See the User
 Guide (\ref users_guide) for more details on how to build the \c SimFQT
 project.
 
-\section tut_build_bom_tree Build a Predefined BOM Tree
-A few steps:
-- \ref tut_build_bom_root
-- \ref tut_build_inventory
-- \ref tut_build_link
+\subsection tut_intro_inputfile Input file of SimFQT Project 
 
-\subsection tut_build_bom_root Instanciate the BOM Root Object
+The fare input file structure should look like the following sample:
 
-\dontinclude CmdBomManager.cpp
+\dontinclude fareInputFile.ref 
+\until 50;
+
+Each line represents a fare rule, i.e., each line tells us the price a customer 
+will be asked 
+according to a lot of criteria such as:
+- the origin and destination of its travel (for instance from Singapour to 
+Bangok in the first fare rule).
+- the type of its travel, i.e. one-way "OW" or round trip "RT".
+- the date and time he is willing to travel (each fare rule has a date range 
+and a time range of validity).
+- the place where he is buying the ticket, i.e. the point of sale.
+- its prefered cabin.
+- the channel of the booking described by a two letters code: 
+direct(D)/indirect(I) and online(N)/offline(F).
+- the date when he wants to buy the ticket, i.e. the advanced purchase required
+in number of days.
+- the saturday night stay option, i.e. is he staying a staturday night between 
+its inbound trip and its outbound one? "T" stands for true and "F" stands for 
+false.
+- the change fees option, i.e. are there fees to change its ticket? "T" stands 
+for true and "F" stands for false.
+- the refundable criterion, i.e. is the ticket refundable? "T" stands for true 
+and "F" stands for false.
+- the number of days he is willing to stay at the destination location (each 
+fare rule has a minimum stay requirement in number of days).
+
+Some fare input examples (including the example above named fare01.csv) are 
+given in the stdair::samples directory.
+
+\section tut_bom_bom The fare quoting BOM Tree
+
+The Fare Quoting Business Object Model (BOM) tree is a structure permitting 
+to store all the fare rules of the simulation. That is why, the BOM tree is 
+built parsing the fare file containing all the fare rules (as described 
+in the previous section \ref tut_intro_inputfile). For convenience and 
+first use of SimFQT (the input fare file building can be long and heavy), 
+SimFQT API enables to build a small default BOM tree.
+
+\subsection tut_bom_build Build of the fare quoting BOM tree 
 
 First, a BOM root object (i.e., a root for all the classes in the project) 
-is instantiated by the <tt>simfqt::SIMFQT_ServiceContext</tt> context object,
-when the <tt>simfqt::SIMFQT_Service</tt> is itself instantiated. The 
-corresponding \c SimFQT type (class) is <tt>simfqt::BomRoot</tt>.
+is instantiated by the <tt>stdair::STDAIR_ServiceContext</tt> context object,
+when the <tt>stdair::STDAIR_Service</tt> is itself instantiated, that is to say 
+during the instanciation of the <tt>simfqt::SIMFQT_Service</tt> object. The 
+corresponding \c type (class) <tt>stdair::BomRoot</tt> is defined in the StdAir 
+library.
 
-In the following sample, that object is named \c ioBomRoot, and is given
-as input/output parameter of the
-<tt>simfqt::CmdBomManager::buildSampleBom()</tt> method:
+Then, the BOM root can be eighter constructed thanks to the 
+<tt>simfqt::SIMFQT_Service::buildSampleBom()</tt> method:
 
-\skipline ioBomRoot
+\dontinclude SIMFQT_Service.hpp
+\skipline buildSampleBom
 
-\subsection tut_build_inventory Instanciate the (Airline) Inventory Object
+or can be constructed using the fare dump file describing above thanks to the 
+<tt> simfqt::SIMFQT_Service::parseAndLoad (const stdair::Filename_T&)</tt> 
+method:
 
-An airline inventory object can then be instantiated. Let us give it
-the "BA" airline code (corresponding to <a
-href="http://www.ba.com">British Airways</a>) as the object key. That
-is, an object (let us name it \c lBAKey) of type (class)
-<tt>simfqt::InventoryKey</tt> has first to be instantiated.
+\dontinclude SIMFQT_Service.hpp
+\skipline parseAndLoad 
 
-\skipline lBAKey
+\subsection tut_bom_display Display of the fare quoting BOM tree 
 
-Thanks to that key, an airline inventory object, i.e. of type (class)
-<tt>simfqt::Inventory</tt>, can be instantiated. Let us name that
-airline inventory object \c lBAInv.
+The fare quoting BOM tree can be displayed as done in the 
+<tt>batches::simfqt.cpp</tt> program:
+\dontinclude simfqt.cpp
+\skipline lBOMCSVDump
+\line lBOMCSVDump
 
-\skipline lBAInv
+When the default bom tree is used (<tt>-b</tt>
+option of the main program <tt>simfqt.cpp</tt>), the fare quoting BOM tree 
+display should look like:
 
-\subsection tut_build_link Link the Inventory Object with the BOM Root
+\include bomTreeDisplay.ref
 
-Then, both objects have to be linked: the airline inventory object
-(<tt>simfqt::Inventory</tt>) has to be linked with the root of the BOM
-tree (<tt>simfqt::BomRoot</tt>). That operation is as simple as using the 
-<tt>simfqt::FacBomManager::addToListAndMap()</tt> method:
+Here the fare quoting BOM tree is just composed of one fare rule.
 
-\line addToListAndMap
-\line linkWithParent
+\subsection tut_bom_structure Structure of the fare quoting BOM tree 
 
-\subsection tut_build_inventory_another Build Another Airline Inventory
+As one can guess looking at the BOM tree display above, the tree is constructed
+ as follow:
+- At the top of the tree, we find a <tt>stdair::BomRoot</tt> object (i.e., a 
+root for all the classes in the project).
+- Just under the root, at the first level, we find <tt>stdair::AirportPair</tt>
+ objects (i.e., all the possible combinations of origin-destination). In the 
+instance above, the only combination possible is from London to Sydney.
+- At the next level, under a particular <tt>stdair::AirportPair</tt>, we find 
+all the date period of the fare rules applicable for this origin-destination.
+- Then, under a particular <tt>stdair::DatePeriod</tt>, we find all the 
+possible combination of point-of-sale and channel applicable.
+- Under a particular <tt>stdair::PosChannel</tt> object, we have the 
+correponding <tt>stdair::TimePeriod</tt> objects.
+- At the next-to-last level, we have <tt>stdair::FareFeatures</tt> objects, 
+that is to say the trip type, the advanced purchase and stay duration required,
+ ...
+- Finally we find the code of the airline publishing the fare rule into 
+question and the class code applicable.
 
-Another airline inventory object, corresponding to the Air France (<a
-href="http://www.airfrance.com">Air France</a>) company, is
-instantiated the same way:
+\section tut_procedure The fare quoting procedure
 
-\skipline lAFKey
-\until linkWithParent
+The project SimFQT aims at fare quoting a list of 
+<a
+href="http://stdair.sourceforge.net/TravelSolutionStruct_8hpp.html ">
+travel solutions</a>
+corresponding to a
+<a
+href="http://stdair.sourceforge.net/BookingRequestStruct_8hpp.html ">
+booking request</a>.
+The fare quoter looks for all the fare rules matching a travel solution: 
+when a fare rule matchs, it creates a  
+<a
+href="http://stdair.sourceforge.net/FareOptionStruct_8hpp.html">
+fare option </a> object and add this object to the travel solution into
+question.
 
-See the corresponding full program (\ref cmd_bom_manager_cpp) for more details.
+A few steps:
+- \ref tut_procedure_bookingrequest
+- \ref tut_procedure_travelsolution
+- \ref tut_bom_build
 
-\subsection tut_dump_bom_tree Dump The BOM Tree Content
+\subsection tut_procedure_bookingrequest Instanciate the default booking request
 
-\dontinclude BomDisplay.cpp
+A default booking request can be build using the 
+<tt>simfqt::SIMFQT_Service::buildBookingRequest</tt> method:
+\dontinclude SIMFQT_Service.hpp
+\skipline buildBookingRequest
 
-From the \c BomRoot (of type <tt>simfqt::BomRoot</tt>) object
-instance, the list of airline inventories (of type
-<tt>simfqt::Inventory</tt>) can then be retrieved...
+\subsection tut_procedure_travelsolution Instanciate the default travel solution list
 
-\skipline lInventoryList
-\line getList
+In the following sample, a list of travel solutions is given as input/output
+parameter of the <tt>simfqt::SIMFQT_Service::buildSampleTravelSolutions</tt> 
+method:
+\skipline buildSampleTravelSolutions
 
-... and browsed:
-\skipline const_iterator
-\until csvDisplay
+\subsection tut_procedure_fareQuote Fare Quoting a list of travel solution
 
-See the corresponding full program (\ref bom_display_cpp) for more details.
+Once a booking request, its correponding list of travel solutions and the fare 
+Quote BOM tree are constructed, the main fonction of the module can be called:
 
-\subsection tut_result_output Result of the Tutorial Program
+\skipline quotePrices
+\line TravelSolutionList
+
+For each travel solution of the list, the applicable fare rules are picked off 
+from the BOM tree (information such as the trip type or the booking request 
+date are only contained into the booking request, that is why we need this 
+object too).
+
+Each chosen fare rule enables to create a fare option structure which is 
+finally stored into the travel solution. 
+
+\subsection tut_procedure_summary Summary of the different steps
+
+All the steps below can be find in the same order in the 
+<tt>batches::simfqt.cpp</tt> program.
+
+First, we instanciate the simfqtService object:
+
+\dontinclude simfqt.cpp
+\skipline BasLogParams
+\skipline simfqtService
+
+Then, we construct a default sample list of travel solutions and a default 
+booking request (as already mentionned in \ref tut_procedure_bookingrequest and
+ \ref tut_procedure_travelsolution parts):
+
+\dontinclude simfqt.cpp
+\skipline TravelSolutionList_T
+\line lTravelSolutionList
+\skipline BookingRequestStruct
+\line simfqtService
+
+Then, the objective is to construct the fareQuote bom tree (see \ref 
+tut_bom_build) from a fare rule input file:
+
+\dontinclude simfqt.cpp
+\skipline parseAndLoad (lFareInputFilename);
+
+For basic use, a defaut BOM tree can be constructed using:
+\dontinclude simfqt.cpp
+\skipline buildSampleBom()
+
+The main step is the fareQuoting (see \ref tut_procedure_fareQuote):
+\dontinclude simfqt.cpp
+\skipline quotePrices
+
+\subsection tut_procedure_results Result of the Tutorial Program
 
 When the <tt>simfqt.cpp</tt> program is run (with the <tt>-b</tt>
 option), the output should look like:
 
 \include simfqt.ref
 
+What is interesting is to compare the travel solution list (here reduced to a 
+single travel solution) display before:
+
+\dontinclude simfqt.ref
+\skipline [0]
+
+and after the fareQuoting:
+
+\skipline [0]
+
+Between the two groups of dashes, wa can see a fare option structure has been 
+added by the fare quoter: the price is 450 EUR for the Y class, the ticket is 
+refundable but there are change fees and the customer must say on saturday 
+night.
+
+Let's return to our default BOM tree display: the only fare rule stored was a 
+match for the travel solution in consideration (same origin airport, same 
+destination airport, flight date included in fare rule date range, BA airline, 
+...).
+
+By looking at the fare rule trip type "RT", we can guess we face a round trip 
+fare: that means the price given in the default bom tree construction in 
+<tt>stdair::CmdBomManager.hpp</tt> has been divided by 2 because we are 
+considering eigher an inbound trip or an outbound one.
+
 See the corresponding full program (\ref batch_simfqt_cpp) for more details.
-
-
-\section tut_extend_bom_tree Extend the Pre-Defined BOM Tree
-
-Now that we master how to instantiate the pre-defined SimFQT classes,
-let us see how to extend that BOM.
-
-\subsection tut_extend_inventory Extend an Airline Inventory Object
-For instance, let us assume that some (IT) provider (e.g., you) would
-like to have a specific implementation of the \c Inventory object. The
-corresponding class has just to extend the <tt>simfqt::Inventory</tt>
-class:
-
-\dontinclude MPInventory.hpp
-
-\skipline namespace
-\skipline class Inventory
-
-The STL containers have to be defined accordingly too:
-
-\skipline InventoryList_T
-
-See the full class definition (\ref test_archi_inv_hpp) and
-implementation (\ref test_archi_inv_cpp) for more details.
-
-\subsection tut_extend_build Build the Specific BOM Objects
-
-\dontinclude StandardAirlineITTestSuite.cpp
-
-The BOM root object (<tt>simfqt::BomRoot</tt>) is instantiated the
-classical way:
-
-\skipline lBomRoot
-\line FacBom
-
-Then, the specific implementation of the airline inventory object
-(<tt>myprovider::Inventory</tt>) can be instantiated the same way as a
-standard Inventory (<tt>simfqt::Inventory</tt>) would be:
-
-\skipline lBAKey
-\skipline lBAInv
-\line FacBom
-
-Then, the specific implementation of the airline inventory object
-(<tt>myprovider::Inventory</tt>) is linked to the root of the BOM tree
-(<tt>simfqt::BomRoot</tt>) the same way as the standard Inventory
-(<tt>simfqt::Inventory</tt>) would be:
-
-\skipline addToList
-
-Another specific airline inventory object is instantiated the same way:
-
-\skipline lAFKey
-\until FacBomManager
-
-From the \c BomRoot (of type <tt>simfqt::BomRoot</tt>) object
-instance, the list of specific airline inventories (of type
-<tt>simfqt::Inventory</tt>) can then be retrieved...
-
-\skipline lInventoryList
-\line getList
-
-... and browsed:
-\skipline const_iterator
-\until }
-
-\subsection tut_extend_result_output Result of the Tutorial Program
-
-When this program is run, the output should look like:
-
-\include StandardAirlineITTestSuite.ref
-
-See the corresponding full program (\ref StandardAirlineITTestSuite_cpp) for
-more details.
 
 */

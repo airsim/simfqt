@@ -205,6 +205,11 @@ int main (int argc, char* argv[]) {
     simfqtService.parseAndLoad (lFareInputFilename);
 
   }
+
+  // DEBUG: Display the travel solutions
+  const std::string& lTSCSVDump =
+    simfqtService.csvDisplay (lTravelSolutionList);
+  STDAIR_LOG_DEBUG (lTSCSVDump);
   
   // FareQuote the sample list of travel solutions
   simfqtService.quotePrices (lBookingRequest, lTravelSolutionList);
@@ -214,10 +219,10 @@ int main (int argc, char* argv[]) {
   STDAIR_LOG_DEBUG ("BOM tree: " << lBOMCSVDump);
   
   // DEBUG: Display the travel solutions
-  const std::string& lTSCSVDump =
-    simfqtService.csvDisplay (lTravelSolutionList);
-  STDAIR_LOG_DEBUG (lTSCSVDump);
-
+  const std::string& lTSCSVDumpEnd
+    = simfqtService.csvDisplay (lTravelSolutionList);
+  STDAIR_LOG_DEBUG (lTSCSVDumpEnd);
+  
   // Close the Log outputFile
   logOutputFile.close();
 

@@ -54,17 +54,16 @@
 
 \section about About SimFQT
 
-SimFQT is a C++ library of classes and functions modeling typical
-airline IT business objects. For instance, it is used by the C++
-Revenue Management Open Library project
-(http://sourceforge.net/projects/rmol/).
+SimFQT is a C++ project composed of classes and functions modeling the pricing
+ of airline IT travel solutions objects. It used the C++ airline IT business library
+(http://sourceforge.net/projects/stdair/).
 
 SimFQT makes an extensive use of existing open-source libraries for
 increased functionality, speed and accuracy. In particular <a
 href="http://www.boost.org">Boost</a> (<em>C++ STL Extensions</em>) library is
 used.
 
-The SimFQT library originates from the department of Operational
+The SimFQT project originates from the department of Operational
 Research and Innovation at <a
 href="http://www.amadeus.com">Amadeus</a>, Sophia Antipolis,
 France. SimFQT is released under the terms of the <a

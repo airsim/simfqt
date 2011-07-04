@@ -1,9 +1,3 @@
-[D]../../../simfqt/batches/simfqt.cpp:186: Welcome to Simfqt
-[D]../../../simfqt/batches/simfqt.cpp:212: Travel solutions:
-    [0] [0] BA, 9, 2011-06-10, LHR, SYD, 21:45 ---  --- 
-[D]../../../simfqt/command/FareQuoter.cpp:519: Segment path: BA; 9, 2011-06-10; LHR, SYD; 21:45. A corresponding fare option for the 'BA Y' class is: Class path: Y; 450 EUR; conditions: 1 1 1
-[D]../../../simfqt/service/SIMFQT_Service.cpp:352: Fare Quote retrieving: 0.001403 - SIMFQT_ServiceContext -- Owns StdAir service: 1
-[D]../../../simfqt/batches/simfqt.cpp:214: BOM tree: 
 ===============================================================
 BomRoot:  -- ROOT -- 
 ===============================================================
@@ -25,6 +19,3 @@ Fare-Features: RT -- 0-1-1-1-0
 ------------------------------------
 AirlineClassList: BA Y
 ------------------------------------
-
-[D]../../../simfqt/batches/simfqt.cpp:219: Travel solutions:
-    [0] [0] BA, 9, 2011-06-10, LHR, SYD, 21:45 --- Y, 450, 1 1 1 --- 
