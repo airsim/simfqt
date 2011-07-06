@@ -194,15 +194,29 @@ BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_06) {
 
 /**
  * Test an error detection functionality
- * Expected to throw SIMFQT::FareInputFileNotFoundException
+ * Expected to throw SIMFQT::FareFileParsingFailedException
  */
 BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_07) {
+
+  // Input file name
+  const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/fareError07.csv");
+    
+  // Try to fareQuote the sample default list of travel solutions
+  BOOST_CHECK_THROW (testFareQuoterHelper (7, lFareInputFilename),
+                     SIMFQT::FareFileParsingFailedException);
+}
+
+/**
+ * Test an error detection functionality
+ * Expected to throw SIMFQT::FareInputFileNotFoundException
+ */
+BOOST_AUTO_TEST_CASE (simfqt_error_pricing_test_08) {
 
   // Input file name
   const stdair::Filename_T lFareInputFilename (STDAIR_SAMPLE_DIR "/missingFile.csv");
     
   // Try to fareQuote the sample default list of travel solutions
-  BOOST_CHECK_THROW (testFareQuoterHelper (7, lFareInputFilename),
+  BOOST_CHECK_THROW (testFareQuoterHelper (8, lFareInputFilename),
                      SIMFQT::FareInputFileNotFoundException);
 }
 
