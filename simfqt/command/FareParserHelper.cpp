@@ -474,8 +474,7 @@ namespace SIMFQT {
 
       fare_rule = fare_key
         >> +( ';' >> segment )
-        >> fare_rule_end[doEndFare(_bomRoot, _fareRule)]
-        >> *(bsq::eol);
+        >> fare_rule_end[doEndFare(_bomRoot, _fareRule)];
 
       fare_rule_end = bsa::char_(';');
 
