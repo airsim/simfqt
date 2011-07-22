@@ -242,7 +242,7 @@ AC_CONFIG_FILES(
 	simfqt/command/Makefile
 	simfqt/service/Makefile
 	simfqt/config/Makefile
-	simfqt/config/Makefile/simfqt-paths.hpp.in
+	simfqt/config/simfqt-paths.hpp
 	simfqt/core/Makefile
 	simfqt/batches/Makefile	
 	simfqt/ui/Makefile	
