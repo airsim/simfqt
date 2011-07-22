@@ -252,6 +252,10 @@ macro (get_external_libs)
       get_boost (${_arg_version})
     endif (${_arg_lower} STREQUAL "boost")
 
+    if (${_arg_lower} STREQUAL "readline")
+      get_readline (${_arg_version})
+    endif (${_arg_lower} STREQUAL "readline")
+
     if (${_arg_lower} STREQUAL "mysql")
       get_mysql (${_arg_version})
     endif (${_arg_lower} STREQUAL "mysql")
@@ -333,6 +337,33 @@ macro (get_boost)
   endif (Boost_FOUND)
 
 endmacro (get_boost)
+
+# ~~~~~~~~~~ Readline ~~~~~~~~~
+macro (get_readline)
+  set (_required_version 0)
+  if (${ARGC} GREATER 0)
+    set (_required_version ${ARGV0})
+    message (STATUS "Requires Readline-${_required_version}")
+  else (${ARGC} GREATER 0)
+    message (STATUS "Requires Readline without specifying any version")
+  endif (${ARGC} GREATER 0)
+
+  set (READLINE_FOUND False)
+
+  find_package (Readline)
+  if (READLINE_LIBRARY)
+    set (READLINE_FOUND True)
+  endif (READLINE_LIBRARY)
+
+  if (READLINE_FOUND)
+    # Update the list of include directories for the project
+    include_directories (${READLINE_INCLUDE_DIR})
+
+    # Update the list of dependencies for the project
+    set (PROJ_DEP_LIBS_FOR_LIB ${PROJ_DEP_LIBS_FOR_LIB} ${READLINE_LIBRARY})
+  endif (READLINE_FOUND)
+
+endmacro (get_readline)
 
 # ~~~~~~~~~~ MySQL ~~~~~~~~~
 macro (get_mysql)
@@ -754,20 +785,14 @@ macro (module_library_add_specific
   endif ("${_linker_lang}" STREQUAL "_linker_lang-NOTFOUND")
 
   ##
-  # Installation
-  set (_all_targets ${_lib_target})
-  foreach (_arg_lib_name ${${MODULE_NAME}_INTER_TARGETS})
-    list (APPEND _all_targets ${_arg_lib_name}lib)
-  endforeach (_arg_lib_name)
-
-  # Installation of the library binaries
-  install (TARGETS ${_all_targets}
+  # Installation of the library
+  install (TARGETS ${_lib_target}
     EXPORT ${LIB_DEPENDENCY_EXPORT}
     LIBRARY DESTINATION "${INSTALL_LIB_DIR}" COMPONENT runtime)
 
   # Register, for reporting purpose, the list of libraries to be built
   # and installed for that module
-  list (APPEND ${MODULE_NAME}_ALL_LIBS ${_all_targets})
+  list (APPEND ${MODULE_NAME}_ALL_LIBS ${_lib_target})
   set (${MODULE_NAME}_ALL_LIBS ${${MODULE_NAME}_ALL_LIBS} PARENT_SCOPE)
 
   # Install the header files for the library
@@ -835,7 +860,7 @@ macro (module_binary_add _exec_source_dir)
 
   # Register the (CMake) target for the executable, and specify the name
   # of that latter
-  add_executable (${_exec_name}bin ${_exec_source_dir}/${MODULE_NAME}.cpp)
+  add_executable (${_exec_name}bin ${_exec_source_dir}/${_exec_name}.cpp)
   set_target_properties (${_exec_name}bin PROPERTIES OUTPUT_NAME ${_exec_name})
 
   # Register the dependencies on which the binary depends upon
@@ -854,7 +879,7 @@ macro (module_binary_add _exec_source_dir)
 
   # Register, for reporting purpose, the list of executables to be built
   # and installed for that module
-  list (APPEND ${MODULE_NAME}_ALL_EXECS ${PROJ_ALL_BIN_TARGETS})
+  list (APPEND ${MODULE_NAME}_ALL_EXECS ${_exec_name})
   set (${MODULE_NAME}_ALL_EXECS ${${MODULE_NAME}_ALL_EXECS} PARENT_SCOPE)
 
 endmacro (module_binary_add)
@@ -872,22 +897,32 @@ endmacro (module_export_install)
 ##                            Tests                              ##
 ###################################################################
 #
-macro (add_test_suites _test_suite_dir_list)
+macro (add_test_suites)
+  #
+  set (_test_suite_dir_list ${ARGV})
+
   if (Boost_FOUND)
     # Tell CMake/CTest that tests will be performed
     enable_testing() 
 
-    #
+    # Browse all the modules, and register test suites for each of them
+    set (_check_target_list "")
     foreach (_module_name ${_test_suite_dir_list})
       set (${_module_name}_ALL_TST_TARGETS "")
       # Each individual test suite is specified within the dedicated
       # sub-directory. The CMake file within each of those test sub-directories
       # specifies a target named check_${_module_name}tst.
       add_subdirectory (test/${_module_name})
-      add_custom_target (check DEPENDS check_${_module_name}tst)
+
+      # Register, for book-keeping purpose (a few lines below), 
+      # the (CMake/CTest) test target of the current module 
+      list (APPEND _check_target_list check_${_module_name}tst)
     endforeach (_module_name)
 
-    # Register, for book-keeping purpose, the list of modules to be tested
+    # Register all the module (CMake/CTest) test targets at once
+    add_custom_target (check DEPENDS ${_check_target_list})
+
+    # Register, for reporting purpose, the list of modules to be tested
     set (PROJ_ALL_MOD_FOR_TST ${_test_suite_dir_list})
 
   endif (Boost_FOUND)
@@ -1023,6 +1058,17 @@ macro (display_boost)
   endif (Boost_FOUND)
 endmacro (display_boost)
 
+# Readline
+macro (display_readline)
+  if (READLINE_FOUND)
+    message (STATUS)
+    message (STATUS "* Readline:")
+    message (STATUS "  - READLINE_VERSION ........... : ${READLINE_VERSION}")
+    message (STATUS "  - READLINE_INCLUDE_DIR ....... : ${READLINE_INCLUDE_DIR}")
+    message (STATUS "  - READLINE_LIBRARY ........... : ${READLINE_LIBRARY}")
+  endif (READLINE_FOUND)
+endmacro (display_readline)
+
 # MySQL
 macro (display_mysql)
   if (MYSQL_FOUND)
@@ -1132,6 +1178,7 @@ macro (display_status)
   message (STATUS "---------------------------------")
   #
   display_boost ()
+  display_readline ()
   display_mysql ()
   display_soci ()
   display_stdair ()
