@@ -72,9 +72,6 @@ test "x$ax_cv_boost_date_time" != xno && enable_exceptions=yes
 # Set the data directory for SimFQT
 pkgdatadir="${datadir}/simfqt"
 AC_SUBST(pkgdatadir)
-# Set the directory for data samples exported by SimFQT
-sampledir="${pkgdatadir}/samples"
-AC_SUBST(sampledir)
 
 # Check for info pages
 AC_ARG_ENABLE(info-doc, 
