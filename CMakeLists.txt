@@ -8,13 +8,14 @@ include (config/project_config_embeddable.cmake)
 ##
 # Project info
 set_project_names (simfqt SimFQT)
+set_project_brief ("C++ Simulated Fare Quote System Library")
 set_project_versions (99 99 99)
 
 ##
 # Project options
 # The parameters are:
 #  * whether or not the documentation must be built and installed
-set_project_options (off)
+set_project_options (on)
 
 
 #####################################
@@ -22,7 +23,6 @@ set_project_options (off)
 #####################################
 #
 packaging_init (${PROJECT_NAME})
-packaging_set_description ("C++ Simulated Fare Quote System Library")
 packaging_set_summary ("${PROJECT_NAME} aims at providing a clean API and a simple implementation, as a C++ library, of a Travel-oriented fare engine. It corresponds to the simulated version of the real-world Fare Quote or pricing System.
 
 ${PROJECT_NAME} makes an extensive use of existing open-source libraries for
