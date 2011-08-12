@@ -17,7 +17,6 @@
 - \ref linking
 - \ref users_guide
 - \ref tutorials
-- \ref verification
 - \ref copyright
 - \ref help_wanted
 - \ref howto_release
@@ -26,12 +25,16 @@
 \section at_sourceforge SimFQT at SourceForge
 - <a href="http://sourceforge.net/projects/simfqt/">Project page</a>
 - <a href="http://sourceforge.net/project/showfiles.php?group_id=267760">Download SimFQT</a>
-- <a href="https://sourceforge.net/apps/trac/simfqt/newticket">Open a ticket fora bug or feature</a>
+- <a href="https://sourceforge.net/apps/trac/simfqt/newticket">Open a ticket for
+  a bug or feature</a>
 - <a href="http://sourceforge.net/mail/?group_id=267760">Mailing lists</a>
 - <a href="https://sourceforge.net/apps/phpbb/simfqt/">Forums</a>
-  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=1">Discuss about Development issues</a>
-  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=2">Ask for Help</a>
-  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=3">Discuss SimFQT</a>
+  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=1">
+  Discuss about Development issues</a>
+  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=2">
+  Ask for Help</a>
+  - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=3">
+  Discuss SimFQT</a>
 
 
 \section development SimFQT Development
@@ -43,9 +46,24 @@
 
 \section external_libs External Libraries
 - <a href="http://www.boost.org">Boost (C++ STL extensions)</a>
+- <a href="http://www.python.org/">Python</a>
 - <a href="http://dev.mysql.com/">MySQL client</a>
-- <a href="http://soci.sourceforge.net/">SOCI (C++ DB API)</a>
+- <a href="http://soci.sourceforge.net/">SOCI (C++ DB API)
 
+</a>\section social_sponsorship Support SimFQT
+\htmlonly
+<table width="100%">
+ <tr>
+  <td align="left" valign="middle">
+   <a href="http://twitter.com/share" class="twitter-share-button" data-count="none" data-via="denis_arnaud">Tweet</a>
+   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+  </td>
+  <td align="right" valign="middle">
+   <g:plusone></g:plusone> 
+  </td>
+ </tr>
+</table>
+\endhtmlonly
 
 \htmlonly
 </div>
@@ -54,21 +72,19 @@
 
 \section about About SimFQT
 
-SimFQT is a C++ project composed of classes and functions modeling the pricing
- of airline IT travel solutions objects. It used the C++ airline IT business library
-(http://sourceforge.net/projects/stdair/).
-
+SimFQT is a C++ project of airline pricing classes and functions, mainly 
+targeting simulation purposes. \ref N
+ 
 SimFQT makes an extensive use of existing open-source libraries for
 increased functionality, speed and accuracy. In particular <a
 href="http://www.boost.org">Boost</a> (<em>C++ STL Extensions</em>) library is
 used.
 
-The SimFQT project originates from the department of Operational
-Research and Innovation at <a
-href="http://www.amadeus.com">Amadeus</a>, Sophia Antipolis,
-France. SimFQT is released under the terms of the <a
+The SimFQT project originates from the department of Operational Research and 
+Innovation at <a href="http://www.amadeus.com">Amadeus</a>, Sophia Antipolis,
+France. SimFQT is released under the terms of the <a 
 href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public
-License</a> (LGPL) for you to enjoy.
+License</a> (LGPLv2.1) for you to enjoy.
 
 SimFQT should work on
 <a href="http://en.wikipedia.org/wiki/GNU/Linux">GNU/Linux</a>,
@@ -77,6 +93,12 @@ Microsoft Windows (with <a href="http://www.cygwin.com/">Cygwin</a>,
 <a href="http://www.mingw.org/">MinGW/MSYS</a>, or 
 <a href="http://msdn.microsoft.com/visualc/">Microsoft Visual C++ .NET</a>) and
 <a href="http://www.apple.com/macosx/">Mac OS X</a> operating systems.
+
+
+\note
+\anchor N
+(N) - The SimFQT library is \b NOT intended, in any way, to be used by
+airlines for production systems.
 
 \htmlonly
 </div>

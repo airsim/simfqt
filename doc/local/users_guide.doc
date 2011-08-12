@@ -8,16 +8,19 @@
   - \ref ug_build_binaries
   - \ref ug_build_and_run_tests
   - \ref ug_install_project
-- \ref ug_bom_tree
- - \ref ug_bom_distribution
- - \ref ug_bom_schedule
- - \ref ug_bom_inventory
-- \ref ug_extending_bom_tree
-
+- \ref ug_inputfile
+- \ref ug_bom_bom
+ - \ref ug_bom_build
+ - \ref ug_bom_structure
+ - \ref ug_bom_display 
+- \ref ug_procedure 
+ - \ref ug_procedure_bookingrequest
+ - \ref ug_procedure_travelsolution
+ - \ref ug_procedure_fareQuote 
 
 \section ug_introduction Introduction
 
-The \c SimFQT library contains classes for airline business management.
+The \c SimFQT library contains classes for fare rule management.
 This document does not cover all the aspects of the \c SimFQT library. It 
 does however explain the most important things you need to know in order
 to start using \c SimFQT. 
@@ -26,45 +29,242 @@ to start using \c SimFQT.
 
 \subsection ug_get_source Get the SimFQT library
 
-\subsection ug_build_binaries Build the SimFQT project
-To run the configuration script the first time, go to the
-top directory (where the SimFQT package has been un-packed), and issue
-either of the following two commands, depending on whether the SimFQT
-project has been checked out from the Subversion repository or
-downloaded as a tar-ball package from the Sourceforge Web site:
- - <tt>./autogen.sh</tt>
- - <tt>./configure</tt>
+Clone locally the full
+<a href="http://simfqt.git.sourceforge.net/git/gitweb.cgi?p=simfqt/simfqt;a=tree;h=refs/heads/trunk;hb=trunk">Git project</a>:
+\verbatim 
+cd ~
+mkdir -p dev/sim
+cd ~/dev/sim
+git clone git://simfqt.git.sourceforge.net/gitroot/simfqt/simfqt simfqtgit
+cd simfqtgit
+git checkout trunk
+\endverbatim 
 
-\subsection ug_build_and_run_tests Build and Run the Tests
+\subsection ug_build_binaries Build the SimFQT project
+
+Link with StdAir, create the distribution package (say, 0.5.0) and compile 
+using the following commands:
+\verbatim 
+cd ~/dev/sim/simfqtgit
+rm -rf build && mkdir -p build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=~/dev/deliveries/simfqt-0.5.0 \
+ -DWITH_STDAIR_PREFIX=~/dev/deliveries/stdair-stable \
+ -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON ..
+make
+\endverbatim 
+
+\subsection ug_build_and_run_tests Run the Tests
+After building the SimFQT project (see \ref ug_build_binaries), the following commands enable to run the tests:
+\verbatim 
+cd ~/dev/sim/simfqtgit
+cd build
+make check
+\endverbatim 
+
+As a result, you should obtain a similar report:
+
+\verbatim 
+[  0%] Built target hdr_cfg_simfqt
+[ 90%] Built target simfqtlib
+[100%] Built target FQTTestSuitetst
+Test project /home/localoriuser/dev/sim/simfqt/simfqtgit/build/test/simfqt
+    Start 1: FQTTestSuitetst
+1/1 Test #1: FQTTestSuitetst ..................   Passed    0.15 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.16 sec
+[100%] Built target check_simfqttst
+[100%] Built target check
+\endverbatim 
 
 \subsection ug_install_project Install the SimFQT Project (Binaries, Documentation)
 
-\section ug_bom_tree Exploring the Predefined BOM Tree
+After the step \ref ug_build_binaries, to install the library and its header 
+files, type:
+\verbatim 
+cd ~/dev/sim/simfqtgit
+cd build
+make install
+\endverbatim
 
-\c SimFQT predefines a BOM (Business Object Model) tree specific to the
-airline IT arena.
+You can check that the executables and other required files have been copied 
+into the given final directory: 
 
-\subsection ug_bom_distribution Airline Distribution BOM Tree
-- \c simfqt::TravelSolutionStruct
+\verbatim 
+cd ~dev/deliveries/simfqt-0.5.0
+\endverbatim
 
-\subsection ug_bom_schedule Airline Network BOM Tree
-- \c simfqt::FlightPeriod
+To generate the SimFQT project documentation, the commands are:
 
-\subsection ug_bom_inventory Airline Inventory BOM Tree
-- \c simfqt::Inventory
-- \c simfqt::FlightDate
+\verbatim 
+cd ~/dev/sim/simfqtgit
+cd build
+make doc
+\endverbatim
+The SimFQT project documentation is available in the following formats: HTML, LaTeX. 
+Those documents are available in a subdirectory:
 
-\subsubsection ug_bom_segment_branch Airline Inventory Marketing BOM Tree
-- \c simfqt::SegmentDate
-- \c simfqt::SegmentCabin
-- \c simfqt::FareFamily
-- \c simfqt::BookingClass
+\verbatim 
+cd ~/dev/sim/simfqtgit
+cd build
+cd doc
+\endverbatim
 
-\subsubsection ug_bom_leg_branch Airline Inventory Operating BOM Tree
-- \c simfqt::LegDate
-- \c simfqt::LegCabin
-- \c simfqt::Bucket
+\section ug_inputfile Input file of SimFQT Project 
 
-\section ug_extending_bom_tree Extending the BOM Tree
+The fare input file structure should look like the following sample:
+
+\dontinclude fareInputFile.ref 
+\until 10;
+
+Each line represents a fare rule (see \c SIMFQT::FareRuleStruct), i.e., each line tells us the price a customer 
+will be asked 
+according to a lot of criteria such as:
+- the origin and destination of its travel (for instance from Singapour to 
+Bangok in the first fare rule).
+- the type of its travel, i.e. one-way "OW" or round trip "RT".
+- the date and time he is willing to travel (each fare rule has a date range 
+and a time range of validity).
+- the place where he is buying the ticket, i.e. the point of sale.
+- its prefered cabin.
+- the channel of the booking described by a two letters code: 
+direct(D)/indirect(I) and online(N)/offline(F).
+- the date when he wants to buy the ticket, i.e. the advanced purchase required
+in number of days.
+- the saturday night stay option, i.e. is he staying a staturday night between 
+its inbound trip and its outbound one? "T" stands for true and "F" stands for 
+false.
+- the change fees option, i.e. are there fees to change its ticket? "T" stands 
+for true and "F" stands for false.
+- the refundable criterion, i.e. is the ticket refundable? "T" stands for true 
+and "F" stands for false.
+- the number of days he is willing to stay at the destination location (each 
+fare rule has a minimum stay requirement in number of days).
+
+Some fare input examples (including the example above named fare01.csv) are 
+given in the stdair::samples directory.
+
+\section ug_bom_bom The fare quoting BOM Tree
+
+The Fare Quoting Business Object Model (BOM) tree is a structure permitting 
+to store all the \c SIMFQT::FareRuleStruct objects of the simulation. That is 
+why, the BOM tree is built parsing the fare file containing all the fare rules 
+(as described in the previous section \ref ug_inputfile). For 
+convenience and first use of SimFQT (the input fare file building can be long 
+and heavy), SimFQT API enables to build a small default BOM tree.
+
+\subsection ug_bom_build Build of the fare quoting BOM tree 
+
+First, a BOM root object (i.e., a root for all the classes in the project) 
+is instantiated by the <tt>stdair::STDAIR_ServiceContext</tt> context object,
+when the <tt>stdair::STDAIR_Service</tt> is itself instantiated, that is to say 
+during the instanciation of the <tt>simfqt::SIMFQT_Service</tt> object. The 
+corresponding \c type (class) <tt>stdair::BomRoot</tt> is defined in the StdAir 
+library.
+
+Then, the BOM root can be eighter constructed thanks to the 
+<tt>simfqt::SIMFQT_Service::buildSampleBom()</tt> method:
+
+\dontinclude SIMFQT_Service.hpp
+\skipline buildSampleBom
+
+or can be constructed using the fare dump file describing above thanks to the 
+<tt> simfqt::SIMFQT_Service::parseAndLoad (const stdair::Filename_T&)</tt> 
+method:
+
+\dontinclude SIMFQT_Service.hpp
+\skipline parseAndLoad 
+
+\subsection ug_bom_structure Structure of the fare quoting BOM tree 
+
+As one can guess looking at the BOM tree display above, the tree is constructed
+ as follow:
+- At the top of the tree, we find a <tt>stdair::BomRoot</tt> object (i.e., a 
+root for all the classes in the project).
+- Just under the root, at the first level, we find <tt>stdair::AirportPair</tt>
+ objects (i.e., all the possible combinations of origin-destination). In the 
+instance above, the only combination possible is from London to Sydney.
+- At the next level, under a particular <tt>stdair::AirportPair</tt>, we find 
+all the date period of the fare rules applicable for this origin-destination.
+- Then, under a particular <tt>stdair::DatePeriod</tt>, we find all the 
+possible combination of point-of-sale and channel applicable.
+- Under a particular <tt>stdair::PosChannel</tt> object, we have the 
+correponding <tt>stdair::TimePeriod</tt> objects.
+- At the next-to-last level, we have <tt>stdair::FareFeatures</tt> objects, 
+that is to say the trip type, the advanced purchase and stay duration required,
+ ...
+- Finally we find the code of the airline publishing the fare rule into 
+question and the class code applicable.
+
+\subsection ug_bom_display Display of the fare quoting BOM tree 
+
+The fare quoting BOM tree can be displayed as done in the 
+<tt>batches::simfqt.cpp</tt> program:
+\dontinclude simfqt.cpp
+\skipline lBOMCSVDump
+\line lBOMCSVDump
+
+When the default bom tree is used (<tt>-b</tt>
+option of the main program <tt>simfqt.cpp</tt>), the fare quoting BOM tree 
+display should look like:
+
+\include bomTreeDisplay.ref
+
+Here the fare quoting BOM tree is just composed of one fare rule.
+
+\section ug_procedure The fare quoting procedure
+
+The project SimFQT aims at fare quoting a list of 
+<a
+href="http://stdair.sourceforge.net/TravelSolutionStruct_8hpp.html ">
+travel solutions</a>
+corresponding to a
+<a
+href="http://stdair.sourceforge.net/BookingRequestStruct_8hpp.html ">
+booking request</a>.
+The fare quoter looks for all the fare rules matching a travel solution: 
+when a fare rule matchs, it creates a  
+<a
+href="http://stdair.sourceforge.net/FareOptionStruct_8hpp.html">
+fare option </a> object and add this object to the travel solution into
+question.
+
+A few steps:
+- \ref ug_procedure_bookingrequest
+- \ref ug_procedure_travelsolution
+- \ref ug_procedure_fareQuote
+
+\subsection ug_procedure_bookingrequest Instanciate the default booking request
+
+A default booking request can be build using the 
+<tt>simfqt::SIMFQT_Service::buildBookingRequest</tt> method:
+\dontinclude SIMFQT_Service.hpp
+\skipline buildBookingRequest
+
+\subsection ug_procedure_travelsolution Instanciate the default travel solution list
+
+In the following sample, a list of travel solutions is given as input/output
+parameter of the <tt>simfqt::SIMFQT_Service::buildSampleTravelSolutions</tt> 
+method:
+\skipline buildSampleTravelSolutions
+
+\subsection ug_procedure_fareQuote Fare Quoting a list of travel solution
+
+Once a booking request, its correponding list of travel solutions and the fare 
+Quote BOM tree are constructed, the main fonction of the module can be called:
+
+\skipline quotePrices
+\line TravelSolutionList
+
+For each travel solution of the list, the applicable fare rules are picked off 
+from the BOM tree (information such as the trip type or the booking request 
+date are only contained into the booking request, that is why we need this 
+object too).
+
+Each chosen fare rule enables to create a fare option structure which is 
+finally stored into the travel solution. 
+
 
 */

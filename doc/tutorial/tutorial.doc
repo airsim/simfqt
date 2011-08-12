@@ -2,27 +2,12 @@
 \page tutorials Tutorials
 
 \section tut_toc Table of Contents
-- \ref tut_intro
- - \ref tut_intro_configuration
- - \ref tut_intro_inputfile
-- \ref tut_bom_bom
- - \ref tut_bom_build
- - \ref tut_bom_display
- - \ref tut_bom_structure
+- \ref tut_configuration
 - \ref tut_procedure
- - \ref tut_procedure_bookingrequest
- - \ref tut_procedure_travelsolution
- - \ref tut_procedure_fareQuote
  - \ref tut_procedure_summary
  - \ref tut_procedure_results
 
-\section tut_intro Introduction
-This page contains some tutorial examples that will help you getting
-started using SimFQT. Some examples show how to construct some simple
-business objects, i.e., instances of the so-named Fare Quoting Business Object
-Model (BOM).
-
-\subsection tut_intro_configuration Preparing the SimFQT Project for Development
+\section tut_configuration Preparing the SimFQT Project for Development
 
 The source code for these examples can be found in the
 <tt>batches</tt> and <tt>test/simfqt</tt> directories. They are
@@ -30,159 +15,8 @@ compiled along with the rest of the \c SimFQT project. See the User
 Guide (\ref users_guide) for more details on how to build the \c SimFQT
 project.
 
-\subsection tut_intro_inputfile Input file of SimFQT Project 
 
-The fare input file structure should look like the following sample:
-
-\dontinclude fareInputFile.ref 
-\until 50;
-
-Each line represents a fare rule, i.e., each line tells us the price a customer 
-will be asked 
-according to a lot of criteria such as:
-- the origin and destination of its travel (for instance from Singapour to 
-Bangok in the first fare rule).
-- the type of its travel, i.e. one-way "OW" or round trip "RT".
-- the date and time he is willing to travel (each fare rule has a date range 
-and a time range of validity).
-- the place where he is buying the ticket, i.e. the point of sale.
-- its prefered cabin.
-- the channel of the booking described by a two letters code: 
-direct(D)/indirect(I) and online(N)/offline(F).
-- the date when he wants to buy the ticket, i.e. the advanced purchase required
-in number of days.
-- the saturday night stay option, i.e. is he staying a staturday night between 
-its inbound trip and its outbound one? "T" stands for true and "F" stands for 
-false.
-- the change fees option, i.e. are there fees to change its ticket? "T" stands 
-for true and "F" stands for false.
-- the refundable criterion, i.e. is the ticket refundable? "T" stands for true 
-and "F" stands for false.
-- the number of days he is willing to stay at the destination location (each 
-fare rule has a minimum stay requirement in number of days).
-
-Some fare input examples (including the example above named fare01.csv) are 
-given in the stdair::samples directory.
-
-\section tut_bom_bom The fare quoting BOM Tree
-
-The Fare Quoting Business Object Model (BOM) tree is a structure permitting 
-to store all the fare rules of the simulation. That is why, the BOM tree is 
-built parsing the fare file containing all the fare rules (as described 
-in the previous section \ref tut_intro_inputfile). For convenience and 
-first use of SimFQT (the input fare file building can be long and heavy), 
-SimFQT API enables to build a small default BOM tree.
-
-\subsection tut_bom_build Build of the fare quoting BOM tree 
-
-First, a BOM root object (i.e., a root for all the classes in the project) 
-is instantiated by the <tt>stdair::STDAIR_ServiceContext</tt> context object,
-when the <tt>stdair::STDAIR_Service</tt> is itself instantiated, that is to say 
-during the instanciation of the <tt>simfqt::SIMFQT_Service</tt> object. The 
-corresponding \c type (class) <tt>stdair::BomRoot</tt> is defined in the StdAir 
-library.
-
-Then, the BOM root can be eighter constructed thanks to the 
-<tt>simfqt::SIMFQT_Service::buildSampleBom()</tt> method:
-
-\dontinclude SIMFQT_Service.hpp
-\skipline buildSampleBom
-
-or can be constructed using the fare dump file describing above thanks to the 
-<tt> simfqt::SIMFQT_Service::parseAndLoad (const stdair::Filename_T&)</tt> 
-method:
-
-\dontinclude SIMFQT_Service.hpp
-\skipline parseAndLoad 
-
-\subsection tut_bom_display Display of the fare quoting BOM tree 
-
-The fare quoting BOM tree can be displayed as done in the 
-<tt>batches::simfqt.cpp</tt> program:
-\dontinclude simfqt.cpp
-\skipline lBOMCSVDump
-\line lBOMCSVDump
-
-When the default bom tree is used (<tt>-b</tt>
-option of the main program <tt>simfqt.cpp</tt>), the fare quoting BOM tree 
-display should look like:
-
-\include bomTreeDisplay.ref
-
-Here the fare quoting BOM tree is just composed of one fare rule.
-
-\subsection tut_bom_structure Structure of the fare quoting BOM tree 
-
-As one can guess looking at the BOM tree display above, the tree is constructed
- as follow:
-- At the top of the tree, we find a <tt>stdair::BomRoot</tt> object (i.e., a 
-root for all the classes in the project).
-- Just under the root, at the first level, we find <tt>stdair::AirportPair</tt>
- objects (i.e., all the possible combinations of origin-destination). In the 
-instance above, the only combination possible is from London to Sydney.
-- At the next level, under a particular <tt>stdair::AirportPair</tt>, we find 
-all the date period of the fare rules applicable for this origin-destination.
-- Then, under a particular <tt>stdair::DatePeriod</tt>, we find all the 
-possible combination of point-of-sale and channel applicable.
-- Under a particular <tt>stdair::PosChannel</tt> object, we have the 
-correponding <tt>stdair::TimePeriod</tt> objects.
-- At the next-to-last level, we have <tt>stdair::FareFeatures</tt> objects, 
-that is to say the trip type, the advanced purchase and stay duration required,
- ...
-- Finally we find the code of the airline publishing the fare rule into 
-question and the class code applicable.
-
-\section tut_procedure The fare quoting procedure
-
-The project SimFQT aims at fare quoting a list of 
-<a
-href="http://stdair.sourceforge.net/TravelSolutionStruct_8hpp.html ">
-travel solutions</a>
-corresponding to a
-<a
-href="http://stdair.sourceforge.net/BookingRequestStruct_8hpp.html ">
-booking request</a>.
-The fare quoter looks for all the fare rules matching a travel solution: 
-when a fare rule matchs, it creates a  
-<a
-href="http://stdair.sourceforge.net/FareOptionStruct_8hpp.html">
-fare option </a> object and add this object to the travel solution into
-question.
-
-A few steps:
-- \ref tut_procedure_bookingrequest
-- \ref tut_procedure_travelsolution
-- \ref tut_bom_build
-
-\subsection tut_procedure_bookingrequest Instanciate the default booking request
-
-A default booking request can be build using the 
-<tt>simfqt::SIMFQT_Service::buildBookingRequest</tt> method:
-\dontinclude SIMFQT_Service.hpp
-\skipline buildBookingRequest
-
-\subsection tut_procedure_travelsolution Instanciate the default travel solution list
-
-In the following sample, a list of travel solutions is given as input/output
-parameter of the <tt>simfqt::SIMFQT_Service::buildSampleTravelSolutions</tt> 
-method:
-\skipline buildSampleTravelSolutions
-
-\subsection tut_procedure_fareQuote Fare Quoting a list of travel solution
-
-Once a booking request, its correponding list of travel solutions and the fare 
-Quote BOM tree are constructed, the main fonction of the module can be called:
-
-\skipline quotePrices
-\line TravelSolutionList
-
-For each travel solution of the list, the applicable fare rules are picked off 
-from the BOM tree (information such as the trip type or the booking request 
-date are only contained into the booking request, that is why we need this 
-object too).
-
-Each chosen fare rule enables to create a fare option structure which is 
-finally stored into the travel solution. 
+\section tut_procedure Your first fareQuote
 
 \subsection tut_procedure_summary Summary of the different steps
 
@@ -192,12 +26,13 @@ All the steps below can be find in the same order in the
 First, we instanciate the simfqtService object:
 
 \dontinclude simfqt.cpp
-\skipline BasLogParams
+\skipline logOutputFile
+\skipline lLogParams
 \skipline simfqtService
 
 Then, we construct a default sample list of travel solutions and a default 
-booking request (as already mentionned in \ref tut_procedure_bookingrequest and
- \ref tut_procedure_travelsolution parts):
+booking request (as already mentionned in \ref ug_procedure_bookingrequest and
+ \ref ug_procedure_travelsolution parts):
 
 \dontinclude simfqt.cpp
 \skipline TravelSolutionList_T
@@ -206,7 +41,7 @@ booking request (as already mentionned in \ref tut_procedure_bookingrequest and
 \line simfqtService
 
 Then, the objective is to construct the fareQuote bom tree (see \ref 
-tut_bom_build) from a fare rule input file:
+ug_bom_bom) from a fare rule input file:
 
 \dontinclude simfqt.cpp
 \skipline parseAndLoad (lFareInputFilename);
@@ -215,11 +50,11 @@ For basic use, a defaut BOM tree can be constructed using:
 \dontinclude simfqt.cpp
 \skipline buildSampleBom()
 
-The main step is the fareQuoting (see \ref tut_procedure_fareQuote):
+The main step is the fareQuoting (see \ref ug_procedure):
 \dontinclude simfqt.cpp
 \skipline quotePrices
 
-\subsection tut_procedure_results Result of the Tutorial Program
+\subsection tut_procedure_results Result of the Batch Program
 
 When the <tt>simfqt.cpp</tt> program is run (with the <tt>-b</tt>
 option), the output should look like:
