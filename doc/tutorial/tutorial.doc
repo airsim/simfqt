@@ -6,22 +6,25 @@
 - \ref tut_procedure
  - \ref tut_procedure_summary
  - \ref tut_procedure_results
+- \ref tut_how_fare_quoting_file
+ - \ref tut_how_build_fare_file
+ - \ref tut_how_fare_quoting
+ - \ref tut_how_fare_quoting_result
 
 \section tut_configuration Preparing the SimFQT Project for Development
 
 The source code for these examples can be found in the
 <tt>batches</tt> and <tt>test/simfqt</tt> directories. They are
-compiled along with the rest of the \c SimFQT project. See the User
-Guide (\ref users_guide) for more details on how to build the \c SimFQT
+compiled along with the rest of the \c SimFQT project. See the 
+\ref users_guide for more details on how to build the \c SimFQT
 project.
-
 
 \section tut_procedure Your first fareQuote
 
 \subsection tut_procedure_summary Summary of the different steps
 
-All the steps below can be find in the same order in the 
-<tt>batches::simfqt.cpp</tt> program.
+All the steps below can be found in the same order in the batch
+<tt>simfqt.cpp</tt> program.
 
 First, we instanciate the simfqtService object:
 
@@ -31,7 +34,7 @@ First, we instanciate the simfqtService object:
 \skipline simfqtService
 
 Then, we construct a default sample list of travel solutions and a default 
-booking request (as already mentionned in \ref ug_procedure_bookingrequest and
+booking request (as mentionned in \ref ug_procedure_bookingrequest and
  \ref ug_procedure_travelsolution parts):
 
 \dontinclude simfqt.cpp
@@ -40,52 +43,126 @@ booking request (as already mentionned in \ref ug_procedure_bookingrequest and
 \skipline BookingRequestStruct
 \line simfqtService
 
-Then, the objective is to construct the fareQuote bom tree (see \ref 
-ug_bom_bom) from a fare rule input file:
-
-\dontinclude simfqt.cpp
-\skipline parseAndLoad (lFareInputFilename);
-
-For basic use, a defaut BOM tree can be constructed using:
+For basic use, the default BOM tree can be built using:
 \dontinclude simfqt.cpp
 \skipline buildSampleBom()
 
-The main step is the fareQuoting (see \ref ug_procedure):
+The main step is the fare quoting (see \ref ug_procedure):
 \dontinclude simfqt.cpp
 \skipline quotePrices
 
 \subsection tut_procedure_results Result of the Batch Program
 
 When the <tt>simfqt.cpp</tt> program is run (with the <tt>-b</tt>
-option), the output should look like:
+option), the log output file should look like:
 
 \include simfqt.ref
 
 What is interesting is to compare the travel solution list (here reduced to a 
-single travel solution) display before:
+single travel solution) displayed before:
 
 \dontinclude simfqt.ref
 \skipline [0]
 
-and after the fareQuoting:
+and after the fare quoting:
 
 \skipline [0]
 
-Between the two groups of dashes, wa can see a fare option structure has been 
+Between the two groups of dashes, we can see that a fare option structure has been 
 added by the fare quoter: the price is 450 EUR for the Y class, the ticket is 
-refundable but there are change fees and the customer must say on saturday 
+refundable but there are exchange fees and the customer must stay over on saturday 
 night.
 
 Let's return to our default BOM tree display: the only fare rule stored was a 
-match for the travel solution in consideration (same origin airport, same 
-destination airport, flight date included in fare rule date range, BA airline, 
-...).
+match for the travel solution into consideration (same origin airport, same 
+destination airport, flight date included in the fare rule date range, same 
+airline "BA", ...).
 
 By looking at the fare rule trip type "RT", we can guess we face a round trip 
 fare: that means the price given in the default bom tree construction in 
 <tt>stdair::CmdBomManager.hpp</tt> has been divided by 2 because we are 
-considering eigher an inbound trip or an outbound one.
+considering either an inbound trip or an outbound one.
 
-See the corresponding full program (\ref batch_simfqt_cpp) for more details.
+\section tut_how_fare_quoting_file Fare quoting with an input file
 
+\subsection tut_how_build_fare_file How to build a fare input file?
+
+The objective here is to build a fare input file to fare quote the default 
+travel solution list built using:
+
+\dontinclude simfqt.cpp
+\skipline TravelSolutionList_T
+\line lTravelSolutionList
+
+This travel solution list, reduced to a singleton, can be displayed as done before:
+
+\dontinclude simfqt.ref
+\skipline [0]
+
+We deduce:
+- we need a fare rule whose origin-destination couple is "LHR, SYD".
+- the date range must include the date "2011-06-10".
+- the time range must include the time "21:45".
+- the airline operating is "BA", so it must be the airline pricing.
+
+We can deduce a part of our fare rule file :
+
+\include fareFile0.ref
+
+We have no information about stay duration and advance purchase 
+(such information are contained into the booking request): 
+so let us put "0" to embrace all the requests possible.
+
+No information for the point-of-sale and the channel too: let us consider 
+all the channels ("IN", "DN", "IF" and DF") and all the points of sale 
+(the origin "LHR", the destination "SYD" and the rest-of-the-world "ROW")
+ existing. To access this information, we could look into the default 
+booking request.
+
+The input file is now:
+
+\include fareFile1.ref
+
+Let us say we have just the Economy cabin "Y" and Bristish Airways 
+prices ticket for class "Y".
+
+No information about the trip type, so we duplicate all the fare rules
+for both type: one-way "OW" and round-trip "RT" (to access this information, 
+we could look to the default booking request).
+
+The fare options are all set to a default value "T" (meaning true) and the 
+fare values are chosen to be all distinct. 
+
+We obtain:
+
+\include fareFile2.ref
+
+\subsection tut_how_fare_quoting Building the BOM tree  with an input file
+
+The steps are the same as before \ref tut_procedure_summary 
+except the bom tree must be built using the fare input file :
+
+\dontinclude simfqt.cpp
+\skipline parseAndLoad (lFareInputFilename);
+
+\subsection tut_how_fare_quoting_result Result of the Batch Program
+
+When the <tt>simfqt.cpp</tt> program is run with the <tt>-f</tt>
+option linking with the file built just above:
+\verbatim 
+~/simfqt -f ~/<YourFileName>.csv 
+\endverbatim
+
+the last lines of the log output should look like:
+
+\verbatim 
+[D]~/simfqtgit/simfqt/batches/simfqt.cpp:223: Travel solutions:
+    [0] [0] BA, 9, 2011-06-10, LHR, SYD, 21:45 --- Y, 145, 1 1 1 --- 
+\endverbatim
+
+We have just one fare option added to the travel solution.
+We can deduce from the price value 145 that the fare quoter used the fare rule 
+number 15 to price the travel solution.
+We have an inbound or outbound trip of a round trip: the total price 290 has 
+been divided by 2.
 */

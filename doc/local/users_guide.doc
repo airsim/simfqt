@@ -10,13 +10,17 @@
   - \ref ug_install_project
 - \ref ug_inputfile
 - \ref ug_bom_bom
- - \ref ug_bom_build
- - \ref ug_bom_structure
+ - \ref ug_bom_build 
  - \ref ug_bom_display 
+ - \ref ug_bom_structure
 - \ref ug_procedure 
  - \ref ug_procedure_bookingrequest
  - \ref ug_procedure_travelsolution
  - \ref ug_procedure_fareQuote 
+- \ref ug_error_message
+ - \ref ug_error_message_input_not_found
+ - \ref ug_error_message_input_not_parsed
+ - \ref ug_error_message_missing_fare_rule
 
 \section ug_introduction Introduction
 
@@ -55,7 +59,7 @@ make
 \endverbatim 
 
 \subsection ug_build_and_run_tests Run the Tests
-After building the SimFQT project (see \ref ug_build_binaries), the following commands enable to run the tests:
+After building the SimFQT project, the following commands run the tests:
 \verbatim 
 cd ~/dev/sim/simfqtgit
 cd build
@@ -103,7 +107,8 @@ cd ~/dev/sim/simfqtgit
 cd build
 make doc
 \endverbatim
-The SimFQT project documentation is available in the following formats: HTML, LaTeX. 
+The SimFQT project documentation is available in the following formats: HTML, 
+LaTeX. 
 Those documents are available in a subdirectory:
 
 \verbatim 
@@ -119,24 +124,24 @@ The fare input file structure should look like the following sample:
 \dontinclude fareInputFile.ref 
 \until 10;
 
-Each line represents a fare rule (see \c SIMFQT::FareRuleStruct), i.e., each line tells us the price a customer 
-will be asked 
-according to a lot of criteria such as:
-- the origin and destination of its travel (for instance from Singapour to 
+Each line represents a fare rule (see \c SIMFQT::FareRuleStruct), i.e., each 
+line tells us the price a customer will be asked according to a lot of 
+criteria such as:
+- the origin and destination of his travel (for instance from Singapour to 
 Bangok in the first fare rule).
-- the type of its travel, i.e. one-way "OW" or round trip "RT".
+- the type of his travel, i.e. one-way "OW" or round trip "RT".
 - the date and time he is willing to travel (each fare rule has a date range 
 and a time range of validity).
 - the place where he is buying the ticket, i.e. the point of sale.
-- its prefered cabin.
+- his prefered cabin.
 - the channel of the booking described by a two letters code: 
 direct(D)/indirect(I) and online(N)/offline(F).
 - the date when he wants to buy the ticket, i.e. the advanced purchase required
 in number of days.
 - the saturday night stay option, i.e. is he staying a staturday night between 
-its inbound trip and its outbound one? "T" stands for true and "F" stands for 
+his inbound trip and his outbound one? "T" stands for true and "F" stands for 
 false.
-- the change fees option, i.e. are there fees to change its ticket? "T" stands 
+- the change fees option, i.e. are there fees to change his ticket? "T" stands 
 for true and "F" stands for false.
 - the refundable criterion, i.e. is the ticket refundable? "T" stands for true 
 and "F" stands for false.
@@ -164,39 +169,18 @@ during the instanciation of the <tt>simfqt::SIMFQT_Service</tt> object. The
 corresponding \c type (class) <tt>stdair::BomRoot</tt> is defined in the StdAir 
 library.
 
-Then, the BOM root can be eighter constructed thanks to the 
+Then, the BOM root can be either constructed thanks to the 
 <tt>simfqt::SIMFQT_Service::buildSampleBom()</tt> method:
 
 \dontinclude SIMFQT_Service.hpp
 \skipline buildSampleBom
 
-or can be constructed using the fare dump file describing above thanks to the 
+or can be constructed using the fare dump file described above thanks to the 
 <tt> simfqt::SIMFQT_Service::parseAndLoad (const stdair::Filename_T&)</tt> 
 method:
 
 \dontinclude SIMFQT_Service.hpp
 \skipline parseAndLoad 
-
-\subsection ug_bom_structure Structure of the fare quoting BOM tree 
-
-As one can guess looking at the BOM tree display above, the tree is constructed
- as follow:
-- At the top of the tree, we find a <tt>stdair::BomRoot</tt> object (i.e., a 
-root for all the classes in the project).
-- Just under the root, at the first level, we find <tt>stdair::AirportPair</tt>
- objects (i.e., all the possible combinations of origin-destination). In the 
-instance above, the only combination possible is from London to Sydney.
-- At the next level, under a particular <tt>stdair::AirportPair</tt>, we find 
-all the date period of the fare rules applicable for this origin-destination.
-- Then, under a particular <tt>stdair::DatePeriod</tt>, we find all the 
-possible combination of point-of-sale and channel applicable.
-- Under a particular <tt>stdair::PosChannel</tt> object, we have the 
-correponding <tt>stdair::TimePeriod</tt> objects.
-- At the next-to-last level, we have <tt>stdair::FareFeatures</tt> objects, 
-that is to say the trip type, the advanced purchase and stay duration required,
- ...
-- Finally we find the code of the airline publishing the fare rule into 
-question and the class code applicable.
 
 \subsection ug_bom_display Display of the fare quoting BOM tree 
 
@@ -214,6 +198,27 @@ display should look like:
 
 Here the fare quoting BOM tree is just composed of one fare rule.
 
+\subsection ug_bom_structure Structure of the fare quoting BOM tree 
+
+As one can guess looking at the BOM tree display above, the tree is constructed
+ as follow:
+- At the top of the tree, we find a <tt>stdair::BomRoot</tt> object (i.e., a 
+root for all the classes in the project).
+- Just under the root, at the first level, we find <tt>stdair::AirportPair</tt>
+ objects (i.e., all the possible combinations of origin-destination). In the 
+instance above, the only combination possible is from London to Sydney.
+- At the next level, under a particular <tt>stdair::AirportPair</tt>, we find 
+all the date periods of the fare rules applicable for this origin-destination.
+- Then, under a particular <tt>stdair::DatePeriod</tt>, we find all the 
+possible combinations of point-of-sale and channel applicable.
+- Under a particular <tt>stdair::PosChannel</tt> object, we have the 
+correponding <tt>stdair::TimePeriod</tt> objects.
+- At the next-to-last level, we have <tt>stdair::FareFeatures</tt> objects, 
+that is to say the trip type, the advanced purchase and stay duration required,
+ ...
+- Finally we find the code of the airline publishing the current fare rule and 
+the applicable class code.
+
 \section ug_procedure The fare quoting procedure
 
 The project SimFQT aims at fare quoting a list of 
@@ -225,11 +230,10 @@ corresponding to a
 href="http://stdair.sourceforge.net/BookingRequestStruct_8hpp.html ">
 booking request</a>.
 The fare quoter looks for all the fare rules matching a travel solution: 
-when a fare rule matchs, it creates a  
+when a fare rule matches, it creates a  
 <a
 href="http://stdair.sourceforge.net/FareOptionStruct_8hpp.html">
-fare option </a> object and add this object to the travel solution into
-question.
+fare option </a> object and adds this object to the current travel solution.
 
 A few steps:
 - \ref ug_procedure_bookingrequest
@@ -238,7 +242,7 @@ A few steps:
 
 \subsection ug_procedure_bookingrequest Instanciate the default booking request
 
-A default booking request can be build using the 
+A default booking request can be built using the 
 <tt>simfqt::SIMFQT_Service::buildBookingRequest</tt> method:
 \dontinclude SIMFQT_Service.hpp
 \skipline buildBookingRequest
@@ -258,7 +262,7 @@ Quote BOM tree are constructed, the main fonction of the module can be called:
 \skipline quotePrices
 \line TravelSolutionList
 
-For each travel solution of the list, the applicable fare rules are picked off 
+For each travel solution of the list, the applicable fare rules are picked 
 from the BOM tree (information such as the trip type or the booking request 
 date are only contained into the booking request, that is why we need this 
 object too).
@@ -266,5 +270,98 @@ object too).
 Each chosen fare rule enables to create a fare option structure which is 
 finally stored into the travel solution. 
 
+\section ug_error_message Error Messages
+
+This section lists the fatal errors you may encounter when using SimFQT:
+- \ref ug_error_message_input_not_found
+- \ref ug_error_message_input_not_parsed
+- \ref ug_error_message_missing_fare_rule
+
+\subsection ug_error_message_input_not_found Fare input file not found
+
+In this case, the output error message will be similar to:
+\verbatim 
+terminate called after throwing an instance of 'SIMFQT::FareInputFileNotFoundException'
+  what():  The fare input file '~/<YourFileName>.csv' does not exist or can not be read
+Aborted
+\endverbatim
+
+You can check:
+- the given path to your input file is correct.
+- the specified file name <YourFileName> is correct.
+- the file permission settings: is the file "readable"?.
+
+\subsection ug_error_message_input_not_parsed Fare input file can not be parsed
+
+This error message means that your input file has been opened but has not been 
+fully read.
+\verbatim 
+terminate called after throwing an instance of 'SIMFQT::FareFileParsingFailedException'
+  what():  Parsing of fare input file: ~/<YourFileName>.csv failed
+Aborted
+\endverbatim
+Your input file structure is somehow incorrect. See the tutorial section 
+\ref tut_how_build_fare_file.
+
+\subsection ug_error_message_missing_fare_rule Error Messages for missing fare rules
+
+If you obtain one of the error messages below and you are currently using your 
+own input file, that means it has been fully read. However, at least one fare 
+rule is missing to complete the fare quote.
+
+- If your error message is about a missing airport pair, you should obtain a similar report:
+\verbatim 
+terminate called after throwing an instance of 'SIMFQT::AirportPairNotFoundException'
+  what():  No available fare rule for the Origin-Destination pair: xxx, xxx
+Aborted
+\endverbatim
+You need to be sure that all your travel solutions have at least one corresponding origin-destination fare rule.
+It seems you should add one origin-destination (i.e., xxx, xxx) fare rule into your input file.
+
+- If your error message is about a missing fare rule for a flight date, you should obtain a similar report:
+\verbatim
+terminate called after throwing an instance of 'SIMFQT::FlightDateNotFoundException'
+  what():  No available fare rule for the flight date x, xxxx-xxx-xx and to the Origin-Destination pair: xxx, xxx
+Aborted
+\endverbatim
+You need to be sure that all your travel solutions have at least one corresponding fare rule: same origin-destination and valid date range.
+It seems you should add/change a fare rule with the Origin-Destination pair: xxx, xxx: its date range must include the flight date xxxx-xxx-xx.
+
+- If your error message is about a missing fare rule for a point-of sale and/or channel, you should obtain a similar report:
+\verbatim
+terminate called after throwing an instance of 'SIMFQT::PosOrChannelNotFoundException'
+  what():  No available fare rule for the point of sale xxx, the channel xx, the flight date x, xxxx-xxx-xx and the Origin-Destination pair: xxx, xxx
+Aborted
+\endverbatim
+You need to be sure that all your travel solutions have at least one corresponding fare rule: same origin-destination, valid date range, same point-of-sale and same channel.
+It seems you should add/change a fare rule to have the same combination as given in the output error message: "the point of sale xxx, the channel xx, the flight date x, xxxx-xxx-xx and the Origin-Destination pair: xxx, xxx".
+
+- If your error message is about a missing fare rule for a flight time, you should obtain a similar report:
+\verbatim
+terminate called after throwing an instance of 'SIMFQT::FlightTimeNotFoundException'
+  what():  No available fare rule corresponding to 'xx; x, xxxx-xxx-xx; xxx, xxx; xx:xx' (parsed key) and to 'xxx, xx' (POS and channel)
+Aborted
+\endverbatim
+You need to be sure that all your travel solutions have at least one corresponding fare rule: same origin-destination, valid date range, same point-of-sale, same channel and valid time range. Add/change a fare rule if necessary.
+
+- If your error message is about a missing fare rule for some features, you should obtain a similar report:
+\verbatim
+terminate called after throwing an instance of 'SIMFQT::FeaturesNotFoundException'
+  what():  No available fare rule corresponding to a trip type xx, to a stay duration of x, to a request date time of xxxx-xxx-xx xx:xx:xx, to 'xx; x, xxxx-xxx-xx; xxx, xxx; xx:xx' (parsed key) and to 'xxx, xx' (POS and channel), to 'xx; x, xxxx-xxx-xx; xxx, xxx; xx:xx' (parsed key) and to 'xxx, xx' (POS and channel)
+Aborted
+\endverbatim
+You need to be sure that all your travel solutions have at least one corresponding fare rule: same origin-destination, valid date range, same point-of-sale, same channel, valid time range and valid features.
+The features are:
+ - the trip type. Maybe you need both "OW" (One-Way) and "RT" (Round-trip) fare rules?
+ - the minimum stay duration. You can try "0" for this parameter to include all the possible stay durations.
+ - the advance purchase. You can try "0" for this parameter to include all the booking requests up to departure date.
+
+-  If your error message is about a missing fare rule for an airline, you should obtain a similar report:
+\verbatim
+terminate called after throwing an instance of 'SIMFQT::AirlineNotFoundException'
+  what():  No available fare rule corresponding to 'xx; x, xxxx-xxx-xx; xxx, xxx; xx:xx' (parsed key), to 'xxxx-xxx-xx xx:xx:xx, for (xxx, xx) xxx-xxx (xx) xxxx-xxx-xx (x days) xx:xx:xx x x x x x' (booking request) and to 'xxx, xx' (POS and channel)
+Aborted
+\endverbatim
+At least one of your fare rules is correct except that the fare into question must be defined by the airline operating (see the first two letters of the parsed key in the error message to know which airline is operating).
 
 */
