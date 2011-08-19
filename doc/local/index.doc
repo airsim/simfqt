@@ -4,7 +4,7 @@
 \htmlonly
 <!-- start of main block -->
 <div style="width: 100%;">
-<!-- start of left margin -->
+<!-- start of right margin -->
 <div style="float:right; width:200px; background-color: #eeeeff; 
      border: 1px solid #b0b0b0; margin: 0 0 10px 20px; padding: 10px; 
      font-size: 90%;">
@@ -24,10 +24,10 @@
 
 \section at_sourceforge SimFQT at SourceForge
 - <a href="http://sourceforge.net/projects/simfqt/">Project page</a>
-- <a href="http://sourceforge.net/project/showfiles.php?group_id=267760">Download SimFQT</a>
+- <a href="http://sourceforge.net/project/showfiles.php?group_id=295242">Download SimFQT</a>
 - <a href="https://sourceforge.net/apps/trac/simfqt/newticket">Open a ticket for
   a bug or feature</a>
-- <a href="http://sourceforge.net/mail/?group_id=267760">Mailing lists</a>
+- <a href="http://sourceforge.net/mail/?group_id=295242">Mailing lists</a>
 - <a href="https://sourceforge.net/apps/phpbb/simfqt/">Forums</a>
   - <a href="https://sourceforge.net/apps/phpbb/simfqt/viewforum.php?f=1">
   Discuss about Development issues</a>
@@ -48,9 +48,9 @@
 - <a href="http://www.boost.org">Boost (C++ STL extensions)</a>
 - <a href="http://www.python.org/">Python</a>
 - <a href="http://dev.mysql.com/">MySQL client</a>
-- <a href="http://soci.sourceforge.net/">SOCI (C++ DB API)
+- <a href="http://soci.sourceforge.net/">SOCI (C++ DB API)</a>
 
-</a>\section social_sponsorship Support SimFQT
+\section social_sponsorship Support SimFQT
 \htmlonly
 <table width="100%">
  <tr>
@@ -67,7 +67,7 @@
 
 \htmlonly
 </div>
-<!-- end of left margin -->
+<!-- end of right margin -->
 \endhtmlonly
 
 \section about About SimFQT
