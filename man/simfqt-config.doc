@@ -1,37 +1,37 @@
 /*!
 
-\page trademgen-config
-	Configuration Script for the C++ Simulated Travel Demand Generation Library
+\page simfqt-config
+	Configuration Script for the C++ Simulated Fare Quote System Library
 
 \section sec_synopsis SYNOPSIS
-<b>trademgen-config</b> <tt>[--prefix] [--version] [--libs] [--cflags]</tt>
+<b>simfqt-config</b> <tt>[--prefix] [--version] [--libs] [--cflags]</tt>
 
 \section sec_description DESCRIPTION
 
-\e trademgen-config is a tool that is used by configure to determine the
+\e simfqt-config is a tool that is used by configure to determine the
 compiler and linker flags that should be used to compile and link
-programs that use \e TraDemGen. It is also used internally by the .m4
-macros, that are included with \e TraDemGen, for GNU autoconf.
+programs that use \e SimFQT. It is also used internally by the .m4
+macros, that are included with \e SimFQT, for GNU autoconf.
 
 \section sec_options OPTIONS
 
-\e trademgen-config accepts the following options:
+\e simfqt-config accepts the following options:
 
  \b --help<br>
     Display this help and exit
 
  \b --prefix<br>
-    Show the TraDemGen installation prefix.
+    Show the SimFQT installation prefix.
 
  \b --version<br>
-    Print the currently installed version of TraDemGen on the standard output.
+    Print the currently installed version of SimFQT on the standard output.
 
  \b --libs<br>
-    Print the linker flags that are necessary to link with the TraDemGen library.
+    Print the linker flags that are necessary to link with the SimFQT library.
 
  \b --cflags<br>
     Print the compiler flags that are necessary to compile with the
-    TraDemGen library.
+    SimFQT library.
 
  \b --sampledir<br>
     Show where the (StdAir CSV) sample files are located.
@@ -52,7 +52,7 @@ macros, that are included with \e TraDemGen, for GNU autoconf.
     Show where the PDF documentation is located.
 
 \section sec_see_also SEE ALSO
- \b trademgen(1), \b boost-config(1), \b trademgen-library(3)
+ \b simfqt(1), \b boost-config(1), \b simfqt-library(3)
 
 \section sec_copyright COPYRIGHT
 
