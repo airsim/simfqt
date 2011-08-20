@@ -1,0 +1,6 @@
+
+	* Fri Aug 19 2011 Denis Arnaud <denis_arnaud at users dot sourceforge.net> 0.1.0
+	- First release. SimFQT is able t price all the booking classes of
+	any travel solution, thanks to either the interactive binary
+	(fareQuote) or the batch (simfqt).
+
