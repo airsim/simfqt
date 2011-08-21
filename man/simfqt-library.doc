@@ -25,7 +25,7 @@ The library covers the following areas:
 - Fare rule sets: storage, engine, management
 
 \section sec_see_also SEE ALSO
- \b simfqt(1), \b simfqt-config(1)
+\b simfqt(1), \b simfqt-parseFareRules(1), \b simfqt-config(1)
 
 
 \section sec_support SUPPORT

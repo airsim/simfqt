@@ -3,4 +3,5 @@
 #
 
 #
-doc_add_man_pages (MAN1 simfqt simfqt-config fareQuote MAN3 simfqt-library)
+doc_add_man_pages (MAN1 simfqt_parseFareRules simfqt simfqt-config
+  MAN3 simfqt-library)

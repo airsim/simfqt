@@ -1,6 +1,6 @@
 /*!
-\page fareQuote
-      Command-line interpreter for the C++ Simulated Fare Quote System Library
+\page simfqt_parseFareRules
+      Binary executable for the C++ Simulated Fare Quote System Library
 
 \section sec_synopsis SYNOPSIS
 
@@ -23,15 +23,11 @@
 
  \b -b, \b --builtin<br>
     The sample BOM tree can be either built-in or parsed from an input
-    file.  That latter must then be given with the -i/--input option
+    file.  That latter must then be given with the -f/--fare option<br>
 
- \b -i, \b --input <path-to-input-file><br>
+ \b -f, \b --fare <path-to-fare-input-file><br>
     Path (absolute or relative) of the (CSV) input file specifying
-    the demand rule sets.<br>
-
- \b -o, \b --output <path-to-output-file><br>
-    Path (absolute or relative) of the (CSV) output file for the
-    generated booking requests.<br>
+    the fare rules.<br>
 
  \b -l, \b --log <path-to-output-log-file><br>
     Path (absolute or relative) of the output log file.
@@ -40,7 +36,7 @@ See the output of the <tt>`simfqt --help'</tt> command for default options.
 
 
 \section sec_see_also SEE ALSO
-\b simfqt-config(1), \b simfqt-library(3)
+\b simfqt(1), \b simfqt-config(1), \b simfqt-library(3)
 
 
 \section sec_support SUPPORT
