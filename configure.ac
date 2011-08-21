@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2007-2011 Denis Arnaud <denis_arnaud@users.sourceforge.net>])
-AC_INIT([SIMFQT],[0.1.0],[denis_arnaud@users.sourceforge.net],[simfqt])
+AC_INIT([SIMFQT],[0.1.1],[denis_arnaud@users.sourceforge.net],[simfqt])
 AC_CONFIG_HEADER([simfqt/config.h])
 AC_CONFIG_SRCDIR([simfqt/basic/BasConst.cpp])
 AC_CONFIG_AUX_DIR([config])

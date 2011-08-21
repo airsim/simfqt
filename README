@@ -1,7 +1,18 @@
 
-Building the library and test binary from Git repository:
+Summary:
+--------
+SimFQT aims at providing a clean API and a simple implementation, as
+a C++ library, of a Travel-oriented fare engine. It corresponds to
+the simulated version of the real-world Fare Quote or pricing system.
+
+SimFQT makes an extensive use of existing open-source libraries for
+increased functionality, speed and accuracy. In particular the
+Boost (C++ Standard Extensions: http://www.boost.org) library is used.
+
+
+Building the library and test binary from the Git repository:
 ----------------------------------------------------------------
-The Sourceforge Subversion repository is to be found here:
+The Sourceforge Git repository may be cloned as following:
 git clone ssh://simfqt.git.sourceforge.net/gitroot/simfqt/simfqt simfqtgit
 cd simfqtgit
 git checkout trunk
@@ -28,7 +39,7 @@ http://sourceforge.net/project/showfiles.php?group_id=295242
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
-  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/simfqt-99.99.99 \
+  cmake -DCMAKE_INSTALL_PREFIX=/home/user/dev/deliveries/simfqt-0.1.1 \
    -DWITH_STDAIR_PREFIX=/home/user/dev/deliveries/stdair-stable \
    -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON ..
 * To build the project, type:
@@ -44,3 +55,4 @@ Then, as usual:
   make package
 
 Denis Arnaud (August 2011)
+
