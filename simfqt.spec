@@ -113,5 +113,10 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Aug 27 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 99.99.99-1
 - Upstream update
 
+* Sun Aug 21 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.1.1-1
+- Upstream update
+- Took into account the feedback from the review request (bug 732146)
+
 * Fri Aug 19 2011 Denis Arnaud <denis.arnaud_fedora@m4x.org> 0.1.0-1
 - First RPM release
+
