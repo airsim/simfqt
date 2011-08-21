@@ -52,7 +52,7 @@ macros, that are included with \e SimFQT, for GNU autoconf.
     Show where the PDF documentation is located.
 
 \section sec_see_also SEE ALSO
- \b simfqt(1), \b boost-config(1), \b simfqt-library(3)
+\b simfqt(1), \b simfqt-parseFareRules(1), \b simfqt-library(3)
 
 \section sec_copyright COPYRIGHT
 
