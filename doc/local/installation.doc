@@ -33,7 +33,7 @@ RPM packages can also be available on the
 SimFQT should compile without errors or warnings on most GNU/Linux systems,
 on UNIX systems like Solaris SunOS, and on POSIX based environments for
 Microsoft Windows like Cygwin or MinGW with MSYS. It can be also built on
-Microsoft Windows NT/2000/XP using Microsoft's Visual C++ .NET, but our 
+Microsoft Windows NT/2000/XP/Vista/7 using Microsoft's Visual C++ .NET, but our 
 support for this compiler is limited. For GNU/Linux, SunOS, Cygwin and MinGW
 we assume that you have at least the following GNU software installed on
 your computer:
