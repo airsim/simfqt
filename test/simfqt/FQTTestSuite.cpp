@@ -70,8 +70,9 @@ void testFareQuoterHelper (const unsigned short iTestFlag,
   // Initialise the Simfqt service object
   SIMFQT::SIMFQT_Service simfqtService (lLogParams);
 
-  // Build the BOM tree from parsing the fare input file
-  simfqtService.parseAndLoad (iFareInputFilename);
+  // Build the BOM tree from parsing the fare input file    
+  SIMFQT::FareFilePath lFareFilePath (iFareInputFilename);
+  simfqtService.parseAndLoad (lFareFilePath);
 
   // Build a sample list of travel solutions and a booking request.
   stdair::TravelSolutionList_T lTravelSolutionList;
