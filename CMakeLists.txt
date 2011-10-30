@@ -9,7 +9,7 @@ include (config/project_config_embeddable.cmake)
 # Project info
 set_project_names (simfqt SimFQT)
 set_project_brief ("C++ Simulated Fare Quote System Library")
-set_project_versions (0 1 1)
+set_project_versions (0 1 2)
 
 ##
 # Project options
@@ -40,7 +40,7 @@ packaging_set_other_options (TBZ2 "TBZ2;TGZ")
 ########################################
 #
 get_external_libs (git "boost 1.41" readline mysql "soci 3.0"
-  "stdair 0.36" doxygen)
+  "stdair 0.43" doxygen)
 
 
 ##############################################
