@@ -1,20 +1,22 @@
 #
 # Config file for the SimFQT package. It defines the following variables:
+#  SIMFQT_VERSION      - version of SimFQT
+#  SIMFQT_BINARY_DIRS  - binary directories for SimFQT
 #  SIMFQT_INCLUDE_DIRS - include directories for SimFQT
 #  SIMFQT_LIBRARY_DIRS - library directories for SimFQT (normally not used!)
-#  SIMFQT_BINARY_DIRS  - binary directories for SimFQT (normally not used!)
 #  SIMFQT_LIBRARIES    - libraries to link against
 #  SIMFQT_EXECUTABLES  - the SimFQT binaries/executables
 
 # Tell the user project where to find SimFQT headers and libraries
+set (SIMFQT_VERSION "@PACKAGE_VERSION@")
+set (SIMFQT_BINARY_DIRS "@SIMFQT_BIN_DIR@")
 set (SIMFQT_INCLUDE_DIRS "@SIMFQT_INCLUDE_DIRS@")
 set (SIMFQT_LIBRARY_DIRS "@SIMFQT_LIB_DIR@")
-set (SIMFQT_BINARY_DIRS "@SIMFQT_BIN_DIR@")
 
 # Library dependencies for SimFQT (contains definitions for the SimFQT IMPORTED
 # targets)
 include ("@SIMFQT_CMAKE_DIR@/simfqt-library-depends.cmake")
 
 # These are the SimFQT IMPORTED targets, created by simfqt-library-depends.cmake
-set (SIMFQT_LIBRARIES simfqtlib simfqtuicllib)
-set (SIMFQT_EXECUTABLES simfqt)
+set (SIMFQT_LIBRARIES simfqtlib)
+set (SIMFQT_EXECUTABLES simfqt simfqt_parseFareRules)
