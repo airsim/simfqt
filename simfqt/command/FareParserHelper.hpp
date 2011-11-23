@@ -7,8 +7,8 @@
 // STL
 #include <string>
 //#define BOOST_SPIRIT_DEBUG
+#include <boost/spirit/include/qi.hpp>
 // StdAir
-#include <stdair/basic/BasParserTypes.hpp>
 #include <stdair/command/CmdAbstract.hpp>
 // Simfqt
 #include <simfqt/SIMFQT_Types.hpp>
@@ -273,14 +273,15 @@ namespace SIMFQT {
     */ 
 
     /** Grammar for the Fare-Rule parser. */
+    template <typename Iterator>	
     struct FareRuleParser : 
-      public boost::spirit::qi::grammar<stdair::iterator_t, 
+      public boost::spirit::qi::grammar<Iterator, 
                                         boost::spirit::ascii::space_type> {
 
       FareRuleParser (stdair::BomRoot&, FareRuleStruct&);
 
       // Instantiation of rules
-      boost::spirit::qi::rule<stdair::iterator_t,
+      boost::spirit::qi::rule<Iterator, 
                               boost::spirit::ascii::space_type>
       start, comments, fare_rule, fare_rule_end, fare_key, fare_id, origin,
         destination, tripType, dateRangeStart, dateRangeEnd, date,

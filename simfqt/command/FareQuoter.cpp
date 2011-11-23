@@ -5,7 +5,6 @@
 #include <cassert>
 #include <sstream>
 // StdAir
-#include <stdair/basic/BasParserTypes.hpp>
 #include <stdair/basic/BasConst_BomDisplay.hpp>
 #include <stdair/bom/BomKeyManager.hpp>
 #include <stdair/bom/ParsedKey.hpp>
