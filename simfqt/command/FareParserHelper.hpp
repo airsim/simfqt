@@ -7,6 +7,7 @@
 // STL
 #include <string>
 //#define BOOST_SPIRIT_DEBUG
+// Boost
 #include <boost/spirit/include/qi.hpp>
 // StdAir
 #include <stdair/command/CmdAbstract.hpp>
@@ -238,62 +239,6 @@ namespace SIMFQT {
       stdair::BomRoot& _bomRoot;
     };
   
-
-    /////////////////////////////////////////////////////////////////////////
-    //
-    //  (Boost Spirit) Grammar Definition
-    //
-    /////////////////////////////////////////////////////////////////////////
-    /**
-
-     // Fare: fareID; OriginCity; DestinationCity; DateRangeStart;
-     DateRangeEnd; DepartureTimeRangeStart; DepartureTimeRangeEnd;
-     POS; AdvancePurchase; SaturdayNight; ChangeFees; NonRefundable;
-     MinimumStay; Price; AirlineCode; Class;
-
-     fareID
-     OriginCity              (3-char airport code)
-     DestinationCity         (3-char airport code)
-     DateRangeStart          (yyyy-mm-dd)
-     DateRangeEnd            (yyyy-mm-dd)
-     DepartureTimeRangeStart (hh:mm)
-     DepartureTimeRangeEnd   (hh:mm)
-     POS                     (3-char point_of_sale city)
-     Cabin Code              (1-char cabin code)
-     Channel                 (D=direct, I=indirect, N=oNline, F=oFfline)
-     AdvancePurchase         
-     SaturdayNight           (T=True, F=False)
-     ChangeFees              (T=True, F=False)
-     NonRefundable           (T=True, F=False)
-     MinimumStay
-     Price
-     AirlineCode             (2-char airline code)
-     ClassList               (List of 1-char class code)
-     
-    */ 
-
-    /** Grammar for the Fare-Rule parser. */
-    template <typename Iterator>	
-    struct FareRuleParser : 
-      public boost::spirit::qi::grammar<Iterator, 
-                                        boost::spirit::ascii::space_type> {
-
-      FareRuleParser (stdair::BomRoot&, FareRuleStruct&);
-
-      // Instantiation of rules
-      boost::spirit::qi::rule<Iterator, 
-                              boost::spirit::ascii::space_type>
-      start, comments, fare_rule, fare_rule_end, fare_key, fare_id, origin,
-        destination, tripType, dateRangeStart, dateRangeEnd, date,
-        timeRangeStart, timeRangeEnd, time, point_of_sale, cabinCode, channel,
-        advancePurchase, saturdayStay, changeFees, nonRefundable, minimumStay,
-        fare, segment;
-      
-      // Parser Context
-      stdair::BomRoot& _bomRoot;
-      FareRuleStruct& _fareRule;
-    };
-
   }
   
   /////////////////////////////////////////////////////////////////////////

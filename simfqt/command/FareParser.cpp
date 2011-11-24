@@ -6,7 +6,6 @@
 #include <string>
 // StdAir
 #include <stdair/basic/BasFileMgr.hpp>
-//#include <stdair/bom/Inventory.hpp>
 #include <stdair/service/Logger.hpp>
 // AirSched
 #include <simfqt/command/FareParserHelper.hpp>
