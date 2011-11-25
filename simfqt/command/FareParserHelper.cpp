@@ -9,6 +9,7 @@
 #include <stdair/basic/BasFileMgr.hpp>
 #include <stdair/bom/BomRoot.hpp>
 #include <stdair/service/Logger.hpp>
+//#define BOOST_SPIRIT_DEBUG
 #include <stdair/basic/BasParserTypes.hpp>
 // SIMFQT
 #include <simfqt/command/FareParserHelper.hpp>
