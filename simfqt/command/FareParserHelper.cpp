@@ -586,6 +586,32 @@ namespace SIMFQT {
         >> ';'
         >> bsq::repeat(1,bsq::inf)[bsa::char_("A-Z")][storeClass(_fareRule)];
 
+      //BOOST_SPIRIT_DEBUG_NODE (FareRuleParser);
+      BOOST_SPIRIT_DEBUG_NODE (start);
+      BOOST_SPIRIT_DEBUG_NODE (comments);
+      BOOST_SPIRIT_DEBUG_NODE (fare_rule);
+      BOOST_SPIRIT_DEBUG_NODE (fare_rule_end);
+      BOOST_SPIRIT_DEBUG_NODE (fare_key);
+      BOOST_SPIRIT_DEBUG_NODE (fare_id);
+      BOOST_SPIRIT_DEBUG_NODE (origin);
+      BOOST_SPIRIT_DEBUG_NODE (destination);
+      BOOST_SPIRIT_DEBUG_NODE (tripType);
+      BOOST_SPIRIT_DEBUG_NODE (dateRangeStart);
+      BOOST_SPIRIT_DEBUG_NODE (dateRangeEnd);
+      BOOST_SPIRIT_DEBUG_NODE (date);
+      BOOST_SPIRIT_DEBUG_NODE (timeRangeStart);
+      BOOST_SPIRIT_DEBUG_NODE (time);
+      BOOST_SPIRIT_DEBUG_NODE (point_of_sale);
+      BOOST_SPIRIT_DEBUG_NODE (cabinCode);
+      BOOST_SPIRIT_DEBUG_NODE (channel);
+      BOOST_SPIRIT_DEBUG_NODE (advancePurchase);
+      BOOST_SPIRIT_DEBUG_NODE (saturdayStay);
+      BOOST_SPIRIT_DEBUG_NODE (changeFees);
+      BOOST_SPIRIT_DEBUG_NODE (nonRefundable);
+      BOOST_SPIRIT_DEBUG_NODE (minimumStay);
+      BOOST_SPIRIT_DEBUG_NODE (fare);
+      BOOST_SPIRIT_DEBUG_NODE (segment);
+
       }
 
       // Instantiation of rules
