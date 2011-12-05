@@ -51,6 +51,7 @@ To customise the following to your environment, you can alter the path
 to the installation directory:
 export INSTALL_BASEDIR=/home/user/dev/deliveries
 export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=64"
+
 Then, as usual:
 * To configure the project, type something like:
   mkdir build && cd build
@@ -72,11 +73,10 @@ Then, as usual:
   make dist
 * To package the binary and the (HTML and PDF) documentation:
   make package
-* To run the installed version (the lines with the 'export' command must be
-  executed once per session only):
-  export LD_LIBRARY_PATH=${INSTALL_BASEDIR}/stdair-stable/lib:$LD_LIBRARY_PATH
-  export LD_LIBRARY_PATH=${INSTALL_BASEDIR}/simfqt-stable/lib:$LD_LIBRARY_PATH
+* To run the local binary version:
+  ./simfqt/simfqt -b
+* To run the installed version:
   ${INSTALL_BASEDIR}/simfqt-stable/bin/simfqt -b
 
-Denis Arnaud (November 2011)
+Denis Arnaud (December 2011)
 
