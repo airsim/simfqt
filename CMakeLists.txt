@@ -9,7 +9,7 @@ include (config/project_config_embeddable.cmake)
 # Project info
 set_project_names (simfqt SimFQT)
 set_project_brief ("C++ Simulated Fare Quote System Library")
-set_project_versions (0 1 2)
+set_project_versions (0 1 3)
 
 ##
 # Project options
