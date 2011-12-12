@@ -630,7 +630,8 @@ const stdair::BookingRequestStruct parseTravelSolutionAndBookingRequestKey
                                    stdair::FREQUENT_FLYER_MEMBER,
                                    lDepartureTime,
                                    stdair::DEFAULT_WTP,
-                                   stdair::DEFAULT_VALUE_OF_TIME);
+                                   stdair::DEFAULT_VALUE_OF_TIME,
+                                   true, true);
 
     return lBookingRequestStruct;
   }
