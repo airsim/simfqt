@@ -15,7 +15,7 @@ set_project_versions (0 1 3)
 # Project options
 # The parameters are:
 #  * whether or not the documentation must be built and installed
-set_project_options (on)
+set_project_options (on on)
 
 
 #####################################
@@ -40,7 +40,7 @@ packaging_set_other_options (TBZ2 "TBZ2;TGZ")
 ########################################
 #
 get_external_libs (git "boost 1.41" readline mysql "soci 3.0"
-  "stdair 0.43" doxygen)
+  "stdair 0.45" doxygen)
 
 
 ##############################################
@@ -68,6 +68,7 @@ install_basic_documentation ()
 ##########################################
 ##            Documentation             ##
 ##########################################
+#
 handle_html_doc ()
 
 ##
@@ -79,8 +80,12 @@ add_subdirectory (man)
 ##              Tests              ##
 #####################################
 ##
+# Initialise the unit test process
+init_test ()
+
+##
 # Test suites
-add_test_suites (${PROJECT_NAME})
+add_test_suite (${PROJECT_NAME})
 
 
 #######################################
