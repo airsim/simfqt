@@ -7,6 +7,7 @@
 #include <fstream>
 // StdAir
 #include <stdair/basic/BasFileMgr.hpp>
+#include <stdair/basic/BasConst_Request.hpp>
 #include <stdair/bom/BomRoot.hpp>
 #include <stdair/service/Logger.hpp>
 //#define BOOST_SPIRIT_DEBUG
@@ -196,6 +197,8 @@ namespace SIMFQT {
       } else if (lPOS == "ROW") {
         const stdair::CityCode_T lPOSROW ("ROW");
         _fareRule.setPOS (lPOSROW);
+      } else if (lPOS == stdair::DEFAULT_POS) {
+        _fareRule.setPOS (stdair::DEFAULT_POS);
       } else {
         // ERROR
         STDAIR_LOG_ERROR ("Invalid point of sale " << lPOS);
@@ -236,8 +239,8 @@ namespace SIMFQT {
                                    boost::spirit::qi::unused_type,
                                    boost::spirit::qi::unused_type) const {
       const stdair::ChannelLabel_T lChannel (iChar.begin(), iChar.end());
-      if (lChannel != "IN" && lChannel != "IF"
-          && lChannel != "DN" && lChannel != "DF") {
+      if (lChannel != "IN" && lChannel != "IF" && lChannel != "DN"
+          && lChannel != "DF" && lChannel != stdair::DEFAULT_CHANNEL) {
         // ERROR
         STDAIR_LOG_ERROR ("Invalid channel " << lChannel);
       }

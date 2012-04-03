@@ -6,6 +6,7 @@
 #include <sstream>
 // StdAir
 #include <stdair/basic/BasConst_BomDisplay.hpp>
+#include <stdair/basic/BasConst_Request.hpp>
 #include <stdair/bom/BomKeyManager.hpp>
 #include <stdair/bom/ParsedKey.hpp>
 #include <stdair/bom/BomManager.hpp>
@@ -208,13 +209,15 @@ namespace SIMFQT {
         lCurrentFarePosChannel_ptr->getChannel();
 
       // Select the fare rules having a corresponding pos channel.
-      if (lCurrentPointOfSale == lPointOfSale &&
-          lCurrentChannel == lChannel) {
-        _atLeastOneAvailablePosChannel = true;
-        // Fare rule(s) with the same point-of-sale and channel exist(s), now
-        // the time range need to be checked.
-        const stdair::PosChannel& lFarePosChannel= *lCurrentFarePosChannel_ptr;
-        priceQuote (iBookingRequest, ioTravelSolution, lFarePosChannel);
+      if (lCurrentPointOfSale == lPointOfSale || lCurrentPointOfSale == stdair::DEFAULT_POS) {
+        if (lCurrentChannel == lChannel || lCurrentChannel == stdair::DEFAULT_CHANNEL) {
+          _atLeastOneAvailablePosChannel = true;
+          // Fare rule(s) with the same point-of-sale and channel exist(s), now
+          // the time range need to be checked.
+          const stdair::PosChannel& lFarePosChannel= *lCurrentFarePosChannel_ptr;
+          STDAIR_LOG_DEBUG (lCurrentPointOfSale + " " + lCurrentChannel);
+          priceQuote (iBookingRequest, ioTravelSolution, lFarePosChannel);
+        }
       }
     }
 
@@ -297,7 +300,14 @@ namespace SIMFQT {
     bool isStayDurationValid = false;
     bool isAdvancePurchaseValid = false;
 
-    // Get the list of the fare features.
+    // Get the list of the fare features (if such list exists: the POS
+    // and channel couple can be only present in a yield rule).
+    const bool hasFareFeaturesList =
+      stdair::BomManager::hasList<stdair::FareFeatures> (iFareTimePeriod);
+    if (hasFareFeaturesList == false) {
+      return;
+    }
+    assert (hasFareFeaturesList == true);
     const stdair::FareFeaturesList_T& lFareFeaturesList =
       stdair::BomManager::getList<stdair::FareFeatures> (iFareTimePeriod);
 
