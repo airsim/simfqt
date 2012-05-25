@@ -168,17 +168,55 @@ namespace SIMFQT {
 
   // ////////////////////////////////////////////////////////////////////
   void SIMFQT_Service::
-  parseAndLoad (const FareFilePath& iFareFilename) {
+  parseAndLoad (const FareFilePath& iFareFilename) { 
 
-    // Retrieve the BOM root object.
+    // Retrieve the SimFQT service context
+    if (_simfqtServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The SimFQT service "
+                                                    "has not been initialised");
+    }
     assert (_simfqtServiceContext != NULL);
+
+    // Retrieve the SimFQT service context and whether it owns the Stdair
+    // service
     SIMFQT_ServiceContext& lSIMFQT_ServiceContext = *_simfqtServiceContext;
+    const bool doesOwnStdairService =
+      lSIMFQT_ServiceContext.getOwnStdairServiceFlag();
+
+    // Retrieve the StdAir service object from the (SimFQT) service context
     stdair::STDAIR_Service& lSTDAIR_Service =
       lSIMFQT_ServiceContext.getSTDAIR_Service();
-    stdair::BomRoot& lBomRoot = lSTDAIR_Service.getBomRoot();
+
+    // Retrieve the persistent BOM root object.
+    stdair::BomRoot& lPersistentBomRoot = 
+      lSTDAIR_Service.getPersistentBomRoot();
     
-    // Initialise the airline inventories
-    FareParser::fareRuleGeneration (iFareFilename, lBomRoot);
+    /**
+     * 1. Initialise the airline inventories
+     */
+    FareParser::fareRuleGeneration (iFareFilename, lPersistentBomRoot);    
+
+    /**
+     * 2. Delegate the complementary building of objects and links by the
+     *    appropriate levels/components
+     * 
+     * \note: Currently, no more things to do by SimFQT at that stage,
+     *        as there is no child
+     */ 
+    
+    /**
+     * 3. Build the complementary links
+     */
+    buildComplementaryLinks (lPersistentBomRoot);
+
+    /**
+     * 4. Have SimFQT clone the whole persistent BOM tree, only when the StdAir
+     *    service is owned by the current component (SimFQT here)
+     */
+    if (doesOwnStdairService == true) {
+      //
+      clonePersistentBom ();
+    }
   }
  
   // ////////////////////////////////////////////////////////////////////
@@ -199,8 +237,12 @@ namespace SIMFQT {
 
     // Retrieve the StdAir service object from the (SimFQT) service context
     stdair::STDAIR_Service& lSTDAIR_Service =
-      lSIMFQT_ServiceContext.getSTDAIR_Service();
+      lSIMFQT_ServiceContext.getSTDAIR_Service(); 
 
+    // Retrieve the persistent BOM root object.
+    stdair::BomRoot& lPersistentBomRoot = 
+      lSTDAIR_Service.getPersistentBomRoot();
+    
     /**
      * 1. Have StdAir build the whole BOM tree, only when the StdAir service is
      *    owned by the current component (SimFQT here)
@@ -208,7 +250,7 @@ namespace SIMFQT {
     if (doesOwnStdairService == true) {
       //
       lSTDAIR_Service.buildSampleBom();
-    }
+    } 
 
     /**
      * 2. Delegate the complementary building of objects and links by the
@@ -216,15 +258,62 @@ namespace SIMFQT {
      * 
      * \note: Currently, no more things to do by SimFQT at that stage,
      *        as there is no child
-     */
+     */ 
 
     /**
-     * 3. Build the complementary objects/links for the current component (here,
-     *    SimFQT)
-     *
-     * \note: Currently, no more things to do by SimFQT at that stage,
-     *        as there is no child
+     * 3. Build the complementary links at the SimFQT level 
+     */ 
+    buildComplementaryLinks (lPersistentBomRoot);
+
+    /**
+     * 4. Have SimFQT clone the whole persistent BOM tree, only when the StdAir
+     *    service is owned by the current component (SimFQT here)
      */
+    if (doesOwnStdairService == true) {
+      //
+      clonePersistentBom ();
+    }
+  } 
+
+  // ////////////////////////////////////////////////////////////////////
+  void SIMFQT_Service::clonePersistentBom () {
+
+    // Retrieve the SimFQT service context
+    if (_simfqtServiceContext == NULL) {
+      throw stdair::NonInitialisedServiceException ("The SimFQT service "
+                                                    "has not been initialised");
+    }
+    assert (_simfqtServiceContext != NULL);
+
+    // Retrieve the SimFQT service context and whether it owns the Stdair
+    // service
+    SIMFQT_ServiceContext& lSIMFQT_ServiceContext = *_simfqtServiceContext;
+    const bool doesOwnStdairService =
+      lSIMFQT_ServiceContext.getOwnStdairServiceFlag();
+
+    // Retrieve the StdAir service object from the (SimFQT) service context
+    stdair::STDAIR_Service& lSTDAIR_Service =
+      lSIMFQT_ServiceContext.getSTDAIR_Service();
+    
+    /**
+     * Have StdAir clone the whole persistent BOM tree, only when the StdAir
+     * service is owned by the current component (SimFQT here)
+     */
+    if (doesOwnStdairService == true) {
+      //
+      lSTDAIR_Service.clonePersistentBom (); 
+    }  
+
+    /**
+     * Build the complementary links at the SimFQT level 
+     */
+    stdair::BomRoot& lBomRoot = lSTDAIR_Service.getBomRoot();   
+    buildComplementaryLinks (lBomRoot);
+  } 
+
+  // ////////////////////////////////////////////////////////////////////
+  void SIMFQT_Service::buildComplementaryLinks (stdair::BomRoot& ioBomRoot) {
+    // Currently, no more things to do by SimFQT at that stage.
   }
 
   // //////////////////////////////////////////////////////////////////////
