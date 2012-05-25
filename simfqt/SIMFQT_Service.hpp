@@ -14,6 +14,7 @@
 /// Forward declarations.
 namespace stdair {
   class STDAIR_Service;
+  class BomRoot;
   struct BookingRequestStruct;
   struct BasLogParams;
   struct BasDBParams;
@@ -105,7 +106,18 @@ namespace SIMFQT {
      *   <li>The other BOM tree is fake, as a hook for RMOL to work.</li>
      * </ul>
      */
-    void buildSampleBom();
+    void buildSampleBom();    
+
+    /**
+     * Clone the persistent BOM object.
+     */
+    void clonePersistentBom ();
+
+    /**
+     * Build all the complementary links in the given bom root object.
+     * \note Do nothing for now.
+     */
+    void buildComplementaryLinks (stdair::BomRoot&); 
 
     /**
      * Build a BookingRequest structure (for test purposes).
