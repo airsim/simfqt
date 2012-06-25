@@ -631,7 +631,7 @@ const stdair::BookingRequestStruct parseTravelSolutionAndBookingRequestKey
                                    lDepartureTime,
                                    stdair::DEFAULT_WTP,
                                    stdair::DEFAULT_VALUE_OF_TIME,
-                                   true, true);
+                                   true, 50, true, 50);
 
     return lBookingRequestStruct;
   }
