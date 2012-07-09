@@ -674,7 +674,7 @@ namespace SIMFQT {
     std::ifstream fileToBeParsed(lChar, std::ios_base::in);
 
     // Check if the filename exist and can be open
-    if (fileToBeParsed == false) {
+    if (fileToBeParsed.is_open() == false) {
       STDAIR_LOG_ERROR ("The fare file " << _filename << " can not be open."
                           << std::endl);
 
