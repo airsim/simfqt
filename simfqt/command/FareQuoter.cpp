@@ -29,7 +29,7 @@
 #include <simfqt/command/FareQuoter.hpp>
 
 namespace SIMFQT {
-
+  
   bool FareQuoter::_atLeastOneAvailableDateRule = false;
   bool FareQuoter::_atLeastOneAvailablePosChannel = false;
   bool FareQuoter::_atLeastOneAvailableTimeRule = false;
@@ -369,10 +369,6 @@ namespace SIMFQT {
               const stdair::FareFeatures& iFareFeatures,
               const stdair::PosChannel& iFarePosChannel,
               stdair::FareOptionStruct& iFareOption) {
-
-    // Get the first segment path parsed key.
-    const stdair::ParsedKey lFirstSPParsedKey =
-      getFirstSPParsedKey(ioTravelSolution);
     
     // Get the segment-path of the travel solution.
     const stdair::SegmentPath_T& lSegmentPath =
@@ -478,7 +474,7 @@ namespace SIMFQT {
         ioTravelSolution.addFareOption (iFareOption);
           
         // DEBUG
-        STDAIR_LOG_DEBUG ("Segment path: " << lFirstSPParsedKey.toString()
+        STDAIR_LOG_DEBUG (ioTravelSolution.describeSegmentPath()
                           << ". A corresponding fare option for the '"
                           << lCurrentAirlineClassList_ptr->describeKey()
                           << "' class is: " << iFareOption);
