@@ -1,3 +1,6 @@
+* Mon Dec 10 2012 Denis Arnaud <denis_arnaud at users dot sourceforge.net> 1.00.0
+- Version 1.00.0
+- Open source release
 
 * Mon Dec 05 2011 Denis Arnaud <denis_arnaud at users dot sourceforge.net> 0.1.3
 - [Dev] Improved the compilation times for the Boost.Spirit parsers.
@@ -7,7 +10,7 @@ well as for third-party libraries (e.g., Xapian, SOCI, Boost). The
 rpath/run-path is now inserted into the (library, executable) binaries (only
 when needed, though).
 - [Build] Removed any support for the GNU Autotools.
-		
+
 * Sun Aug 21 2011 Denis Arnaud <denis_arnaud at users dot sourceforge.net> 0.1.1
 - Renamed the binaries (batch and interactive), as to avoid name clashes.
 - Took into account the feedback from the review request (bug 732146).
