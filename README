@@ -9,6 +9,10 @@ SimFQT makes an extensive use of existing open-source libraries for
 increased functionality, speed and accuracy. In particular the
 Boost (C++ Standard Extensions: http://www.boost.org) library is used.
 
+SimFQT is the one of the components of the Travel Market Simulator
+(http://www.travel-market-simulator). However, it may be used in a
+stand-alone mode.
+
 
 Getting and installing from the Fedora/CentOS/RedHat distribution:
 ------------------------------------------------------------------
@@ -17,14 +21,14 @@ yum -y install simfqt-devel simfqt-doc
 
 You can also get the RPM packages (which may work on Linux
 distributions like Novel Suse and Mandriva) from the Fedora repository
-(e.g., for Fedora 16, 
-http://fr2.rpmfind.net/linux/fedora/releases/16/Everything/)
+(e.g., for Fedora 18, 
+http://fr2.rpmfind.net/linux/fedora/releases/18/Everything/)
 
 
 Building the library and test binary from the Git repository:
 ----------------------------------------------------------------
 The Sourceforge Git repository may be cloned as following:
-git clone ssh://simfqt.git.sourceforge.net/gitroot/simfqt/simfqt simfqtgit
+git clone ssh://git.code.sf.net/p/simfqt/code simfqtgit
 cd simfqtgit
 git checkout trunk
 
@@ -35,7 +39,7 @@ but names may vary according to distributions):
   * stdair-devel
   * boost-devel
   * zeromq-devel
-  * readline-devel
+  * readline-devel, ncurses-devel
   * soci-mysql-devel
   * python-devel
   * gettext-devel (optional)
@@ -57,8 +61,8 @@ Then, as usual:
   mkdir build && cd build
   cmake -DCMAKE_INSTALL_PREFIX=${INSTALL_BASEDIR}/simfqt-1.00.0 \
    -DWITH_STDAIR_PREFIX=${INSTALL_BASEDIR}/stdair-stable \
-   -DCMAKE_BUILD_TYPE:STRING=Debug -DINSTALL_DOC:BOOL=ON \
-   ${LIBSUFFIX_4_CMAKE} ..
+   -DCMAKE_BUILD_TYPE:STRING=Debug -DENABLE_TEST:BOOL=ON -DINSTALL_DOC:BOOL=ON \
+   -DRUN_GCOV:BOOL=OFF ${LIBSUFFIX_4_CMAKE} ..
 * To build the project, type:
   make
 * To test the project, type:
@@ -73,10 +77,14 @@ Then, as usual:
   make dist
 * To package the binary and the (HTML and PDF) documentation:
   make package
+* To browse the (just installed, if enabled) HTML documentation:
+  midori file://${INSTALL_BASEDIR}/simfqt-99.99.99/share/doc/simfqt-99.99.99/html/index.html
+* To browse the (just installed, if enabled) PDF documentation:
+  evince ${INSTALL_BASEDIR}/simfqt-99.99.99/share/doc/simfqt-99.99.99/html/refman.pdf
 * To run the local binary version:
   ./simfqt/simfqt -b
 * To run the installed version:
   ${INSTALL_BASEDIR}/simfqt-stable/bin/simfqt -b
 
-Denis Arnaud (December 2011)
+Denis Arnaud (December 2012)
 
