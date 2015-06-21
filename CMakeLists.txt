@@ -25,7 +25,11 @@ set_project_options (on on off)
 #####################################
 #
 packaging_init (${PROJECT_NAME})
-packaging_set_summary ("${PROJECT_NAME} aims at providing a clean API and a simple implementation, as a C++ library, of a Travel-oriented fare engine. It corresponds to the simulated version of the real-world Fare Quote or pricing System.
+packaging_set_summary (
+"${PROJECT_NAME} aims at providing a clean API and a simple implementation,
+as a C++ library, of a Travel-oriented fare engine.
+It corresponds to the simulated version of the real-world Fare Quote
+or pricing System.
 
 ${PROJECT_NAME} makes an extensive use of existing open-source libraries for
 increased functionality, speed and accuracy. In particular the
@@ -42,7 +46,7 @@ packaging_set_other_options (TBZ2 "TBZ2;TGZ")
 ########################################
 #
 get_external_libs (git "python 2.6" "boost 1.41" "mysql 5.0" "soci 3.0"
-        "zeromq 2.0" readline curses "doxygen 1.4" "gcov 4.6.3" "lcov 1.9"
+        readline curses "doxygen 1.4" "gcov 4.6.3" "lcov 1.9"
         "stdair 1.00.0")
 
 
