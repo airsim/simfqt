@@ -14,6 +14,7 @@
 #define BOOST_TEST_MAIN
 #define BOOST_TEST_MODULE FQTTestSuite
 #include <boost/test/unit_test.hpp>
+#include <boost/version.hpp>
 // StdAir
 #include <stdair/basic/BasLogParams.hpp>
 #include <stdair/basic/BasDBParams.hpp>
@@ -35,7 +36,11 @@ struct UnitTestConfig {
   UnitTestConfig() {
     static std::ofstream _test_log ("FQTTestSuite_utfresults.xml");
     boost_utf::unit_test_log.set_stream (_test_log);
+#if BOOST_VERSION >= 105900
+    boost_utf::unit_test_log.set_format (boost_utf::OF_XML);
+#else
     boost_utf::unit_test_log.set_format (boost_utf::XML);
+#endif
     boost_utf::unit_test_log.set_threshold_level (boost_utf::log_test_units);
     //boost_utf::unit_test_log.set_threshold_level (boost_utf::log_successful_tests);
   }
