@@ -1,5 +1,6 @@
 /*!
- * \page ui_cmdline_simfqt_cpp Command-Line Utility to Demonstrate Typical Simfqt Usage
+ * \page ui_cmdline_simfqt_cpp Command-Line (CLI) utility
+ * to demonstrate typical SimFQT usage
  * \code
  */
 // STL
@@ -9,31 +10,32 @@
 #include <fstream>
 #include <string>
 // Boost (Extended STL)
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/regex.hpp>
 // StdAir
-#include <stdair/basic/BasLogParams.hpp>
-#include <stdair/basic/BasConst_BomDisplay.hpp>
-#include <stdair/basic/BasDBParams.hpp>
-#include <stdair/basic/BasConst_DefaultObject.hpp>
-#include <stdair/basic/BasConst_Inventory.hpp>
-#include <stdair/basic/BasConst_Request.hpp>
-#include <stdair/service/Logger.hpp>
 #include <stdair/stdair_exceptions.hpp>
 #include <stdair/stdair_basic_types.hpp>
 #include <stdair/stdair_date_time_types.hpp>
+#include <stdair/basic/BasConst_DefaultObject.hpp>
+#include <stdair/basic/BasConst_Inventory.hpp>
+#include <stdair/basic/BasConst_Request.hpp>
+#include <stdair/basic/BasLogParams.hpp>
+#include <stdair/basic/BasConst_BomDisplay.hpp>
+#include <stdair/basic/BasDBParams.hpp>
 #include <stdair/bom/TravelSolutionStruct.hpp>
 #include <stdair/bom/BookingRequestStruct.hpp>
 #include <stdair/bom/ParsedKey.hpp>
 #include <stdair/bom/BomKeyManager.hpp>
 #include <stdair/command/CmdBomManager.hpp>
+#include <stdair/service/Logger.hpp>
 // Stdair GNU Readline Wrapper
 #include <stdair/ui/cmdline/SReadline.hpp>
 // Simfqt
 #include <simfqt/SIMFQT_Service.hpp>
 #include <simfqt/config/simfqt-paths.hpp>
-
 
 // //////// Constants //////
 /**
@@ -596,7 +598,8 @@ const stdair::BookingRequestStruct parseTravelSolutionAndBookingRequestKey
     // the travel solution and the booking request are correct.
 
     // Empty the travel solution list to store a new travel solution.
-    ioInteractiveTravelSolutionList.pop_front();
+    ioInteractiveTravelSolutionList.clear();
+
     // Construct the new travel solution. 
     stdair::TravelSolutionStruct lTravelSolution;
     std::ostringstream oStr;
@@ -612,11 +615,11 @@ const stdair::BookingRequestStruct parseTravelSolutionAndBookingRequestKey
          << stdair::DEFAULT_KEY_FLD_DELIMITER
          << lDepartureTime;
     lTravelSolution.addSegment (oStr.str());
-    ioInteractiveTravelSolutionList.push_front(lTravelSolution);
+    ioInteractiveTravelSolutionList.push_front (lTravelSolution);
 
     // Construct the new booking request.
     stdair::DateTime_T lRequestDateTime (lRequestDate, lRequestTime);
-    const stdair::BookingRequestStruct &lBookingRequestStruct =
+    const stdair::BookingRequestStruct& lBookingRequestStruct =
       stdair::BookingRequestStruct(lOriginAirport,
                                    lDestinationAirport,
                                    lPOS,
@@ -826,6 +829,7 @@ TokenList_T extractTokenListForOriDestDate (const TokenList_T& iTokenList) {
   return oTokenList;
 }
 
+
 // ///////// M A I N ////////////
 int main (int argc, char* argv[]) {
 
@@ -897,14 +901,13 @@ int main (int argc, char* argv[]) {
   std::string lUserInput;
   bool EndOfInput (false);
   Command_T::Type_T lCommandType (Command_T::NOP);
-  
-  while (lCommandType != Command_T::QUIT && EndOfInput == false) {
 
+  while (lCommandType != Command_T::QUIT && EndOfInput == false) {
     stdair::TravelSolutionList_T lInteractiveTravelSolutionList;
-    stdair::TravelSolutionStruct lInteractiveTravelSolution;
 
     // Update the default booking request.
-    // If there is an input file, we want the CRS booking request (defined in stdair).
+    // If there is an input file, we want the CRS booking request (defined
+    // in stdair).
     // If not, we want the default booking request.
     const bool isCRSBookingRequest = !isBuiltin;
     const stdair::BookingRequestStruct& lInteractiveBookingRequest =
@@ -916,14 +919,17 @@ int main (int argc, char* argv[]) {
       lInteractiveDestination = "SYD";
       lInteractiveDepartureDate = stdair::Date_T(2011,06,10);
       simfqtService.buildSampleTravelSolutions (lInteractiveTravelSolutionList);
+
     } else {
       lInteractiveOrigin = "SIN";
       lInteractiveDestination = "BKK";
       lInteractiveDepartureDate = stdair::Date_T(2010,01,30);
       //
-      const std::string lBA9_SegmentDateKey ("SQ, 970, 2010-01-30, SIN, BKK, 07:10");
+      const std::string
+        lBA9_SegmentDateKey ("SQ, 970, 2010-01-30, SIN, BKK, 07:10");
       
       // Add the segment date key to the travel solution.
+      stdair::TravelSolutionStruct lInteractiveTravelSolution;
       lInteractiveTravelSolution.addSegment (lBA9_SegmentDateKey);
 
       // Add the travel solution to the list
@@ -956,11 +962,11 @@ int main (int argc, char* argv[]) {
     case Command_T::HELP: {
       // Search for information to display default parameters lists.
       // Get the first travel solution.
-      stdair::TravelSolutionStruct& lTravelSolutionStruct =
+      const stdair::TravelSolutionStruct& lInteractiveTravelSolution =
         lInteractiveTravelSolutionList.front();  
       // Get the segment-path of the first travel solution.
       const stdair::SegmentPath_T& lSegmentPath =
-        lTravelSolutionStruct.getSegmentPath();  
+        lInteractiveTravelSolution.getSegmentPath();
       // Get the first segment of the first travel solution.
       const std::string& lSegmentDateKey = lSegmentPath.front();
       // Get the parsed key of the first segment of the first travel solution.
@@ -1099,31 +1105,35 @@ int main (int argc, char* argv[]) {
 
       // If no parameters are entered by the user, keep default ones.
       if (lTokenListByReadline.empty() == true) {
-
-        lInteractiveTravelSolution = lInteractiveTravelSolutionList.front();
+        const stdair::TravelSolutionStruct& lInteractiveTravelSolution =
+          lInteractiveTravelSolutionList.front();
         
-        std::cout << "No parameters specified. Default booking request and default travel solution list are kept.\n"
+        std::cout << "No parameters specified. Default booking request "
+                  << "and default travel solution list are kept.\n"
                   << "Booking request: << "
-                  << lInteractiveBookingRequest.display()  << " >>"
+                  << lInteractiveBookingRequest.display() << " >>"
                   << "\nTravel Solution: << "
                   << lInteractiveTravelSolution.display() << " >>"
                   << "\n********** \n"
                   << "Fare quote"
                   << "\n**********"
-                << std::endl;
+                  << std::endl;
         
         // Try to fareQuote the sample list of travel solutions.
         try {
-        simfqtService.quotePrices (lInteractiveBookingRequest,
-                                   lInteractiveTravelSolutionList);
+
+          simfqtService.quotePrices (lInteractiveBookingRequest,
+                                     lInteractiveTravelSolutionList);
+
         } catch (stdair::ObjectNotFoundException& E) {
-          std::cerr << "The given travel solution corresponding to the given booking request can not be priced.\n"
+          std::cerr << "The given travel solution corresponding to the given"
+                    << "booking request can not be priced.\n"
                     << E.what()
                     << std::endl;
           break;
         }
+
       } else {
-      
         // Find the best match corresponding to the given parameters.
         TokenList_T lTokenList =
           extractTokenListForTSAndBR (lTokenListByReadline);
@@ -1131,19 +1141,20 @@ int main (int argc, char* argv[]) {
         // Parse the best match, and give default values in case the
         // user does not specify all the parameters or does not
         // specify some of them correctly.
-        stdair::BookingRequestStruct lFinalBookingRequest
-          = parseTravelSolutionAndBookingRequestKey (lTokenList,
-                                                     lInteractiveTravelSolutionList,
-                                                     lInteractiveBookingRequest);
+        stdair::BookingRequestStruct lFinalBookingRequest =
+          parseTravelSolutionAndBookingRequestKey(lTokenList,
+                                                  lInteractiveTravelSolutionList,
+                                                  lInteractiveBookingRequest);
 
         
         assert (lInteractiveTravelSolutionList.size() >= 1);
-        lInteractiveTravelSolution = lInteractiveTravelSolutionList.front();
+        const stdair::TravelSolutionStruct& lInteractiveTravelSolution =
+          lInteractiveTravelSolutionList.front();
 
         // Display the booking request and the first travel solution
         // before pricing.
         std::cout << "Booking request: << "
-                  << lFinalBookingRequest.display()  << " >>"
+                  << lFinalBookingRequest.display() << " >>"
                   << "\nTravel Solution: << "
                   << lInteractiveTravelSolution.display() << " >>"
                   << "\n********** \n"
@@ -1153,10 +1164,13 @@ int main (int argc, char* argv[]) {
         
         // Try to fareQuote the sample list of travel solutions.
         try {
+
           simfqtService.quotePrices (lFinalBookingRequest,
                                      lInteractiveTravelSolutionList);
+
         } catch (stdair::ObjectNotFoundException& E) {
-          std::cerr << "The given travel solution corresponding to the given booking request can not be priced.\n"
+          std::cerr << "The given travel solution corresponding to the given"
+                    << "booking request can not be priced.\n"
                     << E.what()
                     << std::endl;
           break;
@@ -1165,11 +1179,11 @@ int main (int argc, char* argv[]) {
 
       // Display the first travel solution after pricing:
       // one or more fare option have been added.
-      lInteractiveTravelSolution = lInteractiveTravelSolutionList.front();
+      const stdair::TravelSolutionStruct& lInteractiveTravelSolution =
+        lInteractiveTravelSolutionList.front();
       std::cout << "Travel Solution: << "
                 << lInteractiveTravelSolution.display() << " >>\n"
                 << std::endl;
-
       break;
     }
       
@@ -1188,21 +1202,8 @@ int main (int argc, char* argv[]) {
       std::cout << oStr.str() << std::endl;
     }
     }
-  }
 
-  // DEBUG
-  STDAIR_LOG_DEBUG ("End of the session. Exiting.");
-  std::cout << "End of the session. Exiting." << std::endl;
-
-  // Close the Log outputFile
-  logOutputFile.close();
-
-  /*
-    Note: as that program is not intended to be run on a server in
-    production, it is better not to catch the exceptions. When it
-    happens (that an exception is throwned), that way we get the
-    call stack.
-  */
-
+  }  
+  
   return 0;	
 }
