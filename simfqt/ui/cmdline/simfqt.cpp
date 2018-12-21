@@ -428,7 +428,7 @@ const stdair::BookingRequestStruct parseTravelSolutionAndBookingRequestKey
     stdair::CityCode_T lPOS;
     stdair::ChannelLabel_T lChannel;
     stdair::TripType_T lTripType;
-    unsigned short lStayDuration;
+    unsigned short lStayDuration (stdair::DEFAULT_STAY_DURATION);
 
     // Read the airline code.
     lAirlineCode = *itTok;
