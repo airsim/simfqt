@@ -1,6 +1,7 @@
+C++ Simulated Fare Quote System Library
+=======================================
 
-Summary:
---------
+# Summary
 SimFQT aims at providing a clean API and a simple implementation, as
 a C++ library, of a Travel-oriented fare engine. It corresponds to
 the simulated version of the real-world Fare Quote or pricing system.
@@ -10,31 +11,29 @@ increased functionality, speed and accuracy. In particular the
 Boost (C++ Standard Extensions: http://www.boost.org) library is used.
 
 SimFQT is the one of the components of the Travel Market Simulator
-(http://www.travel-market-simulator). However, it may be used in a
+(https://travel-sim.org). However, it may be used in a
 stand-alone mode.
 
+# Installation
 
-Getting and installing from the Fedora/CentOS/RedHat distribution:
-------------------------------------------------------------------
+## On Fedora/CentOS/RedHat distribution
 Just use DNF:
 ```bash
-dnf -y install simfqt-devel simfqt-doc
+$ dnf -y install simfqt-devel simfqt-doc
 ```
 
 You can also get the RPM packages (which may work on Linux
 distributions like Novel Suse and Mandriva) from the Fedora repository
-(_e.g._, for Fedora 30, 
-http://fr2.rpmfind.net/linux/fedora/releases/30/Everything/)
+(_e.g._, for Fedora 32,
+https://fr2.rpmfind.net/linux/RPM/fedora/32/x86_64/)
 
 
-Building the library and test binary from Git repository:
-----------------------------------------------------------------
+## Building the library and test binary from Git repository
 The Git repository may be cloned as following:
 ```bash
 $ git clone git@github.com:airsim/simfqt.git simfqtgit # through SSH
 $ git clone https://github.com/airsim/simfqt.git # if the firewall filters SSH
-cd simfqtgit
-git checkout trunk
+$ cd simfqtgit
 ```
 
 Then, you need the following packages (Fedora/RedHat/CentOS names here, 
@@ -55,17 +54,16 @@ but names may vary according to distributions):
 * rpm-build (optional)
 
 
-Building the library and test binary from the tarball:
-------------------------------------------------------
+## Building the library and test binary from the tarball
 The latest stable source tarball (`simfqt*.tar.gz` or `.bz2`) can be found here:
 https://github.com/airsim/simfqt/releases
 
 To customise the following to your environment, you can alter the path
 to the installation directory:
 ```bash
-export INSTALL_BASEDIR=/home/user/dev/deliveries
-export SFQ_VER=1.00.3
-if [ -d /usr/lib64 ]; then LIBSUFFIX=64; fi
+export INSTALL_BASEDIR="${HOME}/dev/deliveries"
+export SFQ_VER="1.00.4"
+if [ -d /usr/lib64 ]; then LIBSUFFIX="64"; fi
 export LIBSUFFIX_4_CMAKE="-DLIB_SUFFIX=$LIBSUFFIX"
 ```
 
