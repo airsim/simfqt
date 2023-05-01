@@ -287,8 +287,8 @@ namespace SIMFQT {
     // Get the referenced departure date of the segment path.
     const stdair::ParsedKey lFirstSPParsedKey =
       getFirstSPParsedKey(ioTravelSolution);
-    const stdair::Date_T& lSPDate =
-      lFirstSPParsedKey.getFlightDateKey().getDepartureDate();
+    const stdair::FlightDateKey& lFDKey = lFirstSPParsedKey.getFlightDateKey();
+    const stdair::Date_T& lSPDate = lFDKey.getDepartureDate();
 
     // Get the segment boarding time of the segment path.
     const stdair::Duration_T& lSPTime = lFirstSPParsedKey.getBoardingTime();
