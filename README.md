@@ -62,7 +62,7 @@ To customise the following to your environment, you can alter the path
 to the installation directory:
 ```bash
 export INSTALL_BASEDIR="${HOME}/dev/deliveries"
-export SFQ_VER="1.00.12"
+export SFQ_VER="1.00.13"
 ```
 
 Then, as usual:
